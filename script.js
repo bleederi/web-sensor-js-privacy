@@ -22,7 +22,7 @@ function store (data)
         } 
         else 
         {
-            console.log('No LocalStorage support'):
+            console.log('No LocalStorage support');
         }
 }
 
