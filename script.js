@@ -17,15 +17,16 @@ function get_click(buttonID)    //ID not necessarily numerical
 
 function release()
 {        
-        if(currentButton)
-        {
-                console.log(currentButton);
-                dataArray.push(currentButton);        
-                store('dataArray', dataArray);
-                console.log(retrieve('dataArray'));
-                currentButton = null;
-                console.log('release');
-        }
+        console.log(currentButton);
+        dataArray.push(currentButton);        
+        store('dataArray', dataArray);
+        console.log(retrieve('dataArray'));
+        currentButton = null;
+        console.log('release');
+      try {
+        sensors[0].stop();
+      } catch(err) { }
+
 }
 
 function store (key, data)   //currently uses LocalStorage, maybe should use something else?
