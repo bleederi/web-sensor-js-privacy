@@ -2,6 +2,7 @@ console.log(5+6);
 var output = document.querySelector('.output');
 var dataArray = [];
 var i = dataArray.length;      //index to track amount of data points
+var test = null;                //testing variable
 
 function get_click(buttonID)    //ID not necessarily numerical
 {
@@ -9,7 +10,8 @@ function get_click(buttonID)    //ID not necessarily numerical
         dataArray.push(buttonID);        
         store('dataArray', dataArray);
         console.log(retrieve('dataArray'));
-        read_sensors();
+        test = read_sensors();
+        console.log(test);
 }
 
 function store (key, data)   //currently uses LocalStorage, maybe should use something else?
@@ -61,6 +63,7 @@ function read_sensors()
         let zAccel = this.sensors.Accelerometer.z;
         console.log(xAccel, yAccel, zAccel);
         }
+        return xAccel;
 }
 
 //below uses Screen Orientation API
