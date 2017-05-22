@@ -38,22 +38,22 @@ function startSensors() {       //from websensor-compass
         var sensor = new Accelerometer();
         sensor.start();
         sensor.onchange = event => {
-                        let xAccel = sensor.x;
-                        let yAccel = sensor.y;
-                        let zAccel = sensor.z;
-                        console.log(xAccel);
+                let xAccel = sensor.x;
+                let yAccel = sensor.y;
+                let zAccel = sensor.z;
+                console.log("xAccel:" + xAccel + "yAccel: " + yAccel + "zAccel: " + zAccel);
 
-                        // Treat the acceleration vector as an orientation vector by normalizing it.
-                        // Keep in mind that the if the device is flipped, the vector will just be
-                        // pointing in the other direction, so we have no way to know from the
-                        // accelerometer data what way the device is oriented.
-                        let norm = Math.sqrt(xAccel ** 2 + yAccel ** 2 + zAccel ** 2);
+                // Treat the acceleration vector as an orientation vector by normalizing it.
+                // Keep in mind that the if the device is flipped, the vector will just be
+                // pointing in the other direction, so we have no way to know from the
+                // accelerometer data what way the device is oriented.
+                let norm = Math.sqrt(xAccel ** 2 + yAccel ** 2 + zAccel ** 2);
 
-                        // As we only can cover half of the spectrum we multiply the unit vector
-                        // with 90 so that it coveres the -90 to 90 degrees (180 degrees in total).
-                        this.beta = (xAccel / norm) * 90;
-                        this.gamma = (yAccel / norm) * - 90;
-                        this.alpha = 0;
+                // As we only can cover half of the spectrum we multiply the unit vector
+                // with 90 so that it coveres the -90 to 90 degrees (180 degrees in total).
+                this.beta = (xAccel / norm) * 90;
+                this.gamma = (yAccel / norm) * - 90;
+                this.alpha = 0;
         }
 }
 
