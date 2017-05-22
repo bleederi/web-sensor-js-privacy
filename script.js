@@ -111,7 +111,7 @@ function startSensors() {
 
         console.log("Started sensors: " + sensors);
         //console.log(sensors[0], sensors[1]);
-        console.log("s2: " + sensors2);
+        console.log(sensors2.Accelerometer);
         return sensors;
 }
 
