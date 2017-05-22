@@ -108,7 +108,7 @@ function startSensors() {
           console.log(`Orientation sensor ${err.error}`)
         };
 */
-      } catch(err) { }
+      } catch(err) { console.log(err); }
 
         console.log("Started sensors: " + sensors);
         console.log(sensors);
