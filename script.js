@@ -4,6 +4,28 @@ function get_click(buttonID)    //ID not necessarily numerical
 {
         console.log(buttonID);
 }
+
+function store (data)
+{
+        if (typeof(Storage) !== "undefined") 
+        {
+                if ( typeof val === "undefined" ) 
+                {
+                        var value = this.getItem(key);
+                        return value ? JSON.parse(value) : null;
+                }
+                else
+                {
+                        localStorage.setItem('data', JSON.stringify(data));
+                }
+            
+        } 
+        else 
+        {
+            console.log('No LocalStorage support'):
+        }
+}
+
 var output = document.querySelector('.output');
 if(window.deviceOrientationEvent)
 {
@@ -27,7 +49,9 @@ if(window.DeviceMotionEvent)
                         console.log(event.acceleration + ' : ' + event.rotationRate + ' : ' + event.interval);
                         console.log(rotationRate.alpha + ' : ' + rotationRate.beta + ' : ' + rotationRate.gamma);
                         //console.log(gacc.x + ' : ' + gacc.y + ' : ' + gacc.z);
+                        //data = ...                        
 		}
 	);
 
 }
+//store(data):
