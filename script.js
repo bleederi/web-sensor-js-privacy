@@ -47,9 +47,10 @@ function release()
         currentButton = null;
         console.log('release');
       try {
-        //sensors.LinearAccelerationSensor.stop();
-        sensors.Accelerometer.stop();
-        sensors.AbsoluteOrientationSensor.stop();
+        for sensor in sensors
+        {
+                sensor.stop();
+        }
       } catch(err) { }
 
 }
