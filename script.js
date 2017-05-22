@@ -2,7 +2,7 @@ console.log(5+6);
 var output = document.querySelector('.output');
 var dataArray = [];
 var i = dataArray.length;      //index to track amount of data points
-var sensors = {};
+var sensors = [];
 var test = null;                //testing variable
 
 function get_click(buttonID)    //ID not necessarily numerical
@@ -34,18 +34,15 @@ function retrieve (key)
         return JSON.parse(localStorage.getItem(key));
 }
 
-function startSensors() {       //from websensor-compass
-        
-      for (let sensor of Object.values(sensors)) {
-        if (!sensor) { continue; }
-        sensor.onchange = null;
+function startSensors() {
 
       try {
-        sensors.Accelerometer = null;
-        sensors.Accelerometer = new Accelerometer({ frequency: 50, includeGravity: true });
-        sensors.Accelerometer.start();
-        sensors.Accelerometer.onerror = err => {
-          sensors.Accelerometer = null;
+        sensors[0] = null;
+        let accelerometer = new Accelerometer({ frequency: 50, includeGravity: true });
+        sensors[0] = accelerometer;
+        sensors[0].start();
+        sensors[0].onerror = err => {
+          sensors[0] = null;
           console.log(`Accelerometer ${err.error}`)
         };
       } catch(err) { }
@@ -60,7 +57,6 @@ function startSensors() {       //from websensor-compass
                 console.log("xAccel:" + xAccel + "yAccel: " + yAccel + "zAccel: " + zAccel);
         }
         */
-        }
 
         console.log(sensors);
         return sensors;
