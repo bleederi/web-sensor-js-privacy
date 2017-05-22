@@ -9,47 +9,19 @@ function get_click(buttonID)    //ID not necessarily numerical
         dataArray.push(buttonID);        
         store('dataArray', dataArray);
         console.log(retrieve('dataArray'));
-        console.log(buttonID.length);
-        if(window.deviceOrientationEvent)
-        {
-	        window.addEventListener('deviceorientation', function(event)
-                        {
-                                console.log('Alpha(x): ' + event.alpha +  'Beta(y): ' + event.beta + 'Gamma(z): ' + event.gamma);
-                                output.innerHTML  = "beta : " + event.beta + "\n";
-                                output.innerHTML += "gamma: " + event.gamma + "\n";
-                                //data = ...;
-                        }
-	        );
-        }
-        if(window.DeviceMotionEvent)
-        {
-	        window.addEventListener('devicemotion', function(event)
-		        {
-			        var acceleration = event.acceleration;
-          		        var rotationRate = event.rotationRate;
-		                var gacc = event.accelerationIncludingGravity;
-		          
-		                console.log(acceleration.x + ' : ' + acceleration.y + ' : ' + acceleration.z);
-                                console.log(event.acceleration + ' : ' + event.rotationRate + ' : ' + event.interval);
-                                console.log(rotationRate.alpha + ' : ' + rotationRate.beta + ' : ' + rotationRate.gamma);
-                                //console.log(gacc.x + ' : ' + gacc.y + ' : ' + gacc.z);
-                                //data = ...                        
-		        }
-	        );
-
-        }
 }
 
 function store (key, data)   //currently uses LocalStorage, maybe should use something else?
 {
         if (typeof(Storage) !== "undefined") 
         {
-                        localStorage.setItem(key, JSON.stringify(data));
-            
+                localStorage.setItem(key, JSON.stringify(data));
+                return 0;     
         } 
         else 
         {
-            console.log('No LocalStorage support');
+                console.log('No LocalStorage support');
+                return 1;
         }
 }
 
@@ -58,4 +30,38 @@ function retrieve (key)
         return JSON.parse(localStorage.getItem(key));
 }
 
+function read_sensors()
+{
+}
+
+//below uses Screen Orientation API
+/*
+if(window.deviceOrientationEvent)
+{
+        window.addEventListener('deviceorientation', function(event)
+                {
+                        console.log('Alpha(x): ' + event.alpha +  'Beta(y): ' + event.beta + 'Gamma(z): ' + event.gamma);
+                        output.innerHTML  = "beta : " + event.beta + "\n";
+                        output.innerHTML += "gamma: " + event.gamma + "\n";
+                        //data = ...;
+                }
+        );
+}
+if(window.DeviceMotionEvent)
+{
+        window.addEventListener('devicemotion', function(event)
+	        {
+		        var acceleration = event.acceleration;
+  		        var rotationRate = event.rotationRate;
+	                var gacc = event.accelerationIncludingGravity;
+	          
+	                console.log(acceleration.x + ' : ' + acceleration.y + ' : ' + acceleration.z);
+                        console.log(event.acceleration + ' : ' + event.rotationRate + ' : ' + event.interval);
+                        console.log(rotationRate.alpha + ' : ' + rotationRate.beta + ' : ' + rotationRate.gamma);
+                        //console.log(gacc.x + ' : ' + gacc.y + ' : ' + gacc.z);
+                        //data = ...                        
+	        }
+        );
+
+}*/
 //store(data);
