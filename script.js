@@ -38,7 +38,7 @@ function startSensors() {
 
       try {
         sensors[0] = null;
-        let accelerometer = new Accelerometer({ frequency: 50, includeGravity: true });
+        let accelerometer = new Accelerometer({ frequency: 1, includeGravity: true });
         sensors[0] = accelerometer;
         sensors[0].start();
         sensors[0].onerror = err => {
@@ -59,6 +59,7 @@ function startSensors() {
         */
 
         console.log("Started sensors: " + sensors);
+        console.log(sensors[0]);
         return sensors;
 }
 
