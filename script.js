@@ -2,6 +2,7 @@ var output = document.querySelector('.output');
 var dataArray = [];
 var i = dataArray.length;      //index to track amount of data points
 var sensors = [];
+var sensors2 = {};
 var currentButton = null;
 var test = null;                //testing variable
 
@@ -52,6 +53,7 @@ function release()
         {
         sensors[i].stop();
         }
+        sensors2.Accelerometer.stop();
       } catch(err) { }
 
 }
@@ -81,13 +83,15 @@ function startSensors() {
         sensors[1] = null;
         let accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors[0] = accelerometer;
+        sensors2.Accelerometer = accelerometer;
         sensors[0].start();
+        sensors2.Accelerometer.start();
         sensors[0].onerror = err => {
           sensors[0] = null;
           console.log(`Accelerometer ${err.error}`)
         };
         //AbsoluteOrientationSensor
-        let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: 200});
+        let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: 60});
         sensors[1] = absoluteorientationsensor;
         sensors[1].start();
         sensors[1].onerror = err => {
@@ -107,6 +111,7 @@ function startSensors() {
 
         console.log("Started sensors: " + sensors);
         //console.log(sensors[0], sensors[1]);
+        console.log("s2: " + sensors2);
         return sensors;
 }
 
