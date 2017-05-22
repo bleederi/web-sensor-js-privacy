@@ -9,6 +9,7 @@ function get_click(buttonID)    //ID not necessarily numerical
         dataArray.push(buttonID);        
         store('dataArray', dataArray);
         console.log(retrieve('dataArray'));
+        read_sensors();
 }
 
 function store (key, data)   //currently uses LocalStorage, maybe should use something else?
@@ -30,8 +31,36 @@ function retrieve (key)
         return JSON.parse(localStorage.getItem(key));
 }
 
+function startSensors(...requiredSensors) {     //from websensor-compass
+        if(!this.sensors)
+        {
+                return false;
+        }
+      for (let sensor of requiredSensors) {
+        if (!this.sensors[sensor]) {
+          return false;
+        }
+      }
+      for (let sensor of requiredSensors) {
+        if (this.sensors[sensor].activated == false) {
+          this.sensors[sensor].start();
+        }
+      }
+      return true;
+    }
+
 function read_sensors()
 {
+      if (!startSensors("Gyroscope",  "Accelerometer", "AbsoluteOrientationSensor")) {
+        console.error('Requires gyroscope, accelerometer and absolute orientation sensor');
+        return false;
+      }
+      this.sensors.Accelerometer.onchange = event => {
+        let xAccel = this.sensors.Accelerometer.y;
+        let yAccel = this.sensors.Accelerometer.x;
+        let zAccel = this.sensors.Accelerometer.z;
+        console.log(xAccel, yAccel, zAccel);
+        }
 }
 
 //below uses Screen Orientation API
