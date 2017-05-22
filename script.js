@@ -3,11 +3,12 @@ var output = document.querySelector('.output');
 var dataArray = [];
 var i = dataArray.length;      //index to track amount of data points
 var sensors = [];
+var currentButton = null;
 var test = null;                //testing variable
 
 window.addEventListener('load', function(){
  
-        var buttons = document.getElementById('buttons1')
+        var buttons = document.getElementById('buttons')
         var statusdiv = document.getElementById('statusdiv')
         var startx = 0
         var dist = 0
@@ -24,12 +25,14 @@ window.addEventListener('load', function(){
         var touchobj = e.changedTouches[0] // reference first touch point for this event
         var dist = parseInt(touchobj.clientX) - startx
         statusdiv.innerHTML = 'Status: touchmove<br> Horizontal distance traveled: ' + dist + 'px'
+        console.log(startx);
         e.preventDefault()
     }, false)
  
     buttons.addEventListener('touchend', function(e){
         var touchobj = e.changedTouches[0] // reference first touch point for this event
         statusdiv.innerHTML = 'Status: touchend<br> Resting x coordinate: ' + touchobj.clientX + 'px'
+        console.log(startx);
         e.preventDefault()
     }, false)
  
@@ -38,12 +41,23 @@ window.addEventListener('load', function(){
 
 function get_click(buttonID)    //ID not necessarily numerical
 {
+        currentButton = buttonID;
         console.log(buttonID);
-        dataArray.push(buttonID);        
-        store('dataArray', dataArray);
-        console.log(retrieve('dataArray'));
         test = read_sensors();
         console.log(test);
+}
+
+function release()
+{        
+        if(currentButton)
+        {
+                console.log(currentButton);
+                dataArray.push(currentButton);        
+                store('dataArray', dataArray);
+                console.log(retrieve('dataArray'));
+                currentButton = null;
+                console.log('release');
+        }
 }
 
 function store (key, data)   //currently uses LocalStorage, maybe should use something else?
