@@ -92,7 +92,7 @@ function startSensors() {
         };
         */
         //GravitySensor
-        let gravitysensor = new GravitySensor({ frequency: 60, includeGravity: true });
+        let gravitysensor = new GravitySensor({ frequency: 60});
         sensors.GravitySensor = gravitysensor;
         sensors.GravitySensor.start();
         sensors.GravitySensor.onerror = err => {
@@ -107,6 +107,7 @@ function startSensors() {
           sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
         };
+        /*
         //Accelerometer not including gravity
         let accelerometernog = new Accelerometer({ frequency: 60, includeGravity: false });
         sensors.AccelerometerNoG = accelerometernog;
@@ -114,7 +115,7 @@ function startSensors() {
         sensors.AccelerometerNoG.onerror = err => {
           sensors.AccelerometerNoG = null;
           console.log(`AccelerometerNoG ${err.error}`)
-        };
+        };*/
         //AbsoluteOrientationSensor
         let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: 60});
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
@@ -169,11 +170,7 @@ function read_sensors()
                 let yAccelG = sensors.GravitySensor.y;
                 let zAccelG = sensors.GravitySensor.z;
                 console.log("xAccelG: " + xAccelG + " yAccelG: " + yAccelG + " zAccelG: " + zAccelG);
-                } 
-                sensors.AbsoluteOrientationSensor.onchange = event => {
-                sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
-                console.log("Orientation matrix: " + orientationMat);
-              }
+                }
               sensors.Accelerometer.onchange = event => {
                 let xAccel = sensors.Accelerometer.x;
                 let yAccel = sensors.Accelerometer.y;
