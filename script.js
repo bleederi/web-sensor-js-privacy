@@ -35,6 +35,7 @@ function retrieve (key)
 }
 
 function startSensors() {       //from websensor-compass
+        
       for (let sensor of Object.values(sensors)) {
         if (!sensor) { continue; }
         sensor.onchange = null;
@@ -42,6 +43,7 @@ function startSensors() {       //from websensor-compass
       try {
         sensors.Accelerometer = null;
         sensors.Accelerometer = new Accelerometer({ frequency: 50, includeGravity: true });
+        sensors.Accelerometer.start();
         sensors.Accelerometer.onerror = err => {
           sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
@@ -59,6 +61,8 @@ function startSensors() {       //from websensor-compass
         }
         */
         }
+
+        console.log(sensors);
         return sensors;
 }
 
@@ -68,6 +72,8 @@ function read_sensors()
         console.error('Could not start sensors');
         return false;
       }
+        console.log(sensors);
+        /*
       sensors.Accelerometer.onchange = event => {
         let xAccel = this.sensors.Accelerometer.y;
         let yAccel = this.sensors.Accelerometer.x;
@@ -75,6 +81,7 @@ function read_sensors()
         console.log(xAccel, yAccel, zAccel);
         }
         return xAccel;
+        */
 }
 
 //below uses Screen Orientation API
