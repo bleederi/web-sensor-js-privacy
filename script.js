@@ -98,7 +98,10 @@ function read_sensors()
         let yAccel = sensors[0].x;
         let zAccel = sensors[0].z;
         console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
-        }
+        }   
+        sensors[1].onchange = event => {
+        sensors[1].populateMatrix(this.orientationMat);
+      };
         return true;
 }
 
