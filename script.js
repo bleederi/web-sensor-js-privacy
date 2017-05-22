@@ -84,10 +84,10 @@ function startSensors() {
         let accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors[0] = accelerometer;
         sensors2.Accelerometer = accelerometer;
-        sensors[0].start();
+        //sensors[0].start();
         sensors2.Accelerometer.start();
-        sensors[0].onerror = err => {
-          sensors[0] = null;
+        sensors2.Accelerometer.onerror = err => {
+          sensors2.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
         };
         //AbsoluteOrientationSensor
@@ -120,16 +120,17 @@ function read_sensors()
         if (currentButton)
         {
                 sensors = startSensors();
+                /*
               if (!(sensors[0] || sensors[1])) {
                 console.error('Requires accelerometer and absolute orientation sensor');
                 return false;
               }      
                 console.log("Sensors to be read: " + sensors);
-
-              sensors[0].onchange = event => {
-                let xAccel = sensors[0].y;
-                let yAccel = sensors[0].x;
-                let zAccel = sensors[0].z;
+                */
+              sensors2.Accelerometer.onchange = event => {
+                let xAccel = sensors2.Accelerometer.y;
+                let yAccel = sensors2.Accelerometer.x;
+                let zAccel = sensors2.Accelerometer.z;
                 console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
                 } 
                 sensors[1].onchange = event => {
