@@ -35,7 +35,7 @@ function retrieve (key)
 }
 
 function startSensors() {
-        var sensor = new Accelerometer('frequency':60);
+        var sensor = new Accelerometer();
         sensor.start();
         /*
         sensor.onchange = event => {
