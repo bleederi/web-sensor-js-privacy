@@ -5,7 +5,31 @@ var i = dataArray.length;      //index to track amount of data points
 var sensors = [];
 var currentButton = null;
 var test = null;                //testing variable
-var orientationMat = new Float64Array();     //device orientation
+
+
+//create orientation matrix
+function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/18116922
+
+  var arr = [];
+
+  // Creates all lines:
+  for(var i=0; i < rows; i++){
+
+      // Creates an empty line
+      arr.push([]);
+
+      // Adds cols to the empty line:
+      arr[i].push( new Array(cols));
+
+      for(var j=0; j < cols; j++){
+        // Initializes:
+        arr[i][j] = defaultValue;
+      }
+  }
+
+return arr;
+}
+var orientationMat = new Float64Array(matrix(4, 4, 0));     //device orientation
 
 
 function get_click(buttonID)    //ID not necessarily numerical
