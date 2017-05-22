@@ -87,7 +87,7 @@ function startSensors() {
           console.log(`Accelerometer ${err.error}`)
         };
         //AbsoluteOrientationSensor
-        let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: 60});
+        let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: 200});
         sensors[1] = absoluteorientationsensor;
         sensors[1].start();
         sensors[1].onerror = err => {
