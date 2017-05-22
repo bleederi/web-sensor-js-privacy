@@ -2,6 +2,7 @@ console.log(5+6);
 var output = document.querySelector('.output');
 var dataArray = [];
 var i = dataArray.length;      //index to track amount of data points
+var sensors = [];
 var test = null;                //testing variable
 
 function get_click(buttonID)    //ID not necessarily numerical
@@ -33,28 +34,44 @@ function retrieve (key)
         return JSON.parse(localStorage.getItem(key));
 }
 
-function startSensors(...requiredSensors) {     //from websensor-compass
-        if(!this.sensors)
+function startSensors() {       //from websensor-compass
+        try 
         {
-                return false;
+        var sensor = new Accelerometer();
+        sensor.start();
+        sensor.onchange = event => {
+                        let xAccel = sensor.x;
+                        let yAccel = sensor.y;
+                        let zAccel = sensor.z;
+                        console.log(xAccel);
+
+                        // Treat the acceleration vector as an orientation vector by normalizing it.
+                        // Keep in mind that the if the device is flipped, the vector will just be
+                        // pointing in the other direction, so we have no way to know from the
+                        // accelerometer data what way the device is oriented.
+                        let norm = Math.sqrt(xAccel ** 2 + yAccel ** 2 + zAccel ** 2);
+
+                        // As we only can cover half of the spectrum we multiply the unit vector
+                        // with 90 so that it coveres the -90 to 90 degrees (180 degrees in total).
+                        this.beta = (xAccel / norm) * 90;
+                        this.gamma = (yAccel / norm) * - 90;
+                        this.alpha = 0;
         }
-      for (let sensor of requiredSensors) {
-        if (!this.sensors[sensor]) {
-          return false;
+        catch(err)
+        {
+        console.error(err);
         }
-      }
-      for (let sensor of requiredSensors) {
-        if (this.sensors[sensor].activated == false) {
-          this.sensors[sensor].start();
+        if (!sensor)
+        {
+        console.error("Requires accelerometer");
         }
-      }
-      return true;
-    }
+                }
+}
 
 function read_sensors()
 {
-      if (!startSensors("Gyroscope",  "Accelerometer", "AbsoluteOrientationSensor")) {
-        console.error('Requires gyroscope, accelerometer and absolute orientation sensor');
+      if (!startSensors()) {
+        console.error('Requires gyroscope and accelerometer');
         return false;
       }
       this.sensors.Accelerometer.onchange = event => {
