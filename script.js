@@ -48,10 +48,8 @@ function release()
         console.log('release');
       try {
         //sensors.LinearAccelerationSensor.stop();
-        for (sensor in sensors)
-        {
-        sensor.stop();
-        }
+        sensors.Accelerometer.stop();
+        sensors.AbsoluteOrientationSensor.stop();
       } catch(err) { }
 
 }
