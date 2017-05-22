@@ -1,4 +1,3 @@
-console.log(5+6);
 var output = document.querySelector('.output');
 var dataArray = [];
 var i = dataArray.length;      //index to track amount of data points
@@ -30,14 +29,14 @@ function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/1811692
 return arr;
 }
 var orientationMat = new Float64Array([1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6]);     //device orientation
-console.log("Orientation matrix: " + orientationMat);
+//console.log("Orientation matrix: " + orientationMat);
 
 function get_click(buttonID)    //ID not necessarily numerical
 {
         currentButton = buttonID;
         console.log(buttonID);
         test = read_sensors();
-        console.log(test);
+        //console.log(test);
 }
 
 function release()
@@ -45,7 +44,7 @@ function release()
         console.log(currentButton);
         dataArray.push(currentButton);        
         store('dataArray', dataArray);
-        console.log(retrieve('dataArray'));
+        //console.log(retrieve('dataArray'));
         currentButton = null;
         console.log('release');
       try {
@@ -106,7 +105,7 @@ function startSensors() {
         */
 
         console.log("Started sensors: " + sensors);
-        console.log(sensors[0], sensors[1]);
+        //console.log(sensors[0], sensors[1]);
         return sensors;
 }
 
@@ -120,14 +119,13 @@ function read_sensors()
                 return false;
               }      
                 console.log("Sensors to be read: " + sensors);
-        /*
+
               sensors[0].onchange = event => {
                 let xAccel = sensors[0].y;
                 let yAccel = sensors[0].x;
                 let zAccel = sensors[0].z;
                 console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
-                }
-        */   
+                } 
                 sensors[1].onchange = event => {
                 sensors[1].populateMatrix(orientationMat);
                 console.log("Orientation matrix: " + orientationMat);
