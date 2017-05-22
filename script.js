@@ -50,6 +50,7 @@ function release()
         console.log('release');
       try {
         sensors[0].stop();
+        sensors[1].stop();
       } catch(err) { }
 
 }
