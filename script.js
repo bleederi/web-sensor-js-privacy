@@ -103,7 +103,6 @@ function startSensors() {
       } catch(err) { }
 
         console.log("Started sensors: " + sensors);
-        //console.log(sensors[0], sensors[1]);
         console.log(sensors);
         return sensors;
 }
