@@ -74,7 +74,6 @@ function retrieve (key)
 }
 
 function startSensors() {
-
       try {
         sensors[0] = null;
         sensors[1] = null;
@@ -112,25 +111,28 @@ function startSensors() {
 
 function read_sensors()
 {
-        sensors = startSensors();
-      if (!(sensors[0] || sensors[1])) {
-        console.error('Requires accelerometer and absolute orientation sensor');
-        return false;
-      }      
-        console.log("Sensors to be read: " + sensors);
-/*
-      sensors[0].onchange = event => {
-        let xAccel = sensors[0].y;
-        let yAccel = sensors[0].x;
-        let zAccel = sensors[0].z;
-        console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
+        if (currentButton)
+        {
+                sensors = startSensors();
+              if (!(sensors[0] || sensors[1])) {
+                console.error('Requires accelerometer and absolute orientation sensor');
+                return false;
+              }      
+                console.log("Sensors to be read: " + sensors);
+        /*
+              sensors[0].onchange = event => {
+                let xAccel = sensors[0].y;
+                let yAccel = sensors[0].x;
+                let zAccel = sensors[0].z;
+                console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
+                }
+        */   
+                sensors[1].onchange = event => {
+                sensors[1].populateMatrix(orientationMat);
+                console.log("Orientation matrix: " + orientationMat);
+              };
+                return true;
         }
-*/   
-        sensors[1].onchange = event => {
-        sensors[1].populateMatrix(orientationMat);
-        console.log("Orientation matrix: " + orientationMat);
-      };
-        return true;
 }
 
 //below uses Screen Orientation API
