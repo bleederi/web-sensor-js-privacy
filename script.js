@@ -50,6 +50,7 @@ function release()
         for (sensor in sensors)
         {
         sensor.stop();
+        }
       } catch(err) { }
 
 }
