@@ -29,8 +29,8 @@ function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/1811692
 
 return arr;
 }
-var orientationMat = new Float64Array(matrix(4, 4, 0));     //device orientation
-
+var orientationMat = new Float64Array([1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6]);     //device orientation
+console.log("Orientation matrix: " + orientationMat);
 
 function get_click(buttonID)    //ID not necessarily numerical
 {
@@ -125,7 +125,7 @@ function read_sensors()
         console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
         }   
         sensors[1].onchange = event => {
-        sensors[1].populateMatrix(this.orientationMat);
+        sensors[1].populateMatrix(orientationMat);
       };
         return true;
 }
