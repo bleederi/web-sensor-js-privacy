@@ -48,8 +48,10 @@ function release()
         currentButton = null;
         console.log('release');
       try {
-        sensors[0].stop();
-        sensors[1].stop();
+        for (var i=0; i<sensors.length; i++)
+        {
+        sensors[i].stop();
+        }
       } catch(err) { }
 
 }
@@ -84,6 +86,7 @@ function startSensors() {
           sensors[0] = null;
           console.log(`Accelerometer ${err.error}`)
         };
+        //AbsoluteOrientationSensor
         let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: 60});
         sensors[1] = absoluteorientationsensor;
         sensors[1].start();
@@ -91,18 +94,16 @@ function startSensors() {
           sensors[1] = null;
           console.log(`Absolute orientation sensor ${err.error}`)
         };
+/*
+       let orientationsensor = new OrientationSensor({ frequency: 60});
+        sensors[1] = orientationsensor;
+        sensors[1].start();
+        sensors[1].onerror = err => {
+          sensors[1] = null;
+          console.log(`Orientation sensor ${err.error}`)
+        };
+*/
       } catch(err) { }
-
-        /*
-        var sensor = new Accelerometer();
-        sensor.start();
-        sensor.onchange = event => {
-                let xAccel = sensor.x;
-                let yAccel = sensor.y;
-                let zAccel = sensor.z;
-                console.log("xAccel:" + xAccel + "yAccel: " + yAccel + "zAccel: " + zAccel);
-        }
-        */
 
         console.log("Started sensors: " + sensors);
         //console.log(sensors[0], sensors[1]);
