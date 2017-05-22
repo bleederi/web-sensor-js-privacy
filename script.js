@@ -35,8 +35,6 @@ function retrieve (key)
 }
 
 function startSensors() {       //from websensor-compass
-        try 
-        {
         var sensor = new Accelerometer();
         sensor.start();
         sensor.onchange = event => {
@@ -57,15 +55,6 @@ function startSensors() {       //from websensor-compass
                         this.gamma = (yAccel / norm) * - 90;
                         this.alpha = 0;
         }
-        catch(err)
-        {
-        console.error(err);
-        }
-        if (!sensor)
-        {
-        console.error("Requires accelerometer");
-        }
-                }
 }
 
 function read_sensors()
