@@ -5,7 +5,7 @@ var i = dataArray.length;      //index to track amount of data points
 var sensors = [];
 var currentButton = null;
 var test = null;                //testing variable
-var orientationMat = null;     //device orientation
+var orientationMat = new Float64Array();     //device orientation
 
 
 function get_click(buttonID)    //ID not necessarily numerical
