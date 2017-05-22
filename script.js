@@ -49,11 +49,8 @@ function release()
         currentButton = null;
         console.log('release');
       try {
-        for (var i=0; i<sensors.length; i++)
-        {
-        sensors[i].stop();
-        }
         sensors2.Accelerometer.stop();
+        sensors2.AbsoluteOrientationSensor.stop();
       } catch(err) { }
 
 }
@@ -82,7 +79,7 @@ function startSensors() {
         sensors[0] = null;
         sensors[1] = null;
         let accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
-        sensors[0] = accelerometer;
+        //sensors[0] = accelerometer;
         sensors2.Accelerometer = accelerometer;
         //sensors[0].start();
         sensors2.Accelerometer.start();
@@ -92,10 +89,10 @@ function startSensors() {
         };
         //AbsoluteOrientationSensor
         let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: 60});
-        sensors[1] = absoluteorientationsensor;
-        sensors[1].start();
-        sensors[1].onerror = err => {
-          sensors[1] = null;
+        sensors2.AbsoluteOrientationSensor = absoluteorientationsensor;
+        sensors2.AbsoluteOrientationSensor.start();
+        sensors2.AbsoluteOrientationSensor.onerror = err => {
+          sensors2.AbsoluteOrientationSensor = null;
           console.log(`Absolute orientation sensor ${err.error}`)
         };
 /*
@@ -109,10 +106,10 @@ function startSensors() {
 */
       } catch(err) { }
 
-        console.log("Started sensors: " + sensors);
+        console.log("Started sensors: " + sensors2);
         //console.log(sensors[0], sensors[1]);
-        console.log(sensors2.Accelerometer);
-        return sensors;
+        console.log(sensors2);
+        return sensors2;
 }
 
 function read_sensors()
@@ -133,8 +130,8 @@ function read_sensors()
                 let zAccel = sensors2.Accelerometer.z;
                 console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
                 } 
-                sensors[1].onchange = event => {
-                sensors[1].populateMatrix(orientationMat);
+                sensors2.AbsoluteOrientationSensor.onchange = event => {
+                sensors2.AbsoluteOrientationSensor.populateMatrix(orientationMat);
                 console.log("Orientation matrix: " + orientationMat);
               };
                 return true;
