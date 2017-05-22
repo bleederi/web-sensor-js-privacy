@@ -12,7 +12,7 @@ window.addEventListener('load', function(){
         var startx = 0
         var dist = 0
  
-    buttons1.addEventListener('touchstart', function(e){
+    buttons.addEventListener('touchstart', function(e){
         var touchobj = e.changedTouches[0] // reference first touch point (ie: first finger)
         startx = parseInt(touchobj.clientX) // get x position of touch point relative to left edge of browser
         statusdiv.innerHTML = 'Status: touchstart<br> ClientX: ' + startx + 'px'
