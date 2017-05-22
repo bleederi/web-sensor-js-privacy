@@ -44,7 +44,7 @@ function release()
         console.log(currentButton);
         dataArray.push(currentButton);        
         store('dataArray', dataArray);
-        //console.log(retrieve('dataArray'));
+        console.log(retrieve('dataArray'));
         currentButton = null;
         console.log('release');
       try {
