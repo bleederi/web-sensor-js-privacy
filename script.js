@@ -5,6 +5,8 @@ var currentButton = null;
 var test = null;                //testing variable
 
 
+//TODO: How to get acceleration without gravity?
+
 //create orientation matrix
 function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/18116922
 
@@ -50,6 +52,7 @@ function release()
         //sensors.LinearAccelerationSensor.stop();
         sensors.Accelerometer.stop();
         sensors.AbsoluteOrientationSensor.stop();
+        sensors.Gyroscope.stop();
       } catch(err) { }
 
 }
@@ -101,6 +104,14 @@ function startSensors() {
           sensors.AbsoluteOrientationSensor = null;
           console.log(`Absolute orientation sensor ${err.error}`)
         };
+        //Gyroscope
+        let gyroscope = new Gyroscope({ frequency: 60});
+        sensors.Gyroscope = gyroscope;
+        sensors.Gyroscope.start();
+        sensors.Gyroscope.onerror = err => {
+          sensors.Gyroscope = null;
+          console.log(`Gyroscope ${err.error}`)
+        };
 /*
        let orientationsensor = new OrientationSensor({ frequency: 60});
         sensors[1] = orientationsensor;
@@ -135,15 +146,21 @@ function read_sensors()
               //  console.log("xAccelLin: " + xAccelLin + " yAccelLin: " + yAccelLin + " zAccelLin: " + zAccelLin);
               //  } 
               sensors.Accelerometer.onchange = event => {
-                let xAccel = sensors.Accelerometer.y;
-                let yAccel = sensors.Accelerometer.x;
+                let xAccel = sensors.Accelerometer.x;
+                let yAccel = sensors.Accelerometer.y;
                 let zAccel = sensors.Accelerometer.z;
                 console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
                 } 
                 sensors.AbsoluteOrientationSensor.onchange = event => {
                 sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
                 console.log("Orientation matrix: " + orientationMat);
-              };
+              }
+              sensors.Gyroscope.onchange = event => {
+                let xVelGyro = sensors.Gyroscope.x;
+                let yVelGyro = sensors.Gyroscope.y;
+                let zVelGyro = sensors.Gyroscope.z;
+                console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
+                };
                 return true;
         }
 }
