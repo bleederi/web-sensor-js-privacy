@@ -126,6 +126,7 @@ function read_sensors()
         }   
         sensors[1].onchange = event => {
         sensors[1].populateMatrix(orientationMat);
+        console.log("Orientation matrix: " + orientationMat);
       };
         return true;
 }
