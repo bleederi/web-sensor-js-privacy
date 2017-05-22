@@ -3,6 +3,7 @@ var dataArray = [];
 var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
+var gravity = null;
 
 
 //TODO: How to get acceleration without gravity?
@@ -50,6 +51,7 @@ function release()
         console.log('release');
       try {
         //sensors.LinearAccelerationSensor.stop();
+        sensors.GravitySensor.stop();
         sensors.Accelerometer.stop();
         sensors.AccelerometerNoG.stop();
         sensors.AbsoluteOrientationSensor.stop();
@@ -89,6 +91,14 @@ function startSensors() {
           console.log(`LinearAccelerationSensor ${err.error}`)
         };
         */
+        //GravitySensor
+        let gravitysensor = new GravitySensor({ frequency: 60, includeGravity: true });
+        sensors.GravitySensor = gravitysensor;
+        sensors.GravitySensor.start();
+        sensors.GravitySensor.onerror = err => {
+          sensors.GravitySensor = null;
+          console.log(`GravitySensor ${err.error}`)
+        };        
         //Accelerometer including gravity
         let accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors.Accelerometer = accelerometer;
@@ -154,6 +164,16 @@ function read_sensors()
               //  let zAccelLin = sensors.LinearAccelerationSensor.z;
               //  console.log("xAccelLin: " + xAccelLin + " yAccelLin: " + yAccelLin + " zAccelLin: " + zAccelLin);
               //  } 
+              sensors.GravitySensor.onchange = event => {
+                let xAccelG = sensors.GravitySensor.x;
+                let yAccelG = sensors.GravitySensor.y;
+                let zAccelG = sensors.GravitySensor.z;
+                console.log("xAccelG: " + xAccelG + " yAccelG: " + yAccelG + " zAccelG: " + zAccelG);
+                } 
+                sensors.AbsoluteOrientationSensor.onchange = event => {
+                sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
+                console.log("Orientation matrix: " + orientationMat);
+              }
               sensors.Accelerometer.onchange = event => {
                 let xAccel = sensors.Accelerometer.x;
                 let yAccel = sensors.Accelerometer.y;
