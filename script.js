@@ -1,6 +1,5 @@
 var output = document.querySelector('.output');
 var dataArray = [];
-var i = dataArray.length;      //index to track amount of data points
 var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
@@ -114,13 +113,13 @@ function read_sensors()
         if (currentButton)
         {
                 sensors = startSensors();
-                /*
-              if (!(sensors[0] || sensors[1])) {
+                
+              if (!(sensors.Accelerometer || sensors.AbsoluteOrientationSensor)) {
                 console.error('Requires accelerometer and absolute orientation sensor');
                 return false;
               }      
                 console.log("Sensors to be read: " + sensors);
-                */
+                
               sensors.Accelerometer.onchange = event => {
                 let xAccel = sensors.Accelerometer.y;
                 let yAccel = sensors.Accelerometer.x;
