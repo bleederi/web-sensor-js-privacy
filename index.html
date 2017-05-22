@@ -12,21 +12,29 @@
 
 <body>
 <script type="text/javascript" src="script.js"></script>
-<button id="1" onClick="get_click(this.id)">1</button>
-<button id="2" onClick="get_click(this.id)">2</button>
-<button id="3" onClick="get_click(this.id)">3</button>
+<div class="box" id="buttons" ontouchend="release()" onmouseup="release()">
+
+<h3> Touch Me! </h3>
+
+<button id="1" onmousedown="get_click(this.id)">1</button>
+<button id="2" onmousedown="get_click(this.id)">2</button>
+<button id="3" onmousedown="get_click(this.id)">3</button>
 </br>
-<button id="4" onClick="get_click(this.id)">4</button>
-<button id="5" onClick="get_click(this.id)">5</button>
-<button id="6" onClick="get_click(this.id)">6</button>
+<button id="4" onmousedown="get_click(this.id)">4</button>
+<button id="5" onmousedown="get_click(this.id)">5</button>
+<button id="6" onmousedown="get_click(this.id)">6</button>
 </br>
-<button id="7" onClick="get_click(this.id)">7</button>
-<button id="8" onClick="get_click(this.id)">8</button>
-<button id="9" onClick="get_click(this.id)">9</button>
+<button id="7" onmousedown="get_click(this.id)">7</button>
+<button id="8" onmousedown="get_click(this.id)">8</button>
+<button id="9" onmousedown="get_click(this.id)">9</button>
 </br>
 <button id="*" onClick="get_click(this.id)">*</button>
 <button id="0" onClick="get_click(this.id)">0</button>
 <button id="extra" onClick="get_click(this.id)">extra</button>
+
+</div>
 <pre class="output"></pre>
+
+<h3 id="statusdiv">Status</h3>
 </body>
 </html>
