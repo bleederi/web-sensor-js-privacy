@@ -34,33 +34,24 @@ function retrieve (key)
         return JSON.parse(localStorage.getItem(key));
 }
 
-function startSensors() {       //from websensor-compass
-        var sensor = new Accelerometer();
+function startSensors() {
+        var sensor = new Accelerometer('frequency':60);
         sensor.start();
+        /*
         sensor.onchange = event => {
                 let xAccel = sensor.x;
                 let yAccel = sensor.y;
                 let zAccel = sensor.z;
                 console.log("xAccel:" + xAccel + "yAccel: " + yAccel + "zAccel: " + zAccel);
-
-                // Treat the acceleration vector as an orientation vector by normalizing it.
-                // Keep in mind that the if the device is flipped, the vector will just be
-                // pointing in the other direction, so we have no way to know from the
-                // accelerometer data what way the device is oriented.
-                let norm = Math.sqrt(xAccel ** 2 + yAccel ** 2 + zAccel ** 2);
-
-                // As we only can cover half of the spectrum we multiply the unit vector
-                // with 90 so that it coveres the -90 to 90 degrees (180 degrees in total).
-                this.beta = (xAccel / norm) * 90;
-                this.gamma = (yAccel / norm) * - 90;
-                this.alpha = 0;
         }
+        */
+        return sensors;
 }
 
 function read_sensors()
 {
-      if (!startSensors()) {
-        console.error('Requires gyroscope and accelerometer');
+      if (!(sensors = startSensors())) {
+        console.error('Could not start sensors');
         return false;
       }
       this.sensors.Accelerometer.onchange = event => {
