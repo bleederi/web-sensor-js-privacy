@@ -47,7 +47,7 @@ function release()
         currentButton = null;
         console.log('release');
       try {
-        //sensors.LinearAccelerationSensor.stop();
+        sensors.LinearAccelerationSensor.stop();
         sensors.Accelerometer.stop();
         sensors.AbsoluteOrientationSensor.stop();
       } catch(err) { }
@@ -76,13 +76,13 @@ function retrieve (key)
 function startSensors() {
       try {
         //Linear acceleration sensor (no gravity)
-        //let linearaccelerationsensor = new LinearAccelerationSensor({ frequency: 60, includeGravity: true });
-        //sensors.LinearAccelerationSensor = linearaccelerationsensor;
-        //sensors.LinearAccelerationSensor.start();
-        //sensors.LinearAccelerationSensor.onerror = err => {
-        //  sensors.LinearAccelerationSensor = null;
-        //  console.log(`LinearAccelerationSensor ${err.error}`)
-        //};
+        let linearaccelerationsensor = new LinearAccelerationSensor({ frequency: 60, includeGravity: true });
+        sensors.LinearAccelerationSensor = linearaccelerationsensor;
+        sensors.LinearAccelerationSensor.start();
+        sensors.LinearAccelerationSensor.onerror = err => {
+          sensors.LinearAccelerationSensor = null;
+          console.log(`LinearAccelerationSensor ${err.error}`)
+        };
         //Accelerometer including gravity
         let accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors.Accelerometer = accelerometer;
