@@ -52,7 +52,7 @@ function startSensors() {
 
       try {
         sensors[0] = null;
-        let accelerometer = new Accelerometer({ frequency: 1, includeGravity: true });
+        let accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors[0] = accelerometer;
         sensors[0].start();
         sensors[0].onerror = err => {
