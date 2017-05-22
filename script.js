@@ -70,15 +70,13 @@ function read_sensors()
         return false;
       }
         console.log("Sensors to be read: " + sensors);
-        /*
       sensors[0].onchange = event => {
         let xAccel = sensors[0].y;
         let yAccel = sensors[0].x;
         let zAccel = sensors[0].z;
         console.log(xAccel, yAccel, zAccel);
         }
-        return xAccel;
-        */
+        return true;
 }
 
 //below uses Screen Orientation API
