@@ -6,38 +6,6 @@ var sensors = [];
 var currentButton = null;
 var test = null;                //testing variable
 
-window.addEventListener('load', function(){
- 
-        var buttons = document.getElementById('buttons')
-        var statusdiv = document.getElementById('statusdiv')
-        var startx = 0
-        var dist = 0
- 
-    buttons.addEventListener('touchstart', function(e){
-        var touchobj = e.changedTouches[0] // reference first touch point (ie: first finger)
-        startx = parseInt(touchobj.clientX) // get x position of touch point relative to left edge of browser
-        statusdiv.innerHTML = 'Status: touchstart<br> ClientX: ' + startx + 'px'
-        console.log(startx);
-        e.preventDefault()
-    }, false)
- 
-        buttons.addEventListener('touchmove', function(e){
-        var touchobj = e.changedTouches[0] // reference first touch point for this event
-        var dist = parseInt(touchobj.clientX) - startx
-        statusdiv.innerHTML = 'Status: touchmove<br> Horizontal distance traveled: ' + dist + 'px'
-        console.log(startx);
-        e.preventDefault()
-    }, false)
- 
-    buttons.addEventListener('touchend', function(e){
-        var touchobj = e.changedTouches[0] // reference first touch point for this event
-        statusdiv.innerHTML = 'Status: touchend<br> Resting x coordinate: ' + touchobj.clientX + 'px'
-        console.log(startx);
-        e.preventDefault()
-    }, false)
- 
-}, false)
-
 
 function get_click(buttonID)    //ID not necessarily numerical
 {
