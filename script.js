@@ -64,7 +64,7 @@ function startSensors() {
 
 function read_sensors()
 {
-      if (!sensors[0]) {
+      if (!sensors) {
         console.error('No accelerometer');
         return false;
       }
