@@ -49,8 +49,7 @@ function release()
       try {
         for sensor in sensors
         {
-                sensor.stop();
-        }
+        sensor.stop();
       } catch(err) { }
 
 }
