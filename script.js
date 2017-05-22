@@ -64,11 +64,13 @@ function startSensors() {
 
 function read_sensors()
 {
-      if (!sensors) {
+        sensors = startSensors();
+      if (!sensors[0]) {
         console.error('No accelerometer');
         return false;
       }
         console.log("Sensors to be read: " + sensors);
+        /*
       sensors[0].onchange = event => {
         let xAccel = sensors[0].y;
         let yAccel = sensors[0].x;
@@ -76,6 +78,7 @@ function read_sensors()
         console.log(xAccel, yAccel, zAccel);
         }
         return xAccel;
+        */
 }
 
 //below uses Screen Orientation API
