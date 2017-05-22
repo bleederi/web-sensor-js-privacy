@@ -118,12 +118,14 @@ function read_sensors()
         return false;
       }      
         console.log("Sensors to be read: " + sensors);
+/*
       sensors[0].onchange = event => {
         let xAccel = sensors[0].y;
         let yAccel = sensors[0].x;
         let zAccel = sensors[0].z;
         console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
-        }   
+        }
+*/   
         sensors[1].onchange = event => {
         sensors[1].populateMatrix(orientationMat);
         console.log("Orientation matrix: " + orientationMat);
