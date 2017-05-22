@@ -1,8 +1,7 @@
 var output = document.querySelector('.output');
 var dataArray = [];
 var i = dataArray.length;      //index to track amount of data points
-var sensors = [];
-var sensors2 = {};
+var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
 
@@ -49,8 +48,8 @@ function release()
         currentButton = null;
         console.log('release');
       try {
-        sensors2.Accelerometer.stop();
-        sensors2.AbsoluteOrientationSensor.stop();
+        sensors.Accelerometer.stop();
+        sensors.AbsoluteOrientationSensor.stop();
       } catch(err) { }
 
 }
@@ -76,23 +75,21 @@ function retrieve (key)
 
 function startSensors() {
       try {
-        sensors[0] = null;
-        sensors[1] = null;
         let accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         //sensors[0] = accelerometer;
-        sensors2.Accelerometer = accelerometer;
+        sensors.Accelerometer = accelerometer;
         //sensors[0].start();
-        sensors2.Accelerometer.start();
-        sensors2.Accelerometer.onerror = err => {
-          sensors2.Accelerometer = null;
+        sensors.Accelerometer.start();
+        sensors.Accelerometer.onerror = err => {
+          sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
         };
         //AbsoluteOrientationSensor
         let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: 60});
-        sensors2.AbsoluteOrientationSensor = absoluteorientationsensor;
-        sensors2.AbsoluteOrientationSensor.start();
-        sensors2.AbsoluteOrientationSensor.onerror = err => {
-          sensors2.AbsoluteOrientationSensor = null;
+        sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
+        sensors.AbsoluteOrientationSensor.start();
+        sensors.AbsoluteOrientationSensor.onerror = err => {
+          sensors.AbsoluteOrientationSensor = null;
           console.log(`Absolute orientation sensor ${err.error}`)
         };
 /*
@@ -106,10 +103,10 @@ function startSensors() {
 */
       } catch(err) { }
 
-        console.log("Started sensors: " + sensors2);
+        console.log("Started sensors: " + sensors);
         //console.log(sensors[0], sensors[1]);
-        console.log(sensors2);
-        return sensors2;
+        console.log(sensors);
+        return sensors;
 }
 
 function read_sensors()
@@ -124,14 +121,14 @@ function read_sensors()
               }      
                 console.log("Sensors to be read: " + sensors);
                 */
-              sensors2.Accelerometer.onchange = event => {
-                let xAccel = sensors2.Accelerometer.y;
-                let yAccel = sensors2.Accelerometer.x;
-                let zAccel = sensors2.Accelerometer.z;
+              sensors.Accelerometer.onchange = event => {
+                let xAccel = sensors.Accelerometer.y;
+                let yAccel = sensors.Accelerometer.x;
+                let zAccel = sensors.Accelerometer.z;
                 console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
                 } 
-                sensors2.AbsoluteOrientationSensor.onchange = event => {
-                sensors2.AbsoluteOrientationSensor.populateMatrix(orientationMat);
+                sensors.AbsoluteOrientationSensor.onchange = event => {
+                sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
                 console.log("Orientation matrix: " + orientationMat);
               };
                 return true;
