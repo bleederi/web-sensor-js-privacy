@@ -47,7 +47,7 @@ function release()
         currentButton = null;
         console.log('release');
       try {
-        for sensor in sensors
+        for (sensor in sensors)
         {
         sensor.stop();
       } catch(err) { }
