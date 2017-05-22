@@ -53,7 +53,7 @@ function release()
         //sensors.LinearAccelerationSensor.stop();
         //sensors.GravitySensor.stop();
         sensors.Accelerometer.stop();
-        //sensors.AccelerometerNoG.stop();
+        sensors.AccelerometerNoG.stop();
         sensors.AbsoluteOrientationSensor.stop();
         sensors.Gyroscope.stop();
       } catch(err) { }
@@ -109,7 +109,7 @@ function startSensors() {
           sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
         };
-        /*
+        
         //Accelerometer not including gravity
         let accelerometernog = new Accelerometer({ frequency: 60, includeGravity: false });
         sensors.AccelerometerNoG = accelerometernog;
@@ -117,7 +117,7 @@ function startSensors() {
         sensors.AccelerometerNoG.onerror = err => {
           sensors.AccelerometerNoG = null;
           console.log(`AccelerometerNoG ${err.error}`)
-        };*/
+        };
         //AbsoluteOrientationSensor
         let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: 60});
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
@@ -181,14 +181,14 @@ function read_sensors()
                 let zAccel = sensors.Accelerometer.z;
                 console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
                 } 
-/*
+
               sensors.AccelerometerNoG.onchange = event => {
                 let xAccelNoG = sensors.AccelerometerNoG.x;
                 let yAccelNoG = sensors.AccelerometerNoG.y;
                 let zAccelNoG = sensors.AccelerometerNoG.z;
                 console.log("xAccelNoG: " + xAccelNoG + " yAccelNoG: " + yAccelNoG + " zAccelNoG: " + zAccelNoG);
                 }
-*/ 
+
                 sensors.AbsoluteOrientationSensor.onchange = event => {
                 sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
                 console.log("Orientation matrix: " + orientationMat);
