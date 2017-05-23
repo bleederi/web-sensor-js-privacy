@@ -9,12 +9,19 @@ var gravity = null;
 //TODO: How to get acceleration without gravity?
 
 
-class LowPassFilterData {       //from websensor-compass
+class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
   constructor(reading, bias) {
     Object.assign(this, { x: reading.x, y: reading.y, z: reading.z });
     this.bias = bias;
   }
-}
+
+  update(reading) {
+    this.x = this.x * this.bias + reading.x * (1 - this.bias);
+    this.y = this.y * this.bias + reading.y * (1 - this.bias);
+    this.z = this.z * this.bias + reading.z * (1 - this.bias);
+  }
+};
+
 
 //create orientation matrix
 function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/18116922
@@ -113,7 +120,7 @@ function startSensors() {
         let accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors.Accelerometer = accelerometer;
         sensors.Accelerometer.start();
-        const gravity = new LowPassFilterData(accl, 0.8);
+        var gravity = new LowPassFilterData(accl, 0.8);
         sensors.Accelerometer.onerror = err => {
           sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
