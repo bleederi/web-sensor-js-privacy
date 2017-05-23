@@ -18,11 +18,22 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
     Object.assign(this, { x: reading.x, y: reading.y, z: reading.z });
     this.bias = bias;
   }
-
+/*
         update(reading) {
                 this.x = this.x * this.bias + reading.x * (1 - this.bias);
                 this.y = this.y * this.bias + reading.y * (1 - this.bias);
                 this.z = this.z * this.bias + reading.z * (1 - this.bias);
+
+        }
+*/
+        update(reading) {
+                let x = this.x * this.bias + reading.x * (1 - this.bias);
+                let y = this.y * this.bias + reading.y * (1 - this.bias);
+                let z = this.z * this.bias + reading.z * (1 - this.bias);
+                let norm = Math.sqrt(x * x + y * y + z * z);
+                this.x = 9.81 * x / norm;
+                this.y = 9.81 * y / norm;
+                this.z = 9.81 * z / norm;
 
         }
         normalize()
@@ -233,7 +244,7 @@ function read_sensors()
                                 //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                                 //console.log(newAccel)
                                 gravity.update(sensors.Accelerometer);
-                                //gravity.normalize();    //To do this or to not do this..? NaN problems
+                                gravity.normalize();    //To do this or to not do this..? NaN problems
                                 if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
                                 {
                                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
