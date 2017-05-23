@@ -3,9 +3,9 @@ var dataArray = [];
 var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
-var accel = null;
-var gravity = null;
-var accelNoG = null;
+var accel;
+var gravity;
+var accelNoG;
 var recording = false;  //are we recording data or not?
 
 
