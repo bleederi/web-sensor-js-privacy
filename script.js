@@ -275,7 +275,7 @@ function read_sensors()
                         sensors.AbsoluteOrientationSensor.onchange = event => {
                         sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
                         //console.log("Orientation matrix: " + orientationMat);
-                                        document.getElementById("ori").textContent = `Orientation matrix ${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]}`;
+                                        document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \\n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]})`;
                       }
                       sensors.Gyroscope.onchange = event => {
                         var xVelGyro = sensors.Gyroscope.x;
