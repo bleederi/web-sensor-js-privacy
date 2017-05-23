@@ -4,7 +4,6 @@ var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
 var accel = {x:null, y:null, z:null};
-var gravity =  new LowPassFilterData(sensors.Accelerometer, 0.8);
 var accelNoG;
 var recording = false;  //are we recording data or not?
 
@@ -18,10 +17,10 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
     this.bias = bias;
   }
 
-  update(reading) {
-    this.x = this.x * this.bias + reading.x * (1 - this.bias);
-    this.y = this.y * this.bias + reading.y * (1 - this.bias);
-    this.z = this.z * this.bias + reading.z * (1 - this.bias);
+        update(reading) {
+                this.x = this.x * this.bias + reading.x * (1 - this.bias);
+                this.y = this.y * this.bias + reading.y * (1 - this.bias);
+                this.z = this.z * this.bias + reading.z * (1 - this.bias);
 
         }
         normalize()
@@ -153,6 +152,7 @@ function startSensors() {
         var accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors.Accelerometer = accelerometer;
         sensors.Accelerometer.start();
+        gravity =  new LowPassFilterData(sensors.Accelerometer, 0.8);   //GLOBAL
         sensors.Accelerometer.onerror = err => {
           sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
