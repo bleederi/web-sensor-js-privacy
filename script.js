@@ -24,7 +24,7 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
     this.z = this.z * this.bias + reading.z * (1 - this.bias);
 
         //normalize to "known value" 9.81 m/s^2
-        var norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);        
+        let norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);        
         this.x = 9.81 * this.x / norm;
         this.y = 9.81 * this.y / norm;
         this.z = 9.81 * this.z / norm;
@@ -215,9 +215,9 @@ function read_sensors()
                 var yAccel = sensors.Accelerometer.y;
                 var zAccel = sensors.Accelerometer.z;
                 accel = {x:xAccel, y:yAccel, z:zAccel};
-                let newAccel = {x:xAccel, y:yAccel, z:zAccel};
+                var newAccel = {x:xAccel, y:yAccel, z:zAccel};
                 //console.log(newAccel)
-                gravity.update(newAccel);
+                gravity.update(accel);
                 accelNoG = {x:xAccel - gravity.x, y:yAccel - gravity.y, z:zAccel - gravity.z}
                 //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
                 //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
@@ -233,7 +233,7 @@ function read_sensors()
 */
                 sensors.AbsoluteOrientationSensor.onchange = event => {
                 sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
-                console.log("Orientation matrix: " + orientationMat);
+                //console.log("Orientation matrix: " + orientationMat);
               }
               sensors.Gyroscope.onchange = event => {
                 var xVelGyro = sensors.Gyroscope.x;
