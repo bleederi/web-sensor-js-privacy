@@ -125,6 +125,10 @@ function release()
         dataObject.accelerationnog = accelerationnogData;
         dataObject.orientation = orientationData;
         dataObject.rotation = rotationData;
+        accelerationData = [];        //reset accelerationData every new button press
+        accelerationnogData = [];        //reset accelerationnogData every new button press
+        orientationData = [];        //reset orientationData every new button press
+        rotationData = [];
         var b = new Object;     //need to push by value
         Object.assign(b, dataObject);
         dataArray.push(b);        
