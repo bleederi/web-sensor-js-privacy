@@ -83,7 +83,7 @@ function get_click(buttonID)    //ID not necessarily numerical
         currentButton = buttonID;
         console.log(buttonID);
         test = read_sensors();
-        console.log(gravity);
+        console.log("GravityX: " + gravity.x);
         update_text();
         //console.log(test);
 }
@@ -151,7 +151,7 @@ function startSensors() {
         //Accelerometer including gravity
         var accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors.Accelerometer = accelerometer;
-        const gravity =  new LowPassFilterData(sensors.Accelerometer, 0.8);   //GLOBAL
+        gravity =  new LowPassFilterData(sensors.Accelerometer, 0.8);   //GLOBAL
         sensors.Accelerometer.start();
         sensors.Accelerometer.onerror = err => {
           sensors.Accelerometer = null;
