@@ -31,11 +31,16 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
         }
 };
 
+function magnitude(vector)
+{
+return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+}
+
 function update_text()
 {
 document.getElementById("accl").textContent = "xAccel: " + accel.x.toFixed(3) + " yAccel: " + accel.y.toFixed(3) + " zAccel: " + accel.z.toFixed(3);
 document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
-document.getElementById("accl_nog").textContent = "xAccelNoG: " + accelNoG.x.toFixed(3) + " yAccelNoG: " + accelNoG.y.toFixed(3) + " zAccelNoG: " + accelNoG.z.toFixed(3);
+document.getElementById("accl_nog").textContent = "xAccelNoG: " + accelNoG.x.toFixed(3) + " yAccelNoG: " + accelNoG.y.toFixed(3) + " zAccelNoG: " + accelNoG.z.toFixed(3) + "Magnitude: " + magnitude(accelNoG).toFixed(3);
 
 }
 
