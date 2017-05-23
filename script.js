@@ -117,7 +117,7 @@ function startSensors() {
         };        
 */
         //Accelerometer including gravity
-        let accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
+        var accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors.Accelerometer = accelerometer;
         sensors.Accelerometer.start();
         var gravity = new LowPassFilterData(accelerometer, 0.8);
