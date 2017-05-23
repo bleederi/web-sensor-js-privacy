@@ -4,7 +4,7 @@ var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
 var accel = null;
-var GRAVITY = null;
+var gravity = null;
 var accelNoG = null;
 var recording = false;  //are we recording data or not?
 
@@ -229,7 +229,7 @@ function read_sensors()
                 gravity.normalize();
                 accelNoG = {x:xAccel - gravity.x, y:yAccel - gravity.y, z:zAccel - gravity.z}
                 //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
-                //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
+                console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                 //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
                 } 
 /*
@@ -248,7 +248,7 @@ function read_sensors()
                 var xVelGyro = sensors.Gyroscope.x;
                 var yVelGyro = sensors.Gyroscope.y;
                 var zVelGyro = sensors.Gyroscope.z;
-                console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
+                //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
                 };
                 return true;
         }
