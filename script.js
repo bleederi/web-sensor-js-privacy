@@ -215,8 +215,9 @@ function read_sensors()
                 var yAccel = sensors.Accelerometer.y;
                 var zAccel = sensors.Accelerometer.z;
                 accel = {x:xAccel, y:yAccel, z:zAccel};
+                let newAccel = {x:xAccel, y:yAccel, z:zAccel};
                 //console.log(newAccel)
-                gravity.update(accel);
+                gravity.update(newAccel);
                 accelNoG = {x:xAccel - gravity.x, y:yAccel - gravity.y, z:zAccel - gravity.z}
                 //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
                 //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
