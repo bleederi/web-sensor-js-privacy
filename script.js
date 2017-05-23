@@ -6,6 +6,7 @@ var test = null;                //testing variable
 var accel = {x:null, y:null, z:null};
 var accelNoG;
 var recording = false;  //are we recording data or not?
+var nosensors = false;  //for testing with fake values and without sensors
 
 
 //TODO: How to get acceleration without gravity?
@@ -127,6 +128,8 @@ function retrieve (key)
 }
 
 function startSensors() {
+        if(!(nosensors))
+        {
       try {
         /*
         //Linear acceleration sensor (no gravity)
@@ -151,8 +154,8 @@ function startSensors() {
         //Accelerometer including gravity
         var accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors.Accelerometer = accelerometer;
-        gravity =  new LowPassFilterData(sensors.Accelerometer, 0.8);   //GLOBAL
         sensors.Accelerometer.start();
+        gravity =  new LowPassFilterData(sensors.Accelerometer, 0.8);   //GLOBAL
         sensors.Accelerometer.onerror = err => {
           sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
@@ -197,6 +200,11 @@ function startSensors() {
         console.log("Started sensors: " + sensors);
         console.log(sensors);
         return sensors;
+        }
+        else
+        {
+                return null;
+        }
 }
 
 function read_sensors()
@@ -204,65 +212,67 @@ function read_sensors()
         if (currentButton)
         {
                 sensors = startSensors();
-                
-              if (!(sensors.Accelerometer || sensors.AbsoluteOrientationSensor)) {
-                console.error('Requires linear acceleration sensor, accelerometer and absolute orientation sensor');
-                return false;
-              }      
-                console.log("Sensors to be read: " + sensors);
-              //sensors.LinearAccelerationSensor.onchange = event => {
-              //  let xAccelLin = sensors.LinearAccelerationSensor.y;
-              //  let yAccelLin = sensors.LinearAccelerationSensor.x;
-              //  let zAccelLin = sensors.LinearAccelerationSensor.z;
-              //  console.log("xAccelLin: " + xAccelLin + " yAccelLin: " + yAccelLin + " zAccelLin: " + zAccelLin);
-              //  } 
-/*
-              sensors.GravitySensor.onchange = event => {
-                let xAccelG = sensors.GravitySensor.x;
-                let yAccelG = sensors.GravitySensor.y;
-                let zAccelG = sensors.GravitySensor.z;
-                console.log("xAccelG: " + xAccelG + " yAccelG: " + yAccelG + " zAccelG: " + zAccelG);
-                }
-*/
-              sensors.Accelerometer.onchange = event => {
-                accel = {x:sensors.Accelerometer.x, y:sensors.Accelerometer.y, z:sensors.Accelerometer.z};
-                        //let newAccel = accel;
-                        //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
-                        //console.log(newAccel)
-                        gravity.update(sensors.Accelerometer);
-                        //gravity.normalize();
-                        if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
-                        {
-                                accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
-                                //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
+               if(!(nosensors))
+                { 
+                      if (!(sensors.Accelerometer || sensors.AbsoluteOrientationSensor)) {
+                        console.error('Requires linear acceleration sensor, accelerometer and absolute orientation sensor');
+                        return false;
+                      }      
+                        console.log("Sensors to be read: " + sensors);
+                      //sensors.LinearAccelerationSensor.onchange = event => {
+                      //  let xAccelLin = sensors.LinearAccelerationSensor.y;
+                      //  let yAccelLin = sensors.LinearAccelerationSensor.x;
+                      //  let zAccelLin = sensors.LinearAccelerationSensor.z;
+                      //  console.log("xAccelLin: " + xAccelLin + " yAccelLin: " + yAccelLin + " zAccelLin: " + zAccelLin);
+                      //  } 
+        /*
+                      sensors.GravitySensor.onchange = event => {
+                        let xAccelG = sensors.GravitySensor.x;
+                        let yAccelG = sensors.GravitySensor.y;
+                        let zAccelG = sensors.GravitySensor.z;
+                        console.log("xAccelG: " + xAccelG + " yAccelG: " + yAccelG + " zAccelG: " + zAccelG);
                         }
-                        else
-                        {
-                                console.log("Gravity NaN");
+        */
+                      sensors.Accelerometer.onchange = event => {
+                        accel = {x:sensors.Accelerometer.x, y:sensors.Accelerometer.y, z:sensors.Accelerometer.z};
+                                //let newAccel = accel;
+                                accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
+                                //console.log(newAccel)
+                                gravity.update(sensors.Accelerometer);
+                                gravity.normalize();
+                                if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
+                                {
+                                        accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
+                                        console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
+                                }
+                                else
+                                {
+                                        console.log("Gravity NaN");
+                                }
+                                //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
+                                //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
+                                //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
+                        } 
+        /*
+                      sensors.AccelerometerNoG.onchange = event => {
+                        let xAccelNoG = sensors.AccelerometerNoG.x;
+                        let yAccelNoG = sensors.AccelerometerNoG.y;
+                        let zAccelNoG = sensors.AccelerometerNoG.z;
+                        console.log("xAccelNoG: " + xAccelNoG + " yAccelNoG: " + yAccelNoG + " zAccelNoG: " + zAccelNoG);
                         }
-                        //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
-                        //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
-                        //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
-                } 
-/*
-              sensors.AccelerometerNoG.onchange = event => {
-                let xAccelNoG = sensors.AccelerometerNoG.x;
-                let yAccelNoG = sensors.AccelerometerNoG.y;
-                let zAccelNoG = sensors.AccelerometerNoG.z;
-                console.log("xAccelNoG: " + xAccelNoG + " yAccelNoG: " + yAccelNoG + " zAccelNoG: " + zAccelNoG);
+        */
+                        sensors.AbsoluteOrientationSensor.onchange = event => {
+                        sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
+                        //console.log("Orientation matrix: " + orientationMat);
+                      }
+                      sensors.Gyroscope.onchange = event => {
+                        var xVelGyro = sensors.Gyroscope.x;
+                        var yVelGyro = sensors.Gyroscope.y;
+                        var zVelGyro = sensors.Gyroscope.z;
+                        //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
+                        };
+                        return true;
                 }
-*/
-                sensors.AbsoluteOrientationSensor.onchange = event => {
-                sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
-                //console.log("Orientation matrix: " + orientationMat);
-              }
-              sensors.Gyroscope.onchange = event => {
-                var xVelGyro = sensors.Gyroscope.x;
-                var yVelGyro = sensors.Gyroscope.y;
-                var zVelGyro = sensors.Gyroscope.z;
-                //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
-                };
-                return true;
         }
 }
 
