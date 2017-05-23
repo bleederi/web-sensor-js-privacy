@@ -6,6 +6,7 @@ var test = null;                //testing variable
 var accel = {x:null, y:null, z:null};
 var accelNoG;
 var recording = false;  //are we recording data or not?
+var sensorfreq = 1;     //for setting desired sensor frequency
 var nosensors = false;  //for testing with fake values and without sensors
 
 
@@ -143,7 +144,7 @@ function startSensors() {
         };        
 */
         //Accelerometer including gravity
-        accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
+        accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
         sensors.Accelerometer = accelerometer;
         sensors.Accelerometer.start();
         accel = accelerometer;
@@ -164,7 +165,7 @@ function startSensors() {
         };
 */
         //AbsoluteOrientationSensor
-        let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: 60});
+        let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
         sensors.AbsoluteOrientationSensor.start();
         sensors.AbsoluteOrientationSensor.onerror = err => {
@@ -172,7 +173,7 @@ function startSensors() {
           console.log(`Absolute orientation sensor ${err.error}`)
         };
         //Gyroscope
-        let gyroscope = new Gyroscope({ frequency: 60});
+        let gyroscope = new Gyroscope({ frequency: sensorfreq});
         sensors.Gyroscope = gyroscope;
         sensors.Gyroscope.start();
         sensors.Gyroscope.onerror = err => {
