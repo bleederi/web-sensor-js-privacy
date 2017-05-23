@@ -221,14 +221,17 @@ function read_sensors()
 */
               sensors.Accelerometer.onchange = event => {
                 accel = {x:sensors.Accelerometer.x, y:sensors.Accelerometer.y, z:sensors.Accelerometer.z};
-                //var newAccel = {x:xAccel, y:yAccel, z:zAccel};
-                //console.log(newAccel)
-                gravity.update(accel);
-                gravity.normalize();
-                accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
-                //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
-                //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
-                //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
+                if (!(isNaN(accel.x) && isNaN(accel.y) && isNaN(accel.z)))      //to prevent NaN
+                {
+                        //var newAccel = {x:xAccel, y:yAccel, z:zAccel};
+                        //console.log(newAccel)
+                        gravity.update(accel);
+                        gravity.normalize();
+                        accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
+                        //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
+                        //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
+                        //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
+                }
                 } 
 /*
               sensors.AccelerometerNoG.onchange = event => {
