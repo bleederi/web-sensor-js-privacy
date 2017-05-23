@@ -61,7 +61,7 @@ function release()
         console.log(currentButton);
         dataArray.push(currentButton);        
         store('dataArray', dataArray);
-        console.log(retrieve('dataArray'));
+        //console.log(retrieve('dataArray'));
         currentButton = null;
         console.log('release');
       try {
@@ -121,7 +121,6 @@ function startSensors() {
         sensors.Accelerometer = accelerometer;
         sensors.Accelerometer.start();
         gravity = new LowPassFilterData(sensors.Accelerometer, 0.8);
-        console.log("Gravity: " + gravity);
         sensors.Accelerometer.onerror = err => {
           sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
@@ -202,7 +201,7 @@ function read_sensors()
                 gravity.update(newAccel);
                 console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
                 console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
-                document.getElementById("p_accl").innerHTML = "Acceleration:";
+                var text = document.getElementById("p_accl").textContent = "Gravity: " + gravity.x + " " + gravity.y + " " + gravity.z;
                 } 
 /*
               sensors.AccelerometerNoG.onchange = event => {
