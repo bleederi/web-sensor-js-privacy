@@ -1,10 +1,12 @@
 var output = document.querySelector('.output');
 var dataArray = [];     //array to store multiple dataObjects (one dataObject for each button press)
-var dataObject = {button:null, acceleration:null, accelerationnog:null, orientation:null};    //single reading of all the sensor data, each object a list of values obtained during button press
+var dataObject = {button:null, acceleration:null, accelerationnog:null, orientation:null, rotation:null};    //single reading of all the sensor data, each object a list of values obtained during button press
+
 //below are variables for storing data for single button press
 var accelerationData = [];      //list of all acceleration data
 var accelerationnogData = [];   //list of acceleration data without gravity
 var orientationData = [];
+var rotationData = [];
 
 var sensors = {};
 var currentButton = null;
@@ -107,6 +109,7 @@ function get_click(buttonID)    //ID not necessarily numerical
         accelerationData = [];        //reset accelerationData every new button press
         accelerationnogData = [];        //reset accelerationnogData every new button press
         orientationData = [];        //reset orientationData every new button press
+        rotationData = [];
         test = read_sensors();
         update_text();
         //console.log(test);
@@ -120,6 +123,7 @@ function release()
         dataObject.acceleration = accelerationData;
         dataObject.accelerationnog = accelerationnogData;
         dataObject.orientation = orientationData;
+        dataObject.rotation = rotationData;
         var b = new Object;     //need to push by value
         Object.assign(b, dataObject);
         dataArray.push(b);        
@@ -158,26 +162,6 @@ function startSensors() {
         if(!(nosensors))
         {
       try {
-        /*
-        //Linear acceleration sensor (no gravity)
-        let linearaccelerationsensor = new LinearAccelerationSensor({ frequency: 60, includeGravity: true });
-        sensors.LinearAccelerationSensor = linearaccelerationsensor;
-        sensors.LinearAccelerationSensor.start();
-        sensors.LinearAccelerationSensor.onerror = err => {
-          sensors.LinearAccelerationSensor = null;
-          console.log(`LinearAccelerationSensor ${err.error}`)
-        };
-        */
-/*
-        //GravitySensor
-        let gravitysensor = new GravitySensor({ frequency: 60});
-        sensors.GravitySensor = gravitysensor;
-        sensors.GravitySensor.start();
-        sensors.GravitySensor.onerror = err => {
-          sensors.GravitySensor = null;
-          console.log(`GravitySensor ${err.error}`)
-        };        
-*/
         //Accelerometer including gravity
         accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
         sensors.Accelerometer = accelerometer;
@@ -189,16 +173,6 @@ function startSensors() {
           sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
         };
-/*        
-        //Accelerometer not including gravity
-        let accelerometernog = new Accelerometer({ frequency: 60, includeGravity: false });
-        sensors.AccelerometerNoG = accelerometernog;
-        sensors.AccelerometerNoG.start();
-        sensors.AccelerometerNoG.onerror = err => {
-          sensors.AccelerometerNoG = null;
-          console.log(`AccelerometerNoG ${err.error}`)
-        };
-*/
         //AbsoluteOrientationSensor
         let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
@@ -215,15 +189,6 @@ function startSensors() {
           sensors.Gyroscope = null;
           console.log(`Gyroscope ${err.error}`)
         };
-/*
-       let orientationsensor = new OrientationSensor({ frequency: 60});
-        sensors[1] = orientationsensor;
-        sensors[1].start();
-        sensors[1].onerror = err => {
-          sensors[1] = null;
-          console.log(`Orientation sensor ${err.error}`)
-        };
-*/
       } catch(err) { console.log(err); }
 
         console.log("Started sensors: " + sensors);
@@ -248,20 +213,7 @@ function read_sensors()
                         return false;
                       }      
                         console.log("Sensors to be read: " + sensors);
-                      //sensors.LinearAccelerationSensor.onchange = event => {
-                      //  let xAccelLin = sensors.LinearAccelerationSensor.y;
-                      //  let yAccelLin = sensors.LinearAccelerationSensor.x;
-                      //  let zAccelLin = sensors.LinearAccelerationSensor.z;
-                      //  console.log("xAccelLin: " + xAccelLin + " yAccelLin: " + yAccelLin + " zAccelLin: " + zAccelLin);
-                      //  } 
-        /*
-                      sensors.GravitySensor.onchange = event => {
-                        let xAccelG = sensors.GravitySensor.x;
-                        let yAccelG = sensors.GravitySensor.y;
-                        let zAccelG = sensors.GravitySensor.z;
-                        console.log("xAccelG: " + xAccelG + " yAccelG: " + yAccelG + " zAccelG: " + zAccelG);
-                        }
-        */
+
                       sensors.Accelerometer.onchange = event => {
                         accel = {x:sensors.Accelerometer.x, y:sensors.Accelerometer.y, z:sensors.Accelerometer.z};
                                 //let newAccel = accel;
@@ -306,6 +258,7 @@ function read_sensors()
                       sensors.Gyroscope.onchange = event => {
                         var velGyro = {x:sensors.Gyroscope.x, y:sensors.Gyroscope.y, z:sensors.Gyroscope.z};
                                         document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: (${magnitude(velGyro).toFixed(3)}))`;
+                        rotationData.push(velGyro);
                         //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
                         };
                         return true;
