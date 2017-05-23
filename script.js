@@ -68,10 +68,7 @@ function update_text()
 
 function stop_sensors()
 {
-        //sensors.LinearAccelerationSensor.stop();
-        //sensors.GravitySensor.stop();
         sensors.Accelerometer.stop();
-        //sensors.AccelerometerNoG.stop();
         sensors.AbsoluteOrientationSensor.stop();     //don't stop due to the delay in starting up
         sensors.Gyroscope.stop();
 }
@@ -135,7 +132,7 @@ function release()
         Object.assign(b, dataObject);
         dataArray.push(b);        
         store('dataArray', dataArray);
-        console.log(retrieve('dataArray'));
+        //console.log(retrieve('dataArray'));
         currentButton = null;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
         recording = false;
