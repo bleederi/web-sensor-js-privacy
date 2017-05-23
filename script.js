@@ -235,12 +235,12 @@ function read_sensors()
                                 accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                                 //console.log(newAccel)
                                 gravity.update(sensors.Accelerometer);
-                                gravity.normalize();
+                                //gravity.normalize();
                                 if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
                                 {
                                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
                                         console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
-                                        document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x}.toFixed(3), ${gravity.y}.tofixed(3), ${gravity.z}.toFixed(3) (${magnitude(gravity).toFixed(3)}))`;
+                                        document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.tofixed(3)}, ${gravity.z.toFixed(3)} (${magnitude(gravity).toFixed(3)}))`;
                                 }
                                 else
                                 {
