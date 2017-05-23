@@ -34,7 +34,7 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
         }
 };
 
-function magnitude(vector)
+function magnitude(vector)      //Calculate the magnitude of a vector
 {
 return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 }
@@ -223,13 +223,13 @@ function read_sensors()
                 var yAccel = sensors.Accelerometer.y;
                 var zAccel = sensors.Accelerometer.z;
                 accel = {x:xAccel, y:yAccel, z:zAccel};
-                var newAccel = {x:xAccel, y:yAccel, z:zAccel};
+                //var newAccel = {x:xAccel, y:yAccel, z:zAccel};
                 //console.log(newAccel)
                 gravity.update(accel);
                 gravity.normalize();
                 accelNoG = {x:xAccel - gravity.x, y:yAccel - gravity.y, z:zAccel - gravity.z}
                 //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
-                console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
+                //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                 //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
                 } 
 /*
