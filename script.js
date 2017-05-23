@@ -240,7 +240,7 @@ function read_sensors()
                                 {
                                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
                                         console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
-                                        document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`;
+                                        document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x}.toFixed(3), ${gravity.y}.tofixed(3), ${gravity.z}.toFixed(3) (${magnitude(gravity).toFixed(3)}))`;
                                 }
                                 else
                                 {
