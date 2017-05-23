@@ -120,7 +120,8 @@ function startSensors() {
         var accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors.Accelerometer = accelerometer;
         sensors.Accelerometer.start();
-        var gravity = new LowPassFilterData(accelerometer, 0.8);
+        var gravity = new LowPassFilterData(sensors.Accelerometer, 0.8);
+        console.log("Gravity: " + gravity);
         sensors.Accelerometer.onerror = err => {
           sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
@@ -196,8 +197,9 @@ function read_sensors()
                 let xAccel = sensors.Accelerometer.x;
                 let yAccel = sensors.Accelerometer.y;
                 let zAccel = sensors.Accelerometer.z;
-                let newaccel = {x:xAccel, y:yAccel, z:zAccel};
-                gravity.update(newaccel);
+                let newAccel = {x:xAccel, y:yAccel, z:zAccel};
+                console.log(newAccel)
+                gravity.update(newAccel);
                 console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
                 console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                 document.getElementById("p_accl").innerHTML = "Acceleration:";
