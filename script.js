@@ -27,14 +27,14 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
     Object.assign(this, { x: reading.x, y: reading.y, z: reading.z });
     this.bias = bias;
   }
-
+/*
         update(reading) {
                 this.x = this.x * this.bias + reading.x * (1 - this.bias);
                 this.y = this.y * this.bias + reading.y * (1 - this.bias);
                 this.z = this.z * this.bias + reading.z * (1 - this.bias);
 
         }
-/*
+*/
         update(reading) {       //also normalizes
                 let x = this.x * this.bias + reading.x * (1 - this.bias);
                 let y = this.y * this.bias + reading.y * (1 - this.bias);
@@ -45,7 +45,6 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
                 this.z = 9.81 * z / norm;
 
         }
-*/
         normalize()
         {
                 //normalize to "known value" 9.81 m/s^2
