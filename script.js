@@ -3,6 +3,7 @@ var dataArray = [];
 var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
+var gravity = null;
 
 
 //TODO: How to get acceleration without gravity?
@@ -119,7 +120,7 @@ function startSensors() {
         var accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors.Accelerometer = accelerometer;
         sensors.Accelerometer.start();
-        var gravity = new LowPassFilterData(sensors.Accelerometer, 0.8);
+        gravity = new LowPassFilterData(sensors.Accelerometer, 0.8);
         console.log("Gravity: " + gravity);
         sensors.Accelerometer.onerror = err => {
           sensors.Accelerometer = null;
