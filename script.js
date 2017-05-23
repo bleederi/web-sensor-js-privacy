@@ -6,6 +6,7 @@ var dataObject = {button:null, acceleration:null, accelerationnog:null, orientat
 var accelerationData = [];      //list of all acceleration data
 var accelerationnogData = [];   //list of acceleration data without gravity
 var orientationData = [];
+var orientationMatTemp = null;       //temp variable for storing orientation matrix
 var rotationData = [];
 
 var sensors = {};
@@ -251,7 +252,9 @@ function read_sensors()
         */
                         sensors.AbsoluteOrientationSensor.onchange = event => {
                         sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
-                        orientationData.push(orientationMat);
+                        orientationMatTemp = new Object;     //need to push orientation matrix by value
+                        Object.assign(orientationMatTemp, orientationMat);
+                        orientationData.push(orientationMatTemp);
                         //console.log("Orientation matrix: " + orientationMat);
                                         document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]})`;
                       }
