@@ -206,7 +206,7 @@ function read_sensors()
                 console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                 console.log("xAccelNoG: " + xAccelNoG + " yAccelNoG: " + xAccelNoG + " zAccelNoG: " + xAccelNoG);
                 document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
-                document.getElementById("accl_nog").textContent = "xAccelNoG: " + xAccelNoG + " yAccelNoG: " + xAccelNoG + " zAccelNoG: " + xAccelNoG;
+                document.getElementById("accl_nog").textContent = "xAccelNoG: " + xAccelNoG + " yAccelNoG: " + yAccelNoG + " zAccelNoG: " + zAccelNoG;
                 } 
 /*
               sensors.AccelerometerNoG.onchange = event => {
