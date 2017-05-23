@@ -70,7 +70,7 @@ function get_click(buttonID)    //ID not necessarily numerical
         currentButton = buttonID;
         console.log(buttonID);
         test = read_sensors();
-        setInterval(update_text, 1000); //for debugging purposes, can't continuously update text
+        //setInterval(update_text, 1000); //for debugging purposes, can't continuously update text
         //console.log(test);
 }
 
