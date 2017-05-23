@@ -63,7 +63,7 @@ function stop_sensors()
         //sensors.GravitySensor.stop();
         sensors.Accelerometer.stop();
         //sensors.AccelerometerNoG.stop();
-        //sensors.AbsoluteOrientationSensor.stop();     //don't stop due to the delay in starting up
+        sensors.AbsoluteOrientationSensor.stop();     //don't stop due to the delay in starting up
         sensors.Gyroscope.stop();
 }
 
@@ -112,7 +112,7 @@ function release()
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
         console.log('release');
       try {
-        stop_sensors();
+        //stop_sensors();
       } catch(err) { }
 
 }
