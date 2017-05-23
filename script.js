@@ -72,24 +72,24 @@ function stop_sensors()
 //create orientation matrix
 function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/18116922
 
-  var arr = [];
+        var arr = [];
 
-  // Creates all lines:
-  for(var i=0; i < rows; i++){
+        // Creates all lines:
+        for(var i=0; i < rows; i++){
 
-      // Creates an empty line
-      arr.push([]);
+        // Creates an empty line
+        arr.push([]);
 
-      // Adds cols to the empty line:
-      arr[i].push( new Array(cols));
+        // Adds cols to the empty line:
+        arr[i].push( new Array(cols));
 
-      for(var j=0; j < cols; j++){
+        for(var j=0; j < cols; j++){
         // Initializes:
         arr[i][j] = defaultValue;
-      }
-  }
+        }
+        }
 
-return arr;
+        return arr;
 }
 var orientationMat = new Float64Array([1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6]);     //device orientation
 //console.log("Orientation matrix: " + orientationMat);
