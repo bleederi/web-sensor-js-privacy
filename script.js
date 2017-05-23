@@ -46,7 +46,7 @@ document.getElementById("accl").textContent = "xAccel: " + accel.x.toFixed(3) + 
 }
 if(gravity)
 {
-document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
+document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`;
 }
 document.getElementById("accl_nog").textContent = "xAccelNoG: " + accelNoG.x.toFixed(3) + " yAccelNoG: " + accelNoG.y.toFixed(3) + " zAccelNoG: " + accelNoG.z.toFixed(3) + " Magnitude: " + magnitude(accelNoG).toFixed(3);
 
@@ -234,7 +234,7 @@ function read_sensors()
                         if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
                         {
                                 accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
-                                console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
+                                //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
                         }
                         else
                         {
