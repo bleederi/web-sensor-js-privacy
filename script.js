@@ -151,8 +151,8 @@ function startSensors() {
         //Accelerometer including gravity
         var accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors.Accelerometer = accelerometer;
+        const gravity =  new LowPassFilterData(sensors.Accelerometer, 0.8);   //GLOBAL
         sensors.Accelerometer.start();
-        gravity =  new LowPassFilterData(sensors.Accelerometer, 0.8);   //GLOBAL
         sensors.Accelerometer.onerror = err => {
           sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
