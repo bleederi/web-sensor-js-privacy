@@ -3,6 +3,7 @@ var dataArray = [];
 var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
+var accel = null;
 var gravity = null;
 var accelNoG = null;
 var recording = false;  //are we recording data or not?
@@ -26,6 +27,7 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
 
 function update_text()
 {
+document.getElementById("accl").textContent = "xAccel: " + accel.toFixed(3) + " yAccel: " + accel.toFixed(3) + " zAccel: " + accel.z.toFixed(3);
 document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
 document.getElementById("accl_nog").textContent = "xAccelNoG: " + accelNoG.x.toFixed(3) + " yAccelNoG: " + accelNoG.y.toFixed(3) + " zAccelNoG: " + accelNoG.z.toFixed(3);
 
@@ -206,11 +208,11 @@ function read_sensors()
                 var xAccel = sensors.Accelerometer.x;
                 var yAccel = sensors.Accelerometer.y;
                 var zAccel = sensors.Accelerometer.z;
-                var newAccel = {x:xAccel, y:yAccel, z:zAccel};
+                accel = {x:xAccel, y:yAccel, z:zAccel};
                 //console.log(newAccel)
-                gravity.update(newAccel);
+                gravity.update(accel);
                 accelNoG = {x:xAccel - gravity.x, y:yAccel - gravity.y, z:zAccel - gravity.z}
-                //console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
+                //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
                 //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                 //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
                 } 
