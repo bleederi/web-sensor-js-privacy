@@ -1,5 +1,7 @@
 var output = document.querySelector('.output');
-var dataArray = [];
+var dataArray = [];     //array to store multiple dataObjects (one dataObject for each button press)
+var dataObject = {button:null, acceleration:null};    //single reading of all the sensor data, each object a list of values obtained during button press
+var accelerationData = [];      //list of all acceleration data for a single button press
 var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
@@ -97,6 +99,7 @@ function get_click(buttonID)    //ID not necessarily numerical
         currentButton = buttonID;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
         console.log(buttonID);
+        recording = true;
         test = read_sensors();
         update_text();
         //console.log(test);
@@ -105,11 +108,14 @@ function get_click(buttonID)    //ID not necessarily numerical
 function release()
 {        
         console.log(currentButton);
-        dataArray.push(currentButton);        
+        dataObject.button = currentButton;
+        dataObject.acceleration = accelerationData;
+        dataArray.push(dataObject);        
         store('dataArray', dataArray);
-        //console.log(retrieve('dataArray'));
+        console.log(retrieve('dataArray'));
         currentButton = null;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
+        recording = false;
         console.log('release');
       try {
         //stop_sensors();
@@ -257,6 +263,10 @@ function read_sensors()
                                         document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
                                         //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
                                         document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
+                                if (recording)
+                                {
+                                        accelerationData.push(accel);
+                                }
                                 }
                                 else
                                 {
