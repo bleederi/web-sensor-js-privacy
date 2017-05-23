@@ -1,7 +1,11 @@
 var output = document.querySelector('.output');
 var dataArray = [];     //array to store multiple dataObjects (one dataObject for each button press)
-var dataObject = {button:null, acceleration:null};    //single reading of all the sensor data, each object a list of values obtained during button press
-var accelerationData = [];      //list of all acceleration data for a single button press
+var dataObject = {button:null, acceleration:null, accelerationnog:null, orientation:null};    //single reading of all the sensor data, each object a list of values obtained during button press
+//below are variables for storing data for single button press
+var accelerationData = [];      //list of all acceleration data
+var accelerationnogData = [];   //list of acceleration data without gravity
+var orientationData = [];
+
 var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
@@ -101,6 +105,8 @@ function get_click(buttonID)    //ID not necessarily numerical
         console.log(buttonID);
         recording = true;
         accelerationData = [];        //reset accelerationData every new button press
+        accelerationnogData = [];        //reset accelerationnogData every new button press
+        orientationData = [];        //reset orientationData every new button press
         test = read_sensors();
         update_text();
         //console.log(test);
@@ -109,9 +115,12 @@ function get_click(buttonID)    //ID not necessarily numerical
 function release()
 {        
         console.log(currentButton);
+        //save data to dataObject
         dataObject.button = currentButton;
         dataObject.acceleration = accelerationData;
-        var b = new Object;
+        dataObject.accelerationnog = accelerationnnogData;
+        dataObject.orientation = orientationData;
+        var b = new Object;     //need to push by value
         Object.assign(b, dataObject);
         dataArray.push(b);        
         store('dataArray', dataArray);
@@ -269,6 +278,7 @@ function read_sensors()
                                 if (recording)
                                 {
                                         accelerationData.push(accel);
+                                        accelerationnogData.push(accelNoG);
                                 }
                                 }
                                 else
@@ -289,6 +299,7 @@ function read_sensors()
         */
                         sensors.AbsoluteOrientationSensor.onchange = event => {
                         sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
+                        orientationData.push(orientationMat);
                         //console.log("Orientation matrix: " + orientationMat);
                                         document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]})`;
                       }
