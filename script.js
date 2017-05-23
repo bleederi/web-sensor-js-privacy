@@ -110,7 +110,9 @@ function release()
         console.log(currentButton);
         dataObject.button = currentButton;
         dataObject.acceleration = accelerationData;
-        dataArray.push(dataObject);        
+        var b = new Object;
+        Object.assign(b, dataObject);
+        dataArray.push(b);        
         store('dataArray', dataArray);
         console.log(retrieve('dataArray'));
         currentButton = null;
