@@ -4,7 +4,7 @@ var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
 var accel = {x:null, y:null, z:null};
-var gravity = {x:null, y:null, z:null};
+var gravity =  new LowPassFilterData(sensors.Accelerometer, 0.8);
 var accelNoG;
 var recording = false;  //are we recording data or not?
 
@@ -153,7 +153,6 @@ function startSensors() {
         var accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors.Accelerometer = accelerometer;
         sensors.Accelerometer.start();
-        gravity = new LowPassFilterData(sensors.Accelerometer, 0.8);
         sensors.Accelerometer.onerror = err => {
           sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
@@ -228,7 +227,7 @@ function read_sensors()
               sensors.Accelerometer.onchange = event => {
                 accel = {x:sensors.Accelerometer.x, y:sensors.Accelerometer.y, z:sensors.Accelerometer.z};
                         let newAccel = accel;
-                        accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
+                        //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                         //console.log(newAccel)
                         gravity.update(newAccel);
                         gravity.normalize();
