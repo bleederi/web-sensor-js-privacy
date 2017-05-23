@@ -23,11 +23,14 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
     this.y = this.y * this.bias + reading.y * (1 - this.bias);
     this.z = this.z * this.bias + reading.z * (1 - this.bias);
 
-        //normalize to "known value" 9.81 m/s^2
-        let norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);        
-        this.x = 9.81 * this.x / norm;
-        this.y = 9.81 * this.y / norm;
-        this.z = 9.81 * this.z / norm;
+        }
+        normalize()
+        {
+                //normalize to "known value" 9.81 m/s^2
+                let norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);        
+                this.x = 9.81 * this.x / norm;
+                this.y = 9.81 * this.y / norm;
+                this.z = 9.81 * this.z / norm;
         }
 };
 
@@ -40,7 +43,7 @@ function update_text()
 {
 document.getElementById("accl").textContent = "xAccel: " + accel.x.toFixed(3) + " yAccel: " + accel.y.toFixed(3) + " zAccel: " + accel.z.toFixed(3);
 document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
-document.getElementById("accl_nog").textContent = "xAccelNoG: " + accelNoG.x.toFixed(3) + " yAccelNoG: " + accelNoG.y.toFixed(3) + " zAccelNoG: " + accelNoG.z.toFixed(3) + "Magnitude: " + magnitude(accelNoG).toFixed(3);
+document.getElementById("accl_nog").textContent = "xAccelNoG: " + accelNoG.x.toFixed(3) + " yAccelNoG: " + accelNoG.y.toFixed(3) + " zAccelNoG: " + accelNoG.z.toFixed(3) + " Magnitude: " + magnitude(accelNoG).toFixed(3);
 
 }
 
@@ -223,6 +226,7 @@ function read_sensors()
                 var newAccel = {x:xAccel, y:yAccel, z:zAccel};
                 //console.log(newAccel)
                 gravity.update(accel);
+                gravity.normalize();
                 accelNoG = {x:xAccel - gravity.x, y:yAccel - gravity.y, z:zAccel - gravity.z}
                 //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
                 //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
