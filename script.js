@@ -9,11 +9,12 @@ var gravity = null;
 //TODO: How to get acceleration without gravity?
 
 
-class LowPassFilterData {
+class LowPassFilterData {       //from websensor-compass
   constructor(reading, bias) {
     Object.assign(this, { x: reading.x, y: reading.y, z: reading.z });
     this.bias = bias;
   }
+}
 
 //create orientation matrix
 function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/18116922
@@ -191,6 +192,7 @@ function read_sensors()
                 gravity.update(accelerometer);
                 console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
                 console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
+                document.getElementById("p").innerHTML = "New text!";
                 } 
 /*
               sensors.AccelerometerNoG.onchange = event => {
