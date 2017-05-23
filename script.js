@@ -8,6 +8,13 @@ var gravity = null;
 
 //TODO: How to get acceleration without gravity?
 
+
+class LowPassFilterData {
+  constructor(reading, bias) {
+    Object.assign(this, { x: reading.x, y: reading.y, z: reading.z });
+    this.bias = bias;
+  }
+
 //create orientation matrix
 function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/18116922
 
@@ -53,7 +60,7 @@ function release()
         //sensors.LinearAccelerationSensor.stop();
         //sensors.GravitySensor.stop();
         sensors.Accelerometer.stop();
-        sensors.AccelerometerNoG.stop();
+        //sensors.AccelerometerNoG.stop();
         sensors.AbsoluteOrientationSensor.stop();
         sensors.Gyroscope.stop();
       } catch(err) { }
@@ -105,11 +112,12 @@ function startSensors() {
         let accelerometer = new Accelerometer({ frequency: 60, includeGravity: true });
         sensors.Accelerometer = accelerometer;
         sensors.Accelerometer.start();
+        const gravity = new LowPassFilterData(accl, 0.8);
         sensors.Accelerometer.onerror = err => {
           sensors.Accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
         };
-        
+/*        
         //Accelerometer not including gravity
         let accelerometernog = new Accelerometer({ frequency: 60, includeGravity: false });
         sensors.AccelerometerNoG = accelerometernog;
@@ -118,6 +126,7 @@ function startSensors() {
           sensors.AccelerometerNoG = null;
           console.log(`AccelerometerNoG ${err.error}`)
         };
+*/
         //AbsoluteOrientationSensor
         let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: 60});
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
@@ -179,16 +188,18 @@ function read_sensors()
                 let xAccel = sensors.Accelerometer.x;
                 let yAccel = sensors.Accelerometer.y;
                 let zAccel = sensors.Accelerometer.z;
+                gravity.update(accelerometer);
                 console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
+                console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                 } 
-
+/*
               sensors.AccelerometerNoG.onchange = event => {
                 let xAccelNoG = sensors.AccelerometerNoG.x;
                 let yAccelNoG = sensors.AccelerometerNoG.y;
                 let zAccelNoG = sensors.AccelerometerNoG.z;
                 console.log("xAccelNoG: " + xAccelNoG + " yAccelNoG: " + yAccelNoG + " zAccelNoG: " + zAccelNoG);
                 }
-
+*/
                 sensors.AbsoluteOrientationSensor.onchange = event => {
                 sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
                 console.log("Orientation matrix: " + orientationMat);
