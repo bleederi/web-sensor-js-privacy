@@ -57,6 +57,15 @@ function update_text()
                 //document.getElementById("accl_nog").textContent = "xAccelNoG: " + accelNoG.x.toFixed(3) + " yAccelNoG: " + accelNoG.y.toFixed(3) + " zAccelNoG: " + accelNoG.z.toFixed(3) + " Magnitude: " + magnitude(accelNoG).toFixed(3);
 }
 
+function stop_sensors()
+{
+        //sensors.LinearAccelerationSensor.stop();
+        //sensors.GravitySensor.stop();
+        sensors.Accelerometer.stop();
+        //sensors.AccelerometerNoG.stop();
+        sensors.AbsoluteOrientationSensor.stop();
+        sensors.Gyroscope.stop();
+}
 
 //create orientation matrix
 function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/18116922
@@ -101,12 +110,7 @@ function release()
         currentButton = null;
         console.log('release');
       try {
-        //sensors.LinearAccelerationSensor.stop();
-        //sensors.GravitySensor.stop();
-        //sensors.Accelerometer.stop();
-        //sensors.AccelerometerNoG.stop();
-        sensors.AbsoluteOrientationSensor.stop();
-        sensors.Gyroscope.stop();
+        stop_sensors();
       } catch(err) { }
 
 }
