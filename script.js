@@ -22,6 +22,13 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
   }
 };
 
+function update_text()
+{
+document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
+document.getElementById("accl_nog").textContent = "xAccelNoG: " + xAccelNoG + " yAccelNoG: " + yAccelNoG + " zAccelNoG: " + zAccelNoG;
+
+}
+
 
 //create orientation matrix
 function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/18116922
@@ -53,6 +60,7 @@ function get_click(buttonID)    //ID not necessarily numerical
         currentButton = buttonID;
         console.log(buttonID);
         test = read_sensors();
+        setInterval(update_text, 1000); //for debugging purposes, can't continuously update text
         //console.log(test);
 }
 
@@ -193,20 +201,18 @@ function read_sensors()
                 }
 */
               sensors.Accelerometer.onchange = event => {
-                let xAccel = sensors.Accelerometer.x;
-                let yAccel = sensors.Accelerometer.y;
-                let zAccel = sensors.Accelerometer.z;
-                let newAccel = {x:xAccel, y:yAccel, z:zAccel};
+                var xAccel = sensors.Accelerometer.x;
+                var yAccel = sensors.Accelerometer.y;
+                var zAccel = sensors.Accelerometer.z;
+                var newAccel = {x:xAccel, y:yAccel, z:zAccel};
                 console.log(newAccel)
                 gravity.update(newAccel);
-                let xAccelNoG = xAccel - gravity.x;
-                let yAccelNoG = yAccel - gravity.y;
-                let zAccelNoG = zAccel - gravity.z;
+                var xAccelNoG = xAccel - gravity.x;
+                var yAccelNoG = yAccel - gravity.y;
+                var zAccelNoG = zAccel - gravity.z;
                 //console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
                 //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                 //console.log("xAccelNoG: " + xAccelNoG + " yAccelNoG: " + xAccelNoG + " zAccelNoG: " + xAccelNoG);
-                document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
-                document.getElementById("accl_nog").textContent = "xAccelNoG: " + xAccelNoG + " yAccelNoG: " + yAccelNoG + " zAccelNoG: " + zAccelNoG;
                 } 
 /*
               sensors.AccelerometerNoG.onchange = event => {
@@ -221,9 +227,9 @@ function read_sensors()
                 console.log("Orientation matrix: " + orientationMat);
               }
               sensors.Gyroscope.onchange = event => {
-                let xVelGyro = sensors.Gyroscope.x;
-                let yVelGyro = sensors.Gyroscope.y;
-                let zVelGyro = sensors.Gyroscope.z;
+                var xVelGyro = sensors.Gyroscope.x;
+                var yVelGyro = sensors.Gyroscope.y;
+                var zVelGyro = sensors.Gyroscope.z;
                 console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
                 };
                 return true;
