@@ -3,7 +3,6 @@ var dataArray = [];
 var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
-var gravity = null;
 
 
 //TODO: How to get acceleration without gravity?
