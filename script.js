@@ -132,7 +132,7 @@ function release()
         var b = new Object;     //need to push by value
         Object.assign(b, dataObject);
         dataArray.push(b);        
-        store('dataArray', dataArray);
+        //store('dataArray', dataArray);
         //console.log(retrieve('dataArray'));
         currentButton = null;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
