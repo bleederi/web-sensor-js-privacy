@@ -27,14 +27,14 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
     Object.assign(this, { x: reading.x, y: reading.y, z: reading.z });
     this.bias = bias;
   }
-/*
+
         update(reading) {
                 this.x = this.x * this.bias + reading.x * (1 - this.bias);
                 this.y = this.y * this.bias + reading.y * (1 - this.bias);
                 this.z = this.z * this.bias + reading.z * (1 - this.bias);
 
         }
-*/
+/*
         update(reading) {       //also normalizes
                 let x = this.x * this.bias + reading.x * (1 - this.bias);
                 let y = this.y * this.bias + reading.y * (1 - this.bias);
@@ -45,6 +45,7 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
                 this.z = 9.81 * z / norm;
 
         }
+*/
         normalize()
         {
                 //normalize to "known value" 9.81 m/s^2
@@ -231,11 +232,11 @@ function read_sensors()
                                         document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
                                         //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
                                         document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
-                                if (recording)
-                                {
-                                        accelerationData.push(accel);
-                                        accelerationnogData.push(accelNoG);
-                                }
+                                        if (recording)
+                                        {
+                                                accelerationData.push(accel);
+                                                accelerationnogData.push(accelNoG);
+                                        }
                                 }
                                 else
                                 {
