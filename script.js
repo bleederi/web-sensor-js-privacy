@@ -67,7 +67,7 @@ function release()
       try {
         //sensors.LinearAccelerationSensor.stop();
         //sensors.GravitySensor.stop();
-        sensors.Accelerometer.stop();
+        //sensors.Accelerometer.stop();
         //sensors.AccelerometerNoG.stop();
         sensors.AbsoluteOrientationSensor.stop();
         sensors.Gyroscope.stop();
@@ -202,9 +202,9 @@ function read_sensors()
                 let xAccelNoG = xAccel - gravity.x;
                 let yAccelNoG = yAccel - gravity.y;
                 let zAccelNoG = zAccel - gravity.z;
-                console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
-                console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
-                console.log("xAccelNoG: " + xAccelNoG + " yAccelNoG: " + xAccelNoG + " zAccelNoG: " + xAccelNoG);
+                //console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
+                //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
+                //console.log("xAccelNoG: " + xAccelNoG + " yAccelNoG: " + xAccelNoG + " zAccelNoG: " + xAccelNoG);
                 document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
                 document.getElementById("accl_nog").textContent = "xAccelNoG: " + xAccelNoG + " yAccelNoG: " + yAccelNoG + " zAccelNoG: " + zAccelNoG;
                 } 
