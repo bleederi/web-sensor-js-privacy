@@ -26,7 +26,7 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
 
         }
 */
-        update(reading) {
+        update(reading) {       //also normalizes
                 let x = this.x * this.bias + reading.x * (1 - this.bias);
                 let y = this.y * this.bias + reading.y * (1 - this.bias);
                 let z = this.z * this.bias + reading.z * (1 - this.bias);
@@ -244,11 +244,11 @@ function read_sensors()
                                 //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                                 //console.log(newAccel)
                                 gravity.update(sensors.Accelerometer);
-                                gravity.normalize();    //To do this or to not do this..? NaN problems
+                                //gravity.normalize();    //To do this or to not do this..? NaN problems
                                 if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
                                 {
                                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
-                                        document.getElementById("accl").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
+                                        document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
                                         //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
                                         document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
                                 }
