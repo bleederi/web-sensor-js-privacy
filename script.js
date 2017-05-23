@@ -39,10 +39,10 @@ function magnitude(vector)      //Calculate the magnitude of a vector
 return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 }
 
-function update_text(gravity)
+function update_text()
 {
 document.getElementById("accl").textContent = "xAccel: " + accel.x.toFixed(3) + " yAccel: " + accel.y.toFixed(3) + " zAccel: " + accel.z.toFixed(3);
-document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
+//document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
 document.getElementById("accl_nog").textContent = "xAccelNoG: " + accelNoG.x.toFixed(3) + " yAccelNoG: " + accelNoG.y.toFixed(3) + " zAccelNoG: " + accelNoG.z.toFixed(3) + " Magnitude: " + magnitude(accelNoG).toFixed(3);
 
 }
@@ -78,7 +78,8 @@ function get_click(buttonID)    //ID not necessarily numerical
         currentButton = buttonID;
         console.log(buttonID);
         test = read_sensors();
-        update_text(gravity);
+        console.log(gravity);
+        update_text();
         //console.log(test);
 }
 
