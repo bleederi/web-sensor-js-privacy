@@ -76,6 +76,14 @@ function stop_sensors()
         sensors.Gyroscope.stop();
 }
 
+function reset_data()   //to be run every button press and release
+{
+        accelerationData = [];        //reset accelerationData every new button press
+        accelerationnogData = [];        //reset accelerationnogData every new button press
+        orientationData = [];        //reset orientationData every new button press
+        rotationData = [];
+}
+
 //create orientation matrix
 function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/18116922
 
@@ -107,10 +115,7 @@ function get_click(buttonID)    //ID not necessarily numerical
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
         console.log(buttonID);
         recording = true;
-        accelerationData = [];        //reset accelerationData every new button press
-        accelerationnogData = [];        //reset accelerationnogData every new button press
-        orientationData = [];        //reset orientationData every new button press
-        rotationData = [];
+        reset_data();
         test = read_sensors();
         update_text();
         //console.log(test);
@@ -125,10 +130,7 @@ function release()
         dataObject.accelerationnog = accelerationnogData;
         dataObject.orientation = orientationData;
         dataObject.rotation = rotationData;
-        accelerationData = [];        //reset accelerationData every new button press
-        accelerationnogData = [];        //reset accelerationnogData every new button press
-        orientationData = [];        //reset orientationData every new button press
-        rotationData = [];
+        reset_data();
         var b = new Object;     //need to push by value
         Object.assign(b, dataObject);
         dataArray.push(b);        
