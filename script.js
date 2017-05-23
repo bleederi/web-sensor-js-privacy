@@ -100,6 +100,7 @@ function get_click(buttonID)    //ID not necessarily numerical
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
         console.log(buttonID);
         recording = true;
+        accelerationData = null;        //reset accelerationData every new button press
         test = read_sensors();
         update_text();
         //console.log(test);
