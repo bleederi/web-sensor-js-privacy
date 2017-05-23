@@ -229,7 +229,7 @@ function read_sensors()
                         let newAccel = accel;
                         //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                         //console.log(newAccel)
-                        gravity.update(accel);
+                        gravity.update(sensors.Accelerometer);
                         //gravity.normalize();
                         if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
                         {
