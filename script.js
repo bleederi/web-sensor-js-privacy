@@ -118,7 +118,7 @@ function release()
         //save data to dataObject
         dataObject.button = currentButton;
         dataObject.acceleration = accelerationData;
-        dataObject.accelerationnog = accelerationnnogData;
+        dataObject.accelerationnog = accelerationnogData;
         dataObject.orientation = orientationData;
         var b = new Object;     //need to push by value
         Object.assign(b, dataObject);
