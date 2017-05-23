@@ -15,7 +15,7 @@ var test = null;                //testing variable
 var accel = {x:null, y:null, z:null};
 var accelNoG;
 var recording = false;  //are we recording data or not?
-var sensorfreq = 20;     //for setting desired sensor frequency
+var sensorfreq = 60;     //for setting desired sensor frequency
 var nosensors = false;  //for testing with fake values and without sensors
 
 
