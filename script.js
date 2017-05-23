@@ -196,7 +196,8 @@ function read_sensors()
                 let xAccel = sensors.Accelerometer.x;
                 let yAccel = sensors.Accelerometer.y;
                 let zAccel = sensors.Accelerometer.z;
-                gravity.update(accelerometer);
+                let newaccel = {x:xAccel, y:yAccel, z:zAccel};
+                gravity.update(newaccel);
                 console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
                 console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                 document.getElementById("p_accl").innerHTML = "Acceleration:";
