@@ -63,7 +63,7 @@ function stop_sensors()
         //sensors.GravitySensor.stop();
         sensors.Accelerometer.stop();
         //sensors.AccelerometerNoG.stop();
-        sensors.AbsoluteOrientationSensor.stop();
+        //sensors.AbsoluteOrientationSensor.stop();     //don't stop due to the delay in starting up
         sensors.Gyroscope.stop();
 }
 
