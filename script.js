@@ -24,7 +24,7 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
     this.z = this.z * this.bias + reading.z * (1 - this.bias);
 
         //normalize to "known value" 9.81 m/s^2
-        var norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z + this.z);        
+        var norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);        
         this.x = 9.81 * this.x / norm;
         this.y = 9.81 * this.y / norm;
         this.z = 9.81 * this.z / norm;
