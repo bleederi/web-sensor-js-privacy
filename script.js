@@ -255,6 +255,7 @@ function read_sensors()
                         orientationMatTemp = new Object;     //need to push orientation matrix by value
                         Object.assign(orientationMatTemp, orientationMat);
                         orientationData.push(orientationMatTemp);
+                        orientationMatTemp = null;
                         //console.log("Orientation matrix: " + orientationMat);
                                         document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]})`;
                       }
