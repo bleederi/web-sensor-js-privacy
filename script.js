@@ -220,15 +220,12 @@ function read_sensors()
                 }
 */
               sensors.Accelerometer.onchange = event => {
-                var xAccel = sensors.Accelerometer.x;
-                var yAccel = sensors.Accelerometer.y;
-                var zAccel = sensors.Accelerometer.z;
-                accel = {x:xAccel, y:yAccel, z:zAccel};
+                accel = {x:sensors.Accelerometer.x, y:sensors.Accelerometer.y, z:sensors.Accelerometer.z};
                 //var newAccel = {x:xAccel, y:yAccel, z:zAccel};
                 //console.log(newAccel)
                 gravity.update(accel);
                 gravity.normalize();
-                accelNoG = {x:xAccel - gravity.x, y:yAccel - gravity.y, z:zAccel - gravity.z}
+                accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
                 //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
                 //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                 //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
