@@ -236,6 +236,7 @@ function read_sensors()
                                 if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
                                 {
                                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
+                                        document.getElementById("accl").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
                                         //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
                                         document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
                                 }
