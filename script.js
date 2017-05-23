@@ -4,6 +4,7 @@ var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
 var gravity = null;
+var accelNoG = null;
 
 
 //TODO: How to get acceleration without gravity?
@@ -25,7 +26,7 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
 function update_text()
 {
 document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
-document.getElementById("accl_nog").textContent = "xAccelNoG: " + xAccelNoG + " yAccelNoG: " + yAccelNoG + " zAccelNoG: " + zAccelNoG;
+document.getElementById("accl_nog").textContent = "xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z;
 
 }
 
@@ -205,14 +206,12 @@ function read_sensors()
                 var yAccel = sensors.Accelerometer.y;
                 var zAccel = sensors.Accelerometer.z;
                 var newAccel = {x:xAccel, y:yAccel, z:zAccel};
-                console.log(newAccel)
+                //console.log(newAccel)
                 gravity.update(newAccel);
-                var xAccelNoG = xAccel - gravity.x;
-                var yAccelNoG = yAccel - gravity.y;
-                var zAccelNoG = zAccel - gravity.z;
+                accelNoG = {x:xAccel - gravity.x, y:yAccel - gravity.y, z:zAccel - gravity.z}
                 //console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
                 //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
-                //console.log("xAccelNoG: " + xAccelNoG + " yAccelNoG: " + xAccelNoG + " zAccelNoG: " + xAccelNoG);
+                //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
                 } 
 /*
               sensors.AccelerometerNoG.onchange = event => {
