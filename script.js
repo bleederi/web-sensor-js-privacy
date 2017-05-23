@@ -3,8 +3,8 @@ var dataArray = [];
 var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
-var accel;
-var gravity;
+var accel = {x:null, y:null, z:null};
+var gravity = {x:null, y:null, z:null};
 var accelNoG;
 var recording = false;  //are we recording data or not?
 
@@ -45,7 +45,10 @@ if(accel)
 {
 document.getElementById("accl").textContent = "xAccel: " + accel.x.toFixed(3) + " yAccel: " + accel.y.toFixed(3) + " zAccel: " + accel.z.toFixed(3);
 }
+if(gravity)
+{
 document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
+}
 document.getElementById("accl_nog").textContent = "xAccelNoG: " + accelNoG.x.toFixed(3) + " yAccelNoG: " + accelNoG.y.toFixed(3) + " zAccelNoG: " + accelNoG.z.toFixed(3) + " Magnitude: " + magnitude(accelNoG).toFixed(3);
 
 }
@@ -225,12 +228,17 @@ function read_sensors()
               sensors.Accelerometer.onchange = event => {
                 accel = {x:sensors.Accelerometer.x, y:sensors.Accelerometer.y, z:sensors.Accelerometer.z};
                         let newAccel = accel;
+                        accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                         //console.log(newAccel)
                         gravity.update(newAccel);
                         gravity.normalize();
                         if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
                         {
                                 accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
+                        }
+                        else
+                        {
+                                console.log("Gravity NaN");
                         }
                         //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
                         //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
