@@ -199,9 +199,14 @@ function read_sensors()
                 let newAccel = {x:xAccel, y:yAccel, z:zAccel};
                 console.log(newAccel)
                 gravity.update(newAccel);
+                let xAccelNoG = xAccel - gravity.x;
+                let yAccelNoG = yAccel - gravity.y;
+                let zAccelNoG = zAccel - gravity.z;
                 console.log("xAccel: " + xAccel + " yAccel: " + yAccel + " zAccel: " + zAccel);
                 console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
-                var text = document.getElementById("p_accl").textContent = "Gravity: " + gravity.x + " " + gravity.y + " " + gravity.z;
+                console.log("xAccelNoG: " + xAccelNoG + " yAccelNoG: " + xAccelNoG + " zAccelNoG: " + xAccelNoG);
+                document.getElementById("g_accl").textContent = "xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z;
+                document.getElementById("accl_nog").textContent = "xAccelNoG: " + xAccelNoG + " yAccelNoG: " + xAccelNoG + " zAccelNoG: " + xAccelNoG;
                 } 
 /*
               sensors.AccelerometerNoG.onchange = event => {
