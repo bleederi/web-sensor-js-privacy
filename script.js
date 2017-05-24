@@ -56,6 +56,11 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
         }
 };
 
+function exportData() { //https://stackoverflow.com/a/13405322
+        var myCsv = retrieve('dataArray');
+        window.open('data:text/csv;charset=utf-8,' + escape(myCsv));
+}
+
 function change_frequency()     //for changing sensor frequency
 {
         let newfreq = Number(prompt("New sensor frequency"));
