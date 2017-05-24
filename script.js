@@ -84,7 +84,8 @@ function exportData() { //https://stackoverflow.com/a/13405322 and https://halis
             result += lineDelimiter;
         });
 
-        var myCsv = JSON.stringify(result);
+        //var myCsv = JSON.stringify(result);
+        var myCsv = result;
         window.open('data:text/csv;charset=utf-8,' + escape(myCsv));
 }
 
