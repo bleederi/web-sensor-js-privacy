@@ -198,6 +198,9 @@ function startSensors() {
         //AbsoluteOrientationSensor
         absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
+                absoluteorientationsensor.onchange = event => {
+                absoluteorientationsensor.populateMatrix(orientationMat);
+        }
         absoluteorientationsensor.onerror = err => {
           absoluteorientationsensor = null;
           console.log(`Absolute orientation sensor ${err.error}`)
@@ -206,6 +209,10 @@ function startSensors() {
         //Gyroscope
         gyroscope = new Gyroscope({ frequency: sensorfreq});
         sensors.Gyroscope = gyroscope;
+        g.onchange = event => {
+                velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
+                //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
+        }
         gyroscope.onerror = err => {
           gyroscope = null;
           console.log(`Gyroscope ${err.error}`)
@@ -237,31 +244,24 @@ function read_sensors() //ran when a button is pressed
                         console.log("Saving data from sensors: " + sensors);
                         
                         //gravity.normalize();    //To do this or to not do this..? NaN problems
-                                if (!(isNaN(accel.x) && isNaN(accel.y) && isNaN(accel.z)))      //to prevent NaN
-                                {
-                                        accelerationData.push(accel);
-                                        accelerationnogData.push(accelNoG);
-                                }
-                                else
-                                {
-                                console.log("Acceleration NaN");
-                                }
-                                //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
-                                //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
-                                //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
-                        absoluteorientationsensor.onchange = event => {
-                        absoluteorientationsensor.populateMatrix(orientationMat);
+                        if (!(isNaN(accel.x) && isNaN(accel.y) && isNaN(accel.z)))      //to prevent NaN
+                        {
+                                accelerationData.push(accel);
+                                accelerationnogData.push(accelNoG);
+                        }
+                        else
+                        {
+                        console.log("Acceleration NaN");
+                        }
+                        //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
+                        //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
+                        //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
+                        rotationData.push(velGyro);
                         orientationMatTemp = new Object;     //need to push orientation matrix by value
                         Object.assign(orientationMatTemp, orientationMat);
                         orientationData.push(orientationMatTemp);
                         orientationMatTemp = null;
                         //console.log("Orientation matrix: " + orientationMat);
-                      }
-                      g.onchange = event => {
-                        velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
-                        //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
-                        rotationData.push(velGyro);
-                        };
         }
         //return true;
 }
