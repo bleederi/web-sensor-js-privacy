@@ -1,6 +1,6 @@
 var output = document.querySelector('.output');
 var dataArray = [];     //array to store multiple dataObjects (one dataObject for each button press)
-var dataObject = {button:null, acceleration:null, accelerationnog:null, orientation:null, rotation:null};    //single reading of all the sensor data, each object a list of values obtained during button press
+var dataObject = {button:null, acceleration:null, accelerationnog:null, orientation:null, rotation:null, frequency:null};    //single reading of all the sensor data, each object a list of values obtained during button press
 
 //below are variables for storing data for single button press
 var accelerationData = [];      //list of all acceleration data
@@ -56,6 +56,22 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
         }
 };
 
+function change_frequency()     //for changing sensor frequency
+{
+        let newfreq = prompt("New sensor frequency");
+        sensorfreq = newfreq;
+        stop_sensors();
+        sensors = start_sensors();
+        if(sensors_started)
+        {
+                return true;
+        }
+        else
+        {
+                return false;
+        }
+}
+
 function magnitude(vector)      //Calculate the magnitude of a vector
 {
 return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
@@ -70,6 +86,7 @@ if (accel && accelNoG && gravity && orientationMat && velGyro)  //only update if
                         document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
                         document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]}) ...`;
                         document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: (${magnitude(velGyro).toFixed(3)}))`;
+                        document.getElementById("sensorfreq").textContent = `Sensor frequency (${sensorfreq})`;
         }
 }
 
@@ -93,7 +110,6 @@ function get_click(buttonID)    //ID not necessarily numerical
         if(!(sensors_started))
         {
                 sensors = startSensors();
-                sensors_started = true;
         }
         currentButton = buttonID;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
@@ -116,6 +132,7 @@ function release()
         var b = new Object;     //need to push by value
         Object.assign(b, dataObject);
         dataArray.push(b);
+        dataObject.frequency = sensorfreq;
         console.log(currentButton + ' released');        
         currentButton = null;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
@@ -192,6 +209,7 @@ function startSensors() {
 
                 console.log("Started sensors: ");
                 console.log(sensors);
+                sensors_started = true;
                 return sensors;
         }
         else
@@ -235,5 +253,6 @@ xhr.onreadystatechange = function () {
     }
 };
 var data = JSON.stringify({"email": "hey@mail.com", "password": "101010"});
+//var data = JSON.stringify(localStorage.getItem(key));
 xhr.send(data);
 }
