@@ -6,6 +6,7 @@ var dataObject = {button:null, acceleration:null, accelerationnog:null, orientat
 var accelerationData = [];      //list of all acceleration data
 var accelerationnogData = [];   //list of acceleration data without gravity
 var orientationData = [];
+var orientationMat = new Float64Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);     //device orientation
 var orientationMatTemp = null;       //temp variable for storing orientation matrix
 var rotationData = [];
 
@@ -87,31 +88,6 @@ function reset_data()   //to be run every button press and release
         rotationData = [];
 }
 
-//create orientation matrix
-function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/18116922
-
-        var arr = [];
-
-        // Creates all lines:
-        for(var i=0; i < rows; i++){
-
-        // Creates an empty line
-        arr.push([]);
-
-        // Adds cols to the empty line:
-        arr[i].push( new Array(cols));
-
-        for(var j=0; j < cols; j++){
-        // Initializes:
-        arr[i][j] = defaultValue;
-        }
-        }
-
-        return arr;
-}
-var orientationMat = new Float64Array([1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6]);     //device orientation
-//console.log("Orientation matrix: " + orientationMat);
-
 function get_click(buttonID)    //ID not necessarily numerical
 {
         if(!(sensors_started))
@@ -121,7 +97,7 @@ function get_click(buttonID)    //ID not necessarily numerical
         }
         currentButton = buttonID;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
-        console.log(buttonID + 'down');
+        console.log(currentButton + ' pressed down');
         recording = true;
         reset_data();
         reading = setInterval(read_sensors, 1000/sensorfreq);     //start saving data from sensors in loop
@@ -130,7 +106,6 @@ function get_click(buttonID)    //ID not necessarily numerical
 function release()
 {        
         clearInterval(reading); //stop saving data from sensors
-        //console.log(currentButton);
         //save data to dataObject
         dataObject.button = currentButton;
         dataObject.acceleration = accelerationData;
@@ -141,7 +116,7 @@ function release()
         var b = new Object;     //need to push by value
         Object.assign(b, dataObject);
         dataArray.push(b);
-        console.log(currentButton + 'release');        
+        console.log(currentButton + ' released');        
         currentButton = null;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
         recording = false;
@@ -215,7 +190,7 @@ function startSensors() {
                 gyroscope.start();
                 } catch(err) { console.log(err); }
 
-                console.log("Started sensors: " + sensors);
+                console.log("Started sensors: ");
                 console.log(sensors);
                 return sensors;
         }
