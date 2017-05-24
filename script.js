@@ -56,6 +56,25 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
         }
 };
 
+<<<<<<< HEAD
+=======
+function change_frequency()     //for changing sensor frequency
+{
+        let newfreq = prompt("New sensor frequency");
+        sensorfreq = newfreq;
+        stop_sensors();
+        sensors = startSensors();
+        if(sensors_started)
+        {
+                return true;
+        }
+        else
+        {
+                return false;
+        }
+}
+
+>>>>>>> e1b0d52... v212, added possibility to change sensor frequency fix
 function magnitude(vector)      //Calculate the magnitude of a vector
 {
 return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
