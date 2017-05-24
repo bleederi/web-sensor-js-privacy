@@ -232,38 +232,21 @@ function startSensors() {
 
 function read_sensors() //ran when a button is pressed
 {
-                if(!(nosensors))
-                { 
-                        if (!(sensors.Accelerometer || sensors.AbsoluteOrientationSensor)) {
-                                console.error('Requires linear acceleration sensor, accelerometer and absolute orientation sensor');
-                                //return false;
-                        } 
-                }
         if (recording)
         {     
-                        console.log("Saving data from sensors: " + sensors);
-                        
-                        //gravity.normalize();    //To do this or to not do this..? NaN problems
-                        if (!(isNaN(accel.x) && isNaN(accel.y) && isNaN(accel.z)))      //to prevent NaN
-                        {
-                                accelerationData.push(accel);
-                                accelerationnogData.push(accelNoG);
-                        }
-                        else
-                        {
-                        console.log("Acceleration NaN");
-                        }
-                        //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
-                        //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
-                        //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
-                        rotationData.push(velGyro);
-                        orientationMatTemp = new Object;     //need to push orientation matrix by value
-                        Object.assign(orientationMatTemp, orientationMat);
-                        orientationData.push(orientationMatTemp);
-                        orientationMatTemp = null;
-                        //console.log("Orientation matrix: " + orientationMat);
+                console.log("Saving data from sensors: " + sensors);
+                accelerationData.push(accel);
+                accelerationnogData.push(accelNoG);
+                //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
+                //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
+                //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
+                rotationData.push(velGyro);
+                orientationMatTemp = new Object;     //need to push orientation matrix by value
+                Object.assign(orientationMatTemp, orientationMat);
+                orientationData.push(orientationMatTemp);
+                orientationMatTemp = null;
+                //console.log("Orientation matrix: " + orientationMat);
         }
-        //return true;
 }
 
 //below uses Screen Orientation API
