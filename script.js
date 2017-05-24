@@ -12,7 +12,7 @@ var rotationData = [];
 var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
-var accel = {x:null, y:null, z:null};
+var accel = null;
 var accelNoG;
 var recording = false;  //are we recording data or not?
 var sensorfreq = 60;     //for setting desired sensor frequency
@@ -219,11 +219,13 @@ function read_sensors()
                         console.log("Sensors to be read: " + sensors);
 
                       sensors.Accelerometer.onchange = event => {
-                        accel = {x:sensors.Accelerometer.x, y:sensors.Accelerometer.y, z:sensors.Accelerometer.z};
+                        accel = sensors.Accelerometer;
+                                //let accelVar = {x:sensors.Accelerometer.x, y:sensors.Accelerometer.y, z:sensors.Accelerometer.z};
+                                let accelVar = {x:accel.x, y:accel.y, z:accel.z};
                                 //let newAccel = accel;
                                 //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                                 //console.log(newAccel)
-                                gravity.update(sensors.Accelerometer);
+                                gravity.update(accelVar);
                                 //gravity.normalize();    //To do this or to not do this..? NaN problems
                                 if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
                                 {
