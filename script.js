@@ -12,7 +12,7 @@ var rotationData = [];
 var sensors = {};
 var currentButton = null;
 var test = null;                //testing variable
-var accel = null;
+var accel = {x:null, y:null, z:null};
 var accelNoG;
 var recording = false;  //are we recording data or not?
 var sensorfreq = 60;     //for setting desired sensor frequency
@@ -221,16 +221,18 @@ function read_sensors()
                       accelerometer.onchange = event => {
                                 //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                                 gravity.update(accelerometer);
+                                accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z}
                                 //gravity.normalize();    //To do this or to not do this..? NaN problems
                                 if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
                                 {
-                                        accelNoG = {x:accelerometer.x - gravity.x, y:accelerometer.y - gravity.y, z:accelerometer.z - gravity.z}
+                                        accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
+                                        document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
                                         document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
                                         //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
                                         document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
                                         if (recording)
                                         {
-                                                accelerationData.push(accelerometer);
+                                                accelerationData.push(accel);
                                                 accelerationnogData.push(accelNoG);
                                         }
                                 }
