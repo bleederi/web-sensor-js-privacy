@@ -71,7 +71,7 @@ if (accel && accelNoG && gravity)
                         document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
                         document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
                         //document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]})`;
-                        //document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: (${magnitude(velGyro).toFixed(3)}))`;
+                        document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: (${magnitude(velGyro).toFixed(3)}))`;
         }
 }
 
@@ -259,13 +259,11 @@ function read_sensors() //ran when a button is pressed
                         //console.log("Orientation matrix: " + orientationMat);
                       }
 */
-/*
                       sensors.Gyroscope.onchange = event => {
-                        var velGyro = {x:sensors.Gyroscope.x, y:sensors.Gyroscope.y, z:sensors.Gyroscope.z};
+                        velGyro = {x:sensors.Gyroscope.x, y:sensors.Gyroscope.y, z:sensors.Gyroscope.z};
                         //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
                         rotationData.push(velGyro);
                         };
-*/
         }
         //return true;
 }
