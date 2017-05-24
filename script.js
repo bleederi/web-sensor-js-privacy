@@ -57,7 +57,7 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
 };
 
 function exportData() { //https://stackoverflow.com/a/13405322
-        var myCsv = retrieve('dataArray');
+        var myCsv = JSON.stringify(dataArray);
         window.open('data:text/csv;charset=utf-8,' + escape(myCsv));
 }
 
