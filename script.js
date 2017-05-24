@@ -14,6 +14,7 @@ var currentButton = null;
 var test = null;                //testing variable
 var accel = {x:null, y:null, z:null};
 var accelNoG;
+var velGyro;
 var recording = false;  //are we recording data or not?
 var sensorfreq = 60;     //for setting desired sensor frequency
 var nosensors = false;  //for testing with fake values and without sensors
@@ -69,9 +70,8 @@ if (accel && accelNoG && gravity)
                         document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
                         document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
                         document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
-                        document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]})`;
-                        document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: (${magnitude(velGyro).toFixed(3)}))`;
-                        rotationData.push(velGyro);
+                        //document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]})`;
+                        //document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: (${magnitude(velGyro).toFixed(3)}))`;
         }
 }
 
@@ -263,6 +263,7 @@ function read_sensors() //ran when a button is pressed
                       sensors.Gyroscope.onchange = event => {
                         var velGyro = {x:sensors.Gyroscope.x, y:sensors.Gyroscope.y, z:sensors.Gyroscope.z};
                         //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
+                        rotationData.push(velGyro);
                         };
 */
         }
