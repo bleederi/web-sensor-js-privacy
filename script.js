@@ -106,12 +106,6 @@ function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/1811692
 var orientationMat = new Float64Array([1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6]);     //device orientation
 //console.log("Orientation matrix: " + orientationMat);
 
-function sleep_until (milliseconds) {        //https://stackoverflow.com/a/4548079
-   var max_sec = new Date().getTime();
-   while (new Date() < max_sec + milliseconds) {}
-    return true;
-}
-
 function get_click(buttonID)    //ID not necessarily numerical
 {
         currentButton = buttonID;
@@ -120,13 +114,15 @@ function get_click(buttonID)    //ID not necessarily numerical
         recording = true;
         reset_data();
         sensors = startSensors();       //does it make sense to start sensors every button press?
-        test = read_sensors();
+        reading = setInterval(read_sensors, 1000/sensorfreq);     //start reading sensors in loop
+        //test = read_sensors();
         update_text();
         //console.log(test);
 }
 
 function release()
 {        
+        clearInterval(reading);
         console.log(currentButton);
         //save data to dataObject
         dataObject.button = currentButton;
@@ -227,24 +223,14 @@ function read_sensors() //ran when a button is pressed
                 { 
                         if (!(sensors.Accelerometer || sensors.AbsoluteOrientationSensor)) {
                                 console.error('Requires linear acceleration sensor, accelerometer and absolute orientation sensor');
-                                return false;
+                                //return false;
                         } 
                 }
-        while (recording)
+        if (recording)
         {     
-                        //console.log("Saving data from sensors: " + sensors);
+                        console.log("Saving data from sensors: " + sensors);
                         
                         //gravity.normalize();    //To do this or to not do this..? NaN problems
-                        accelerometer.onchange = event => {
-                                //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
-                                gravity.update(accelerometer);
-                                accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
-                                //console.log(accel);
-                                accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
-                                document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
-                                document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
-                                //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
-                                document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
                                 if (!(isNaN(accel.x) && isNaN(accel.y) && isNaN(accel.z)))      //to prevent NaN
                                 {
                                         accelerationData.push(accel);
@@ -254,7 +240,6 @@ function read_sensors() //ran when a button is pressed
                                 {
                                 console.log("Acceleration NaN");
                                 }
-                        }
                                 //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
                                 //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                                 //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
@@ -273,10 +258,8 @@ function read_sensors() //ran when a button is pressed
                         rotationData.push(velGyro);
                         //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
                         };
-        //sleep
-        sleep_until(1000/sensorfreq);
         }
-        return true;
+        //return true;
 }
 
 //below uses Screen Orientation API
