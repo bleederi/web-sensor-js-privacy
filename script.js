@@ -67,7 +67,7 @@ if (accel && accelNoG && gravity && orientationMat && velGyro)  //only update if
                         document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
                         document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
                         document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
-                        document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]})`;
+                        document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]}) ...`;
                         document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: (${magnitude(velGyro).toFixed(3)}))`;
         }
 }
@@ -121,7 +121,7 @@ function get_click(buttonID)    //ID not necessarily numerical
         }
         currentButton = buttonID;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
-        console.log(buttonID);
+        console.log(buttonID + 'down');
         recording = true;
         reset_data();
         reading = setInterval(read_sensors, 1000/sensorfreq);     //start saving data from sensors in loop
@@ -130,7 +130,7 @@ function get_click(buttonID)    //ID not necessarily numerical
 function release()
 {        
         clearInterval(reading); //stop saving data from sensors
-        console.log(currentButton);
+        //console.log(currentButton);
         //save data to dataObject
         dataObject.button = currentButton;
         dataObject.acceleration = accelerationData;
@@ -144,7 +144,7 @@ function release()
         currentButton = null;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
         recording = false;
-        console.log('release');
+        console.log(currentButton + 'release');
       try {
         //stop_sensors();
       } catch(err) { }
