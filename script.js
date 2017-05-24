@@ -176,8 +176,8 @@ function startSensors() {
         gravity =  new LowPassFilterData(accelerometer, 0.8);   //GLOBAL
         accelerometer.onchange = event => {
                 //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
-                gravity.update(accelerometer);
                 accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
+                gravity.update(accel);
                 //console.log(accel);
                 accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
                 document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
