@@ -135,11 +135,11 @@ function release()
         dataObject.accelerationnog = accelerationnogData;
         dataObject.orientation = orientationData;
         dataObject.rotation = rotationData;
+        dataObject.frequency = sensorfreq;
         reset_data();
         var b = new Object;     //need to push by value
         Object.assign(b, dataObject);
         dataArray.push(b);
-        dataObject.frequency = sensorfreq;
         console.log(currentButton + ' released');        
         currentButton = null;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
