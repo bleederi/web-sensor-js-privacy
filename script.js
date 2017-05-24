@@ -18,8 +18,10 @@ var recording = false;  //are we recording data or not?
 var sensorfreq = 60;     //for setting desired sensor frequency
 var nosensors = false;  //for testing with fake values and without sensors
 
+//var textUpdate = setInterval(update_text, 1000/sensorfreq);
 
 //TODO: How to get acceleration without gravity?
+
 
 
 class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
@@ -62,8 +64,15 @@ return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z
 
 function update_text()
 {
-                //document.getElementById("accl").textContent = "xAccel: " + accel.x.toFixed(3) + " yAccel: " + accel.y.toFixed(3) + " zAccel: " + accel.z.toFixed(3);
-                //document.getElementById("accl_nog").textContent = "xAccelNoG: " + accelNoG.x.toFixed(3) + " yAccelNoG: " + accelNoG.y.toFixed(3) + " zAccelNoG: " + accelNoG.z.toFixed(3) + " Magnitude: " + magnitude(accelNoG).toFixed(3);
+if (accel && accelNoG && gravity)
+        {
+                        document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
+                        document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
+                        document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
+                        document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]})`;
+                        document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: (${magnitude(velGyro).toFixed(3)}))`;
+                        rotationData.push(velGyro);
+        }
 }
 
 function stop_sensors()
@@ -177,12 +186,9 @@ function startSensors() {
                 //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                 accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
                 gravity.update(accel);
+                //console.log(gravity);
                 //console.log(accel);
                 accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
-                document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
-                document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
-                //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
-                document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
         }
         accelerometer.onerror = err => {
           accelerometer = null;
@@ -192,19 +198,19 @@ function startSensors() {
         //AbsoluteOrientationSensor
         let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
-        sensors.AbsoluteOrientationSensor.start();
         sensors.AbsoluteOrientationSensor.onerror = err => {
           sensors.AbsoluteOrientationSensor = null;
           console.log(`Absolute orientation sensor ${err.error}`)
         };
+        sensors.AbsoluteOrientationSensor.start();
         //Gyroscope
         let gyroscope = new Gyroscope({ frequency: sensorfreq});
         sensors.Gyroscope = gyroscope;
-        sensors.Gyroscope.start();
         sensors.Gyroscope.onerror = err => {
           sensors.Gyroscope = null;
           console.log(`Gyroscope ${err.error}`)
         };
+        sensors.Gyroscope.start();
       } catch(err) { console.log(err); }
 
         console.log("Started sensors: " + sensors);
@@ -251,14 +257,11 @@ function read_sensors() //ran when a button is pressed
                         orientationData.push(orientationMatTemp);
                         orientationMatTemp = null;
                         //console.log("Orientation matrix: " + orientationMat);
-                                        document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]})`;
                       }
 */
 /*
                       sensors.Gyroscope.onchange = event => {
                         var velGyro = {x:sensors.Gyroscope.x, y:sensors.Gyroscope.y, z:sensors.Gyroscope.z};
-                                        document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: (${magnitude(velGyro).toFixed(3)}))`;
-                        rotationData.push(velGyro);
                         //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
                         };
 */
