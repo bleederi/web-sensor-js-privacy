@@ -171,14 +171,13 @@ function startSensors() {
         sensors.Accelerometer = accelerometer;
         accelerometer.start();
         gravity =  new LowPassFilterData(accelerometer, 0.8);   //GLOBAL
-        //console.log(accel);
         accelerometer.onchange = event => {
                 //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                 gravity.update(accelerometer);
                 accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
-                console.log(accel);
+                //console.log(accel);
                 accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
-                document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
+                document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
                 document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
                 //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
                 document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
