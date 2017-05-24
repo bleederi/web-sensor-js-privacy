@@ -59,7 +59,7 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
 function change_frequency()     //for changing sensor frequency
 {
         let newfreq = Number(prompt("New sensor frequency"));
-        if (!(NaN(newfreq)))
+        if (!(isNaN(newfreq)))
         {
                 sensorfreq = Number(newfreq);
                 stop_sensors();
