@@ -169,12 +169,11 @@ function startSensors() {
         //Accelerometer including gravity
         accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
         sensors.Accelerometer = accelerometer;
-        sensors.Accelerometer.start();
-        accel = accelerometer;
-        gravity =  new LowPassFilterData(sensors.Accelerometer, 0.8);   //GLOBAL
+        accelerometer.start();
+        gravity =  new LowPassFilterData(accelerometer, 0.8);   //GLOBAL
         //console.log(accel);
-        sensors.Accelerometer.onerror = err => {
-          sensors.Accelerometer = null;
+        accelerometer.onerror = err => {
+          accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
         };
         //AbsoluteOrientationSensor
@@ -223,7 +222,7 @@ function read_sensors()
                                 gravity.update(accelerometer);
                                 accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z}
                                 //gravity.normalize();    //To do this or to not do this..? NaN problems
-                                if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
+                                if (!(isNaN(accel.x) && isNaN(accel.y) && isNaN(accel.z)))      //to prevent NaN
                                 {
                                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
                                         document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
@@ -238,7 +237,7 @@ function read_sensors()
                                 }
                                 else
                                 {
-                                        console.log("Gravity NaN");
+                                        console.log("Acceleration NaN");
                                 }
                                 //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
                                 //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
