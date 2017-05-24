@@ -177,6 +177,11 @@ function startSensors() {
                 gravity.update(accelerometer);
                 accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
                 document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
+                accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
+                document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
+                document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
+                //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
+                document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
         }
         accelerometer.onerror = err => {
           accelerometer = null;
@@ -210,12 +215,12 @@ function startSensors() {
         }
 }
 
-function read_sensors()
+function read_sensors() //ran when a button is pressed
 {
-        if (currentButton)
+        if (recording)
         {
                 sensors = startSensors();
-               if(!(nosensors))
+                if(!(nosensors))
                 { 
                       if (!(sensors.Accelerometer || sensors.AbsoluteOrientationSensor)) {
                         console.error('Requires linear acceleration sensor, accelerometer and absolute orientation sensor');
@@ -226,16 +231,8 @@ function read_sensors()
                         //gravity.normalize();    //To do this or to not do this..? NaN problems
                         if (!(isNaN(accel.x) && isNaN(accel.y) && isNaN(accel.z)))      //to prevent NaN
                         {
-                                accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
-                                document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
-                                document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
-                                //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
-                                document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
-                        if (recording)
-                        {
                                 accelerationData.push(accel);
                                 accelerationnogData.push(accelNoG);
-                        }
                         }
                         else
                         {
@@ -244,14 +241,6 @@ function read_sensors()
                                 //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
                                 //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                                 //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
-        /*
-                      sensors.AccelerometerNoG.onchange = event => {
-                        let xAccelNoG = sensors.AccelerometerNoG.x;
-                        let yAccelNoG = sensors.AccelerometerNoG.y;
-                        let zAccelNoG = sensors.AccelerometerNoG.z;
-                        console.log("xAccelNoG: " + xAccelNoG + " yAccelNoG: " + yAccelNoG + " zAccelNoG: " + zAccelNoG);
-                        }
-        */
                         sensors.AbsoluteOrientationSensor.onchange = event => {
                         sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
                         orientationMatTemp = new Object;     //need to push orientation matrix by value
