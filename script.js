@@ -18,7 +18,7 @@ var recording = false;  //are we recording data or not?
 var sensorfreq = 60;     //for setting desired sensor frequency
 var nosensors = false;  //for testing with fake values and without sensors
 
-//var textUpdate = setInterval(update_text, 1000/sensorfreq);
+var textUpdate = setInterval(update_text, 1000/sensorfreq);
 
 //TODO: How to get acceleration without gravity?
 
@@ -123,15 +123,15 @@ function get_click(buttonID)    //ID not necessarily numerical
         recording = true;
         reset_data();
         sensors = startSensors();       //does it make sense to start sensors every button press?
-        reading = setInterval(read_sensors, 1000/sensorfreq);     //start reading sensors in loop
+        reading = setInterval(read_sensors, 1000/sensorfreq);     //start saving data from sensors in loop
         //test = read_sensors();
-        update_text();
+        //update_text();
         //console.log(test);
 }
 
 function release()
 {        
-        clearInterval(reading);
+        clearInterval(reading); //stop saving data from sensors
         console.log(currentButton);
         //save data to dataObject
         dataObject.button = currentButton;
