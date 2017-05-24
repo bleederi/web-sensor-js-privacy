@@ -176,7 +176,7 @@ function startSensors() {
                 //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                 gravity.update(accelerometer);
                 accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
-                document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
+                console.log(accel);
                 accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
                 document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
                 document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
@@ -227,7 +227,7 @@ function read_sensors() //ran when a button is pressed
                         return false;
                       }      
                         console.log("Sensors to be read: " + sensors);
-
+                        
                         //gravity.normalize();    //To do this or to not do this..? NaN problems
                         if (!(isNaN(accel.x) && isNaN(accel.y) && isNaN(accel.z)))      //to prevent NaN
                         {
