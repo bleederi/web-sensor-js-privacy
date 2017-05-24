@@ -196,21 +196,21 @@ function startSensors() {
         }
         accelerometer.start();
         //AbsoluteOrientationSensor
-        let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
+        absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
-        sensors.AbsoluteOrientationSensor.onerror = err => {
-          sensors.AbsoluteOrientationSensor = null;
+        absoluteorientationsensor.onerror = err => {
+          absoluteorientationsensor = null;
           console.log(`Absolute orientation sensor ${err.error}`)
         };
-        sensors.AbsoluteOrientationSensor.start();
+        absoluteorientationsensor.start();
         //Gyroscope
-        let gyroscope = new Gyroscope({ frequency: sensorfreq});
+        gyroscope = new Gyroscope({ frequency: sensorfreq});
         sensors.Gyroscope = gyroscope;
-        sensors.Gyroscope.onerror = err => {
-          sensors.Gyroscope = null;
+        gyroscope.onerror = err => {
+          gyroscope = null;
           console.log(`Gyroscope ${err.error}`)
         };
-        sensors.Gyroscope.start();
+        gyroscope.start();
       } catch(err) { console.log(err); }
 
         console.log("Started sensors: " + sensors);
@@ -249,16 +249,16 @@ function read_sensors() //ran when a button is pressed
                                 //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
                                 //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                                 //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
-                        sensors.AbsoluteOrientationSensor.onchange = event => {
-                        sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
+                        absoluteorientationsensor.onchange = event => {
+                        absoluteorientationsensor.populateMatrix(orientationMat);
                         orientationMatTemp = new Object;     //need to push orientation matrix by value
                         Object.assign(orientationMatTemp, orientationMat);
                         orientationData.push(orientationMatTemp);
                         orientationMatTemp = null;
                         //console.log("Orientation matrix: " + orientationMat);
                       }
-                      sensors.Gyroscope.onchange = event => {
-                        velGyro = {x:sensors.Gyroscope.x, y:sensors.Gyroscope.y, z:sensors.Gyroscope.z};
+                      g.onchange = event => {
+                        velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
                         //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
                         rotationData.push(velGyro);
                         };
