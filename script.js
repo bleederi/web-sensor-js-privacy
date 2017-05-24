@@ -140,11 +140,11 @@ function release()
         reset_data();
         var b = new Object;     //need to push by value
         Object.assign(b, dataObject);
-        dataArray.push(b);        
+        dataArray.push(b);
+        console.log(currentButton + 'release');        
         currentButton = null;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
         recording = false;
-        console.log(currentButton + 'release');
       try {
         //stop_sensors();
       } catch(err) { }
@@ -173,63 +173,63 @@ function retrieve (key)
 function startSensors() {
         if(!(nosensors))
         {
-      try {
-        //Accelerometer including gravity
-        accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
-        sensors.Accelerometer = accelerometer;
-        gravity =  new LowPassFilterData(accelerometer, 0.8);   //GLOBAL
-        accelerometer.onchange = event => {
-                //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
-                accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
-                gravity.update(accel);
-                //console.log(gravity);
-                //console.log(accel);
-                accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
-        }
-        accelerometer.onerror = err => {
-          accelerometer = null;
-          console.log(`Accelerometer ${err.error}`)
-        }
-        accelerometer.start();
-        //AbsoluteOrientationSensor
-        absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
-        sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
-        absoluteorientationsensor.onchange = event => {
-                absoluteorientationsensor.populateMatrix(orientationMat);
-        }
-        absoluteorientationsensor.onerror = err => {
-          absoluteorientationsensor = null;
-          console.log(`Absolute orientation sensor ${err.error}`)
-        };
-        absoluteorientationsensor.start();
-        //Gyroscope
-        gyroscope = new Gyroscope({ frequency: sensorfreq});
-        sensors.Gyroscope = gyroscope;
-        gyroscope.onchange = event => {
-                velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
-        }
-        gyroscope.onerror = err => {
-          gyroscope = null;
-          console.log(`Gyroscope ${err.error}`)
-        };
-        gyroscope.start();
-      } catch(err) { console.log(err); }
+                try {
+                //Accelerometer including gravity
+                accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
+                sensors.Accelerometer = accelerometer;
+                gravity =  new LowPassFilterData(accelerometer, 0.8);
+                accelerometer.onchange = event => {
+                        //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
+                        accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
+                        gravity.update(accel);
+                        //console.log(gravity);
+                        //console.log(accel);
+                        accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
+                }
+                accelerometer.onerror = err => {
+                  accelerometer = null;
+                  console.log(`Accelerometer ${err.error}`)
+                }
+                accelerometer.start();
+                //AbsoluteOrientationSensor
+                absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
+                sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
+                absoluteorientationsensor.onchange = event => {
+                        absoluteorientationsensor.populateMatrix(orientationMat);
+                }
+                absoluteorientationsensor.onerror = err => {
+                  absoluteorientationsensor = null;
+                  console.log(`Absolute orientation sensor ${err.error}`)
+                };
+                absoluteorientationsensor.start();
+                //Gyroscope
+                gyroscope = new Gyroscope({ frequency: sensorfreq});
+                sensors.Gyroscope = gyroscope;
+                gyroscope.onchange = event => {
+                        velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
+                }
+                gyroscope.onerror = err => {
+                  gyroscope = null;
+                  console.log(`Gyroscope ${err.error}`)
+                };
+                gyroscope.start();
+                } catch(err) { console.log(err); }
 
-        console.log("Started sensors: " + sensors);
-        console.log(sensors);
-        return sensors;
+                console.log("Started sensors: " + sensors);
+                console.log(sensors);
+                return sensors;
         }
         else
         {
-                return null;
+                return null;    //here do something in order to be able to use on desktop with fake data...
         }
 }
 
-function read_sensors() //ran when a button is pressed
+function read_sensors() //ran when a button is pressed, saves data gathered from sensors
 {
         if (recording)
         {     
-                console.log("Saving data from sensors: " + sensors);
+                console.log("Saving data from sensors");
                 accelerationData.push(accel);
                 accelerationnogData.push(accelNoG);
                 //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
@@ -243,35 +243,3 @@ function read_sensors() //ran when a button is pressed
                 //console.log("Orientation matrix: " + orientationMat);
         }
 }
-
-//below uses Screen Orientation API
-/*
-if(window.deviceOrientationEvent)
-{
-        window.addEventListener('deviceorientation', function(event)
-                {
-                        console.log('Alpha(x): ' + event.alpha +  'Beta(y): ' + event.beta + 'Gamma(z): ' + event.gamma);
-                        output.innerHTML  = "beta : " + event.beta + "\n";
-                        output.innerHTML += "gamma: " + event.gamma + "\n";
-                        //data = ...;
-                }
-        );
-}
-if(window.DeviceMotionEvent)
-{
-        window.addEventListener('devicemotion', function(event)
-	        {
-		        var acceleration = event.acceleration;
-  		        var rotationRate = event.rotationRate;
-	                var gacc = event.accelerationIncludingGravity;
-	          
-	                console.log(acceleration.x + ' : ' + acceleration.y + ' : ' + acceleration.z);
-                        console.log(event.acceleration + ' : ' + event.rotationRate + ' : ' + event.interval);
-                        console.log(rotationRate.alpha + ' : ' + rotationRate.beta + ' : ' + rotationRate.gamma);
-                        //console.log(gacc.x + ' : ' + gacc.y + ' : ' + gacc.z);
-                        //data = ...                        
-	        }
-        );
-
-}*/
-//store(data);
