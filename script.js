@@ -221,7 +221,7 @@ function startSensors() {
         }
 }
 
-function read_sensor_data() //ran when a button is pressed
+function read_sensors() //ran when a button is pressed
 {
                 if(!(nosensors))
                 { 
