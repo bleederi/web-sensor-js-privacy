@@ -65,7 +65,7 @@ return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z
 
 function update_text()
 {
-if (accel && accelNoG && gravity)
+if (accel && accelNoG && gravity && velGyro)
         {
                         document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
                         document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
@@ -198,7 +198,7 @@ function startSensors() {
         //AbsoluteOrientationSensor
         absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
-                absoluteorientationsensor.onchange = event => {
+        absoluteorientationsensor.onchange = event => {
                 absoluteorientationsensor.populateMatrix(orientationMat);
         }
         absoluteorientationsensor.onerror = err => {
@@ -209,7 +209,7 @@ function startSensors() {
         //Gyroscope
         gyroscope = new Gyroscope({ frequency: sensorfreq});
         sensors.Gyroscope = gyroscope;
-        g.onchange = event => {
+        gyroscope.onchange = event => {
                 velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
                 //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
         }
