@@ -21,9 +21,7 @@ var nosensors = false;  //for testing with fake values and without sensors
 
 var textUpdate = setInterval(update_text, 1000/sensorfreq);
 
-//TODO: How to get acceleration without gravity?
-
-
+sensors = startSensors();
 
 class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
   constructor(reading, bias) {
@@ -122,11 +120,7 @@ function get_click(buttonID)    //ID not necessarily numerical
         console.log(buttonID);
         recording = true;
         reset_data();
-        sensors = startSensors();       //does it make sense to start sensors every button press?
         reading = setInterval(read_sensors, 1000/sensorfreq);     //start saving data from sensors in loop
-        //test = read_sensors();
-        //update_text();
-        //console.log(test);
 }
 
 function release()
@@ -143,8 +137,6 @@ function release()
         var b = new Object;     //need to push by value
         Object.assign(b, dataObject);
         dataArray.push(b);        
-        //store('dataArray', dataArray);
-        //console.log(retrieve('dataArray'));
         currentButton = null;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
         recording = false;
@@ -211,7 +203,6 @@ function startSensors() {
         sensors.Gyroscope = gyroscope;
         gyroscope.onchange = event => {
                 velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
-                //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
         }
         gyroscope.onerror = err => {
           gyroscope = null;
