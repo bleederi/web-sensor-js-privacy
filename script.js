@@ -172,7 +172,6 @@ function startSensors() {
         //Accelerometer including gravity
         accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
         sensors.Accelerometer = accelerometer;
-        accelerometer.start();
         gravity =  new LowPassFilterData(accelerometer, 0.8);   //GLOBAL
         accelerometer.onchange = event => {
                 //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
@@ -188,7 +187,8 @@ function startSensors() {
         accelerometer.onerror = err => {
           accelerometer = null;
           console.log(`Accelerometer ${err.error}`)
-        };
+        }
+        accelerometer.start();
         //AbsoluteOrientationSensor
         let absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
         sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
@@ -254,12 +254,14 @@ function read_sensors() //ran when a button is pressed
                                         document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]})`;
                       }
 */
+/*
                       sensors.Gyroscope.onchange = event => {
                         var velGyro = {x:sensors.Gyroscope.x, y:sensors.Gyroscope.y, z:sensors.Gyroscope.z};
                                         document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: (${magnitude(velGyro).toFixed(3)}))`;
                         rotationData.push(velGyro);
                         //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
                         };
+*/
         }
         //return true;
 }
