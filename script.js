@@ -56,37 +56,10 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
         }
 };
 
-function exportData() { //https://stackoverflow.com/a/13405322 and https://halistechnology.com/2015/05/28/use-javascript-to-export-your-data-as-csv/
-        var result, ctr, keys, columnDelimiter, lineDelimiter, data;
-
-        data = dataArray;
-        if (data == null || !data.length) {
-            return null;
-        }
-
-        columnDelimiter = ',';
-        lineDelimiter = '\n';
-
-        keys = Object.keys(data[0]);
-
-        result = '';
-        result += keys.join(columnDelimiter);
-        result += lineDelimiter;
-
-        data.forEach(function(item) {
-            ctr = 0;
-            keys.forEach(function(key) {
-                if (ctr > 0) result += columnDelimiter;
-
-                result += item[key];
-                ctr++;
-            });
-            result += lineDelimiter;
-        });
-
-        //var myCsv = JSON.stringify(result);
-        var myCsv = result;
-        window.open('data:text/csv;charset=utf-8,' + escape(myCsv));
+function exportData() //https://stackoverflow.com/a/13405322
+{
+        var exportData = JSON.stringify(dataArray);
+        window.open('data:text/csv;charset=utf-8,' + escape(exportData));
 }
 
 function change_frequency()     //for changing sensor frequency
