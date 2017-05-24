@@ -249,7 +249,6 @@ function read_sensors() //ran when a button is pressed
                                 //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
                                 //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
                                 //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
-/*
                         sensors.AbsoluteOrientationSensor.onchange = event => {
                         sensors.AbsoluteOrientationSensor.populateMatrix(orientationMat);
                         orientationMatTemp = new Object;     //need to push orientation matrix by value
@@ -258,7 +257,6 @@ function read_sensors() //ran when a button is pressed
                         orientationMatTemp = null;
                         //console.log("Orientation matrix: " + orientationMat);
                       }
-*/
                       sensors.Gyroscope.onchange = event => {
                         velGyro = {x:sensors.Gyroscope.x, y:sensors.Gyroscope.y, z:sensors.Gyroscope.z};
                         //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
