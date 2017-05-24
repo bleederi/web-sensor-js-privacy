@@ -225,7 +225,7 @@ function read_sensors() //ran when a button is pressed
                         console.error('Requires linear acceleration sensor, accelerometer and absolute orientation sensor');
                         return false;
                       }      
-                        console.log("Sensors to be read: " + sensors);
+                        console.log("Saving data from sensors: " + sensors);
                         
                         //gravity.normalize();    //To do this or to not do this..? NaN problems
                         if (!(isNaN(accel.x) && isNaN(accel.y) && isNaN(accel.z)))      //to prevent NaN
@@ -255,9 +255,9 @@ function read_sensors() //ran when a button is pressed
                         rotationData.push(velGyro);
                         //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
                         };
-                        return true;
                 }
         }
+        return true;
 }
 
 //below uses Screen Orientation API
