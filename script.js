@@ -113,6 +113,7 @@ function get_click(buttonID)    //ID not necessarily numerical
         console.log(buttonID);
         recording = true;
         reset_data();
+        sensors = startSensors();       //does it make sense to start sensors every button press?
         test = read_sensors();
         update_text();
         //console.log(test);
@@ -216,9 +217,8 @@ function startSensors() {
 
 function read_sensors() //ran when a button is pressed
 {
-        if (recording)
+        while (recording)
         {
-                sensors = startSensors();
                 if(!(nosensors))
                 { 
                       if (!(sensors.Accelerometer || sensors.AbsoluteOrientationSensor)) {
