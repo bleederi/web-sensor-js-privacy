@@ -18,10 +18,9 @@ var velGyro;
 var recording = false;  //are we recording data or not?
 var sensorfreq = 60;     //for setting desired sensor frequency
 var nosensors = false;  //for testing with fake values and without sensors
+var sensors_started = false;
 
 var textUpdate = setInterval(update_text, 1000/sensorfreq);
-
-sensors = startSensors();
 
 class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-filters
   constructor(reading, bias) {
@@ -115,6 +114,11 @@ var orientationMat = new Float64Array([1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6]);     //
 
 function get_click(buttonID)    //ID not necessarily numerical
 {
+        if(!(sensors_started))
+        {
+                sensors = startSensors();
+                sensors_started = true;
+        }
         currentButton = buttonID;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
         console.log(buttonID);
