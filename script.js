@@ -106,6 +106,12 @@ function matrix( rows, cols, defaultValue){ //http://stackoverflow.com/a/1811692
 var orientationMat = new Float64Array([1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6]);     //device orientation
 //console.log("Orientation matrix: " + orientationMat);
 
+function sleep_until (milliseconds) {        //https://stackoverflow.com/a/4548079
+   var max_sec = new Date().getTime();
+   while (new Date() < max_sec + milliseconds) {}
+    return true;
+}
+
 function get_click(buttonID)    //ID not necessarily numerical
 {
         currentButton = buttonID;
@@ -215,7 +221,7 @@ function startSensors() {
         }
 }
 
-function read_sensors() //ran when a button is pressed
+function read_sensor_data() //ran when a button is pressed
 {
                 if(!(nosensors))
                 { 
@@ -267,6 +273,8 @@ function read_sensors() //ran when a button is pressed
                         rotationData.push(velGyro);
                         //console.log("xVelGyro: " + xVelGyro + " yVelGyro: " + yVelGyro + " zVelGyro: " + zVelGyro);
                         };
+        //sleep
+        sleep_until(1000/sensorfreq);
         }
         return true;
 }
