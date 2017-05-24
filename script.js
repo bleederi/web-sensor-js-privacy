@@ -218,24 +218,19 @@ function read_sensors()
                       }      
                         console.log("Sensors to be read: " + sensors);
 
-                      sensors.Accelerometer.onchange = event => {
-                        accel = sensors.Accelerometer;
-                                //let accelVar = {x:sensors.Accelerometer.x, y:sensors.Accelerometer.y, z:sensors.Accelerometer.z};
-                                let accelVar = {x:accel.x, y:accel.y, z:accel.z};
-                                //let newAccel = accel;
+                      accelerometer.onchange = event => {
                                 //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
-                                //console.log(newAccel)
-                                gravity.update(accelVar);
+                                gravity.update(accelerometer);
                                 //gravity.normalize();    //To do this or to not do this..? NaN problems
                                 if (!(isNaN(gravity.x) && isNaN(gravity.y) && isNaN(gravity.z)))      //to prevent NaN
                                 {
-                                        accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z}
+                                        accelNoG = {x:accelerometer.x - gravity.x, y:accelerometer.y - gravity.y, z:accelerometer.z - gravity.z}
                                         document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
                                         //console.log(`Isolated gravity (${gravity.x}, ${gravity.y}, ${gravity.z})`);
                                         document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
                                         if (recording)
                                         {
-                                                accelerationData.push(accel);
+                                                accelerationData.push(accelerometer);
                                                 accelerationnogData.push(accelNoG);
                                         }
                                 }
