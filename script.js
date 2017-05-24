@@ -176,6 +176,7 @@ function startSensors() {
                 //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                 gravity.update(accelerometer);
                 accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
+                document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
         }
         accelerometer.onerror = err => {
           accelerometer = null;
