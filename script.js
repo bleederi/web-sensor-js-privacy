@@ -120,10 +120,6 @@ function reset_data()   //to be run every button press and release
 
 function get_click(buttonID)    //ID not necessarily numerical
 {
-        if(!(sensors_started))
-        {
-                sensors = startSensors();
-        }
         currentButton = buttonID;
         document.getElementById("bstate").textContent = `Button state (${currentButton})`;
         console.log(currentButton + ' pressed down');

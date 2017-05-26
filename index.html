@@ -12,6 +12,12 @@
 
 <body>
 <script type="text/javascript" src="script.js"></script>
+<script>
+        if(!(sensors_started))
+        {
+                sensors = startSensors();
+        }
+</script>
 <div class="box" id="buttons">
 
 <h3>Pin pad</h3>
