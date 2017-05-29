@@ -2,6 +2,7 @@ import json
 import numpy
 import math
 from collections import OrderedDict
+import pickle
 
 def convert_orientation(jsondata):      #Convert orientation matrix to Euler angles
         orientationjsondata = []        #New JSON data with orientation converted to Euler angles
@@ -251,7 +252,7 @@ def calc_total_energy(jsondata):     #Function to calculate the total energy of 
                 jsondata_withenergy.append(energydict)
         return jsondata_withenergy
 
-def calc_fft(jsondata): #Function to calculate FFT of each sequence and add that to the JSON formatted data
+def calc_fft(jsondata): #Function to calculate FFT of each sequence and add that to the data. This function returns NON-JSON-FORMATTED DATA because the FFTs are complex.
         jsondata_withfft = []
         for buttonpress in jsondata:
                 if(buttonpress['button'] !=  None):     #skip bad values
@@ -371,9 +372,38 @@ def calc_stats_fft(jsondata):   #Function to calculate maximum, minimum, mean an
                 jsondata_withstats.append(buttonstats)
         return jsondata_withstats
 
+def calc_coe(jsondata): #Calculates the centre of energy of the acceleration sequences and adds that to the data
+        jsondata_with_coe = []
+        for buttonpress in jsondata[:1]:
+                if(buttonpress['button'] !=  None):     #skip bad values
+                        coedict = {}        #Dict of CoE data related to a single button press
+                        for key, value in buttonpress.items():
+                                coedict[key] = value
+                                #Now select keys to calculate CoE for
+                                if (key == 'button' or key == 'frequency' or key.endswith('_avg') or key.endswith('_max') or key.endswith('_min') or key.endswith('_e') or key.endswith('_d') or key == 'dac' or key.startswith('orientation') or key.startswith('rotation')):
+                                        continue
+                                else:
+                                        #print(key, value)
+                                        print(value)                                        
+                                        if('_fft' in key):
+                                                totalEnergy = buttonpress[key + '_e']
+                                        else:
+                                                totalEnergy = buttonpress[key + '_fft_e']
+                                        print(totalEnergy)
+                                        CoE_x = 0
+                                        CoE_y = 0
+                                        CoE_z = 0
+                                        #for i in value: #i is a dict
+                                                #print(i['x'])
+                                                #CoE_x = CoE_x + i['x']
+                                        #CoE_x = CoE_x / totalEnergy['x']
+                jsondata_with_coe.append(coedict)
+        return jsondata_with_coe
+
 filename = 'data_1'
 datafile = open(filename,'r')
 jsondata = json.load(datafile)
+datafile.close()
 
 #Process the data step by step
 
@@ -392,7 +422,23 @@ energydict = calc_total_energy(statsdict)
 fftdict = calc_fft(energydict)
 #print(fftdict)
 fftwithstatsdict = calc_stats_fft(fftdict)
+#print(fftwithstatsdict)
+coedict = calc_coe(fftwithstatsdict)
+#print(coedict)
 
+#Now format the data to be a little bit clearer and save it to a file
+savefilename = filename + '_processed'
+with open(savefilename, 'w') as outfile:
+        for buttonpress in fftwithstatsdict:    ##Loop through all the button presses
+                outfile.write("New button:" + str(buttonpress['button']) + "\n")
+                for key in sorted(buttonpress):
+                        outfile.write("'" + str(key) + "'" + ':')               
+                        outfile.write(str(buttonpress[key]) + ';'  +'\n')
+                outfile.write("@\n")    #Use @ as splitting character
+#print(str(fftwithstatsdict))
+
+#with open(savefilename, 'w') as outfile:
+#    outfile.write(str(fftwithstatsdict))
 
 #ordered = OrderedDict(fftwithstatsdict[0])
 def prettyprint(jsondata): #Clearly print the JSON array
@@ -429,7 +475,7 @@ def prettyprint(jsondata): #Clearly print the JSON array
                                 print(len(buttonpress[key][0].keys()))
                                 features = features + len(buttonpress[key][0].keys())
                         """
-prettyprint(fftwithstatsdict)
+#prettyprint(coedict)
 
 """
 print(seqkeys, ", should be 4")
