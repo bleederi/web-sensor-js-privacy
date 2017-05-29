@@ -374,12 +374,9 @@ def calc_stats_fft(jsondata):   #Function to calculate maximum, minimum, mean an
 filename = 'data_1'
 datafile = open(filename,'r')
 jsondata = json.load(datafile)
-"""
-for buttonpress in jsondata:    ##Loop through all the button presses
-        print("Button: ", buttonpress['button'])
-        print(buttonpress)
-        #print("FFT:", numpy.fft(buttonpress['']));
-"""
+
+#Process the data step by step
+
 orientationdata = convert_orientation(jsondata)
 #print(orientationdata)
 noninitialdata = remove_initial(orientationdata)
@@ -393,10 +390,11 @@ statsdict = calc_stats(datawithdac)
 energydict = calc_total_energy(statsdict)
 #print(energydict)
 fftdict = calc_fft(energydict)
-#print(fftdict[:1])
+#print(fftdict)
 fftwithstatsdict = calc_stats_fft(fftdict)
-#print(fftwithstatsdict)
 
+
+#ordered = OrderedDict(fftwithstatsdict[0])
 def prettyprint(jsondata): #Clearly print the JSON array
         for buttonpress in jsondata:    ##Loop through all the button presses
                 features = 0
@@ -405,7 +403,7 @@ def prettyprint(jsondata): #Clearly print the JSON array
                 statkeys = 0
                 seqkeys = 0
                 print("\nNew button: ", buttonpress['button'], "\n")
-                for key in buttonpress:
+                for key in sorted(buttonpress):
                         print(key)                
                         print(buttonpress[key])
                         """
