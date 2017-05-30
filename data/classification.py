@@ -83,10 +83,12 @@ for buttonpress in buttondata:
                 data[key] = seq
         buttondata_array.append(data)
 
-buttons = buttondata_array[0:3] #Buttons to be plotted
-
+def buttonselection():      #Condition for selecting the buttons to be plotted
+    for x in buttondata_array:
+        if x['button'] == 2:    #Select all buttons that fulfil this condition
+            yield x
 index = 1
-for button in buttons:
+for button in buttonselection():
         #Plot sequences
         fig = plt.figure(index)
         fig.suptitle('Data for button ' + str(button['button']))

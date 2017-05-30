@@ -3,7 +3,7 @@ import numpy
 import math
 from collections import OrderedDict
 import pickle
-from helperfuncs import prettyprint
+from helperfuncs import prettyprint, find_interval 
 
 def convert_orientation(jsondata):      #Convert orientation matrix to Euler angles
         orientationjsondata = []        #New JSON data with orientation converted to Euler angles
@@ -17,19 +17,16 @@ def convert_orientation(jsondata):      #Convert orientation matrix to Euler ang
                                         orientationdict[key] = []
                                         for orimatrix in value:  #Each orientation matrix
                                                 tempdict = {}   #Temp dict to store Euler angle values
-                                                #print(orivalue)
                                                 r11 = orimatrix['0']
                                                 r21 = orimatrix['4']
                                                 r31 = orimatrix['8']
                                                 r32 = orimatrix['9']
                                                 r33 = orimatrix['10']
-                                                #print(r11, r21, r31, r32, r33)
                                                 betadivisor = math.sqrt(math.pow(r32,2) + math.pow(r33,2))
                                                 if(r11 != 0 and r33 != 0 and betadivisor != 0): #Can't divide by zero
                                                         alpha = math.atan2(r21, r11)
                                                         beta = math.atan2(-r31, (math.sqrt(math.pow(r32,2) + math.pow(r33,2))))
                                                         gamma = math.atan2(r32, r33)
-                                                        #print(alpha, beta, gamma)
                                                 tempdict = {'alpha': alpha, 'beta': beta, 'gamma': gamma}
                                                 orientationdict['orientation'].append(tempdict)
                 orientationjsondata.append(orientationdict)
@@ -103,8 +100,6 @@ def calc_dac(jsondata): #Function to calculate DAC of acceleration data and add 
                                                 if(value.index(accvalue) == 0): #First value special case: always 0
                                                         dac = 0
                                                 else:
-                                                        #print("Current: ", accvalue)
-                                                        #print("Previous: ", previous)
                                                         #Calculate Euclidean distance of current-previous
                                                         dac = math.sqrt(math.pow(accvalue['x']-previous['x'], 2) + math.pow(accvalue['y']-previous['y'], 2) + math.pow(accvalue['z']-previous['z'], 2))
                                                 previous = accvalue
@@ -122,9 +117,7 @@ def calc_stats(jsondata):       #Function to obtain statistical features of the 
                                 if key != 'button' and key != 'frequency':
                                         #Calculate maximums
                                         buttonstats[key + '_max'] = {}
-                                        #print(key, value)
-                                        if (key == 'acceleration' or key == 'accelerationnog' or key == 'rotation' or key == 'acceleration_d' or key == 'accelerationnog_d' or key == 'rotation_d'):
-                                                #print(value)                                                        
+                                        if (key == 'acceleration' or key == 'accelerationnog' or key == 'rotation' or key == 'acceleration_d' or key == 'accelerationnog_d' or key == 'rotation_d'):                                                       
                                                 max_x = value[0]['x']
                                                 max_y = value[0]['y']
                                                 max_z = value[0]['z']
@@ -223,7 +216,6 @@ def calc_total_energy(jsondata):     #Function to calculate the total energy of 
                                         continue
                                 if (key.startswith('acceleration') or key.startswith('rotation') or key.startswith('orientation') or key == 'dac'):
                                         energydict[key + '_e'] = {}   #Total energy
-                                        #print("KEY: \n", key, value)
                                         if (key.startswith('acceleration') or key.startswith('rotation')):
                                                 #Should do with list comprehension later
                                                 e_x = math.pow(value[0]['x'], 2)
@@ -233,7 +225,6 @@ def calc_total_energy(jsondata):     #Function to calculate the total energy of 
                                                                 e_x = e_x + math.pow(value[value.index(i)]['x'], 2)
                                                                 e_y = e_y + math.pow(value[value.index(i)]['y'], 2)
                                                                 e_z = e_z + math.pow(value[value.index(i)]['z'], 2)
-                                                #print(e_x, e_y, e_z)
                                                 e_dict = {'x':e_x, 'y': e_y, 'z': e_z} 
                                 #Need to handle orientation and DAC separately (different structure)
                                         if (key.startswith('orientation')):
@@ -248,8 +239,7 @@ def calc_total_energy(jsondata):     #Function to calculate the total energy of 
                                         if (key == 'dac'):
                                                 e_dac = sum( i*i for i in value)
                                                 e_dict = {'dac':e_dac}
-                                        energydict[key + '_e'] = e_dict
-                                        #print(energydict)                              
+                                        energydict[key + '_e'] = e_dict                            
                 jsondata_withenergy.append(energydict)
         return jsondata_withenergy
 
@@ -263,10 +253,8 @@ def calc_fft(jsondata): #Function to calculate FFT of each sequence and add that
                                 if (key == 'button' or key == 'frequency' or key.endswith('_avg') or key.endswith('_max') or key.endswith('_min') or key.endswith('_e') or key.endswith('_d') or key == 'dac'):
                                         continue
                                 else:
-                                        #print(key)
                                         fftdict[key + '_fft'] = []
                                         if (key.startswith('acceleration') or key.startswith('rotation')):
-                                                #print(key)
                                                 #Below make the sequences to be FFTed
                                                 fft_array_x = []
                                                 fft_array_y = []
@@ -275,15 +263,12 @@ def calc_fft(jsondata): #Function to calculate FFT of each sequence and add that
                                                         fft_array_x.append(value[value.index(i)]['x'])
                                                         fft_array_y.append(value[value.index(i)]['y'])
                                                         fft_array_z.append(value[value.index(i)]['z'])
-                                                #print(fft_array_x)
                                                 fft_x = numpy.fft.fft(fft_array_x)
                                                 fft_y = numpy.fft.fft(fft_array_y)
                                                 fft_z = numpy.fft.fft(fft_array_z)
-                                                #print(fft_x)
                                                 f_dict = {'x':fft_x, 'y': fft_y, 'z': fft_z} 
                                 #Need to handle orientation separately (different structure)
                                         if (key.startswith('orientation')):
-                                                #print(key)
                                                 #Below make the sequences to be FFTed
                                                 fft_array_alpha = []
                                                 fft_array_beta = []
@@ -292,14 +277,11 @@ def calc_fft(jsondata): #Function to calculate FFT of each sequence and add that
                                                         fft_array_alpha.append(value[value.index(i)]['alpha'])
                                                         fft_array_beta.append(value[value.index(i)]['beta'])
                                                         fft_array_gamma.append(value[value.index(i)]['gamma'])
-                                                #print(fft_array_x)
                                                 fft_alpha = numpy.fft.fft(fft_array_alpha)
                                                 fft_beta = numpy.fft.fft(fft_array_beta)
                                                 fft_gamma = numpy.fft.fft(fft_array_gamma)
-                                                #print(fft_alpha)
                                                 f_dict = {'alpha':fft_alpha, 'beta': fft_beta, 'gamma': fft_gamma} 
-                                        fftdict[key + '_fft'] = f_dict
-                #print(fftdict)                
+                                        fftdict[key + '_fft'] = f_dict             
                 jsondata_withfft.append(fftdict)
         return jsondata_withfft
 
@@ -316,9 +298,7 @@ def calc_stats_fft(jsondata):   #Function to calculate maximum, minimum, mean an
                                         buttonstats[key + '_max'] = {}
                                         buttonstats[key + '_avg'] = {}
                                         buttonstats[key + '_e'] = {}
-                                        #print(key, value)
                                         if (key.startswith('acceleration') or key.startswith('rotation')):
-                                                #print(key, value)
                                                 fft_x = value['x']   #Array holding the FFT
                                                 fft_y = value['y']
                                                 fft_z = value['z']
@@ -335,14 +315,10 @@ def calc_stats_fft(jsondata):   #Function to calculate maximum, minimum, mean an
                                                 e_x = (1/len(fft_x)) * numpy.sum(fft_x * numpy.conj(fft_x))
                                                 e_y = (1/len(fft_y)) *numpy.sum(fft_y * numpy.conj(fft_y))
                                                 e_z = (1/len(fft_z)) *numpy.sum(fft_z * numpy.conj(fft_z))
-                                                #print(fft_x)
-                                                #print(e_x)
-                                                #print("Max:", max_x)
                                                 maxdict = {'x':max_x, 'y': max_y, 'z': max_z}    #Dict to store max values of a single sequence
                                                 mindict = {'x':min_x, 'y': min_y, 'z': min_z}    #Dict to store min values of a single sequence
                                                 avgdict = {'x':avg_x, 'y': avg_y, 'z': avg_z}    #Dict to store avg values of a single sequence
                                                 edict = {'x':e_x, 'y': e_y, 'z': e_z}    #Dict to store energy of a single sequence
-                                                #print(edict)
                                         #Need to handle orientation separately (different structure)
                                         if (key.startswith('orientation')):
                                                 fft_alpha = value['alpha'] #Array holding the FFT
@@ -368,39 +344,28 @@ def calc_stats_fft(jsondata):   #Function to calculate maximum, minimum, mean an
                                         buttonstats[key + '_min'] = mindict
                                         buttonstats[key + '_avg'] = avgdict
                                         buttonstats[key + '_e'] = edict
-                                        #print(edict)
-                #print(buttonstats) 
                 jsondata_withstats.append(buttonstats)
         return jsondata_withstats
 
-def calc_coe(jsondata): #Calculates the centre of energy of the acceleration sequences and adds that to the data
-        jsondata_with_coe = []
+def calc_interval(jsondata): #Calculates the interval of 70% energy of the acceleration sequences and adds that to the data
+        jsondata_with_interval = []
         for buttonpress in jsondata:
                 if(buttonpress['button'] !=  None):     #skip bad values
-                        coedict = {}        #Dict of CoE data related to a single button press
+                        buttondictwithinterval = {}        #Dict of the original data with interval data related for a single button press
                         for key, value in buttonpress.items():
-                                coedict[key] = value
+                                buttondictwithinterval[key] = value
                                 #Now select keys to calculate CoE for
-                                if (key == 'button' or key == 'frequency' or key.endswith('_avg') or key.endswith('_max') or key.endswith('_min') or key.endswith('_e') or key.endswith('_d') or key == 'dac' or key.startswith('orientation') or key.startswith('rotation')):
+                                if (key == 'button' or key == 'frequency' or key.endswith('_avg') or key.endswith('_max') or key.endswith('_min') or key.endswith('_e') or key.endswith('_d') or key == 'dac' or key.startswith('orientation') or key.startswith('rotation') or '_fft' in key):
                                         continue
                                 else:
-                                        coedict[key + '_coe'] = {}
-                                        #print(key)
-                                        #print(value)                                        
-                                        if('_fft' in key):
-                                                totalEnergy = buttonpress[key + '_e']
-                                        else:
-                                                totalEnergy = buttonpress[key + '_fft_e']       #FFT preserves energy
-                                        #print("Total energy:", totalEnergy)
+                                        buttondictwithinterval[key + '_interval'] = {}                                     
+                                        totalEnergy = buttonpress[key + '_e']
                                         index = 1       #Does the sum begin at i=0 or i=1?
                                         CoE_x = 0
                                         CoE_y = 0
                                         CoE_z = 0
-                                        #print(value)
                                         if(type(value) is dict):
-                                                #print("Dict ", value)
                                                 for i, k in value.items(): #For numpy arrays, i is a dict of numpy arrays
-                                                        #print("i:", i, "k: ", k)
                                                         if (i == 'x'):
                                                                 index = 0
                                                                 for num in k:
@@ -418,7 +383,7 @@ def calc_coe(jsondata): #Calculates the centre of energy of the acceleration seq
                                                                         index = index + 1
                                         elif (type(value) is list):
                                                 for i in value:
-                                                        CoE_x = CoE_x + ((value.index(i))* math.pow(i['x'], 2))     #Does the sum begin at i=0 or i=1?
+                                                        CoE_x = CoE_x + ((value.index(i))* math.pow(i['x'], 2))
                                                         CoE_y = CoE_y + ((value.index(i))* math.pow(i['y'], 2))
                                                         CoE_z = CoE_z + ((value.index(i))* math.pow(i['z'], 2))
                                         else:
@@ -427,12 +392,15 @@ def calc_coe(jsondata): #Calculates the centre of energy of the acceleration seq
                                         CoE_x = float(CoE_x / totalEnergy['x'])
                                         CoE_y = float(CoE_y / totalEnergy['y'])
                                         CoE_z = float(CoE_z / totalEnergy['z'])
-                                        #print("CoE:", CoE_x, CoE_y, CoE_z)
                                         ceoedict = {'x': CoE_x, 'y': CoE_y, 'z': CoE_z}
-                                        coedict[key + '_coe'] = ceoedict
-                #print(coedict)
-                jsondata_with_coe.append(coedict)
-        return jsondata_with_coe
+                                        #Now find shortest intervals containing 70% of the total energy
+                                        interval_x = find_interval(value, ceoedict['x'], totalEnergy['x'], 'x')
+                                        interval_y = find_interval(value, ceoedict['y'], totalEnergy['y'], 'y')
+                                        interval_z = find_interval(value, ceoedict['z'], totalEnergy['z'], 'z')
+                                        intervaldict = {'x': interval_x, 'y': interval_y, 'z': interval_z}
+                                        buttondictwithinterval[key + '_interval'] = intervaldict
+                jsondata_with_interval.append(buttondictwithinterval)
+        return jsondata_with_interval
 
 filename = 'data_1'
 datafile = open(filename,'r')
@@ -457,34 +425,18 @@ fftdict = calc_fft(energydict)
 #print(fftdict)
 fftwithstatsdict = calc_stats_fft(fftdict)
 #print(fftwithstatsdict)
-coedict = calc_coe(fftwithstatsdict)
-#print(coedict)
+intervaldict = calc_interval(fftwithstatsdict)
+#print(intervaldict)
 
 #Now format the data to be a little bit clearer and save it to a file
 savefilename = filename + '_processed'
 with open(savefilename, 'w') as outfile:
-        for buttonpress in coedict:    ##Loop through all the button presses
+        for buttonpress in intervaldict:    ##Loop through all the button presses
                 outfile.write("New button:" + str(buttonpress['button']) + "\n")
                 outfile.write("@\n")    #Use @ as splitting character
                 for key in sorted(buttonpress):
                         outfile.write("'" + str(key) + "'" + ':')               
                         outfile.write(str(buttonpress[key]) + ';'  +'\n')
                 outfile.write("@\n")    #Use @ as splitting character
-#print(str(fftwithstatsdict))
 
-#with open(savefilename, 'w') as outfile:
-#    outfile.write(str(fftwithstatsdict))
-
-#ordered = OrderedDict(fftwithstatsdict[0])
-#prettyprint(coedict)
-
-"""
-print(seqkeys, ", should be 4")
-print(dkeys, ", should be 4")
-print(statkeys, ", should be 25")
-print(ekeys, ", should be 9")
-
-#print("All available features: ", datawithdac[0].keys())
-print("Features per sensor reading:", features)
-"""
 
