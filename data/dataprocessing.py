@@ -3,6 +3,7 @@ import numpy
 import math
 from collections import OrderedDict
 import pickle
+from helperfuncs import prettyprint
 
 def convert_orientation(jsondata):      #Convert orientation matrix to Euler angles
         orientationjsondata = []        #New JSON data with orientation converted to Euler angles
@@ -120,7 +121,7 @@ def calc_stats(jsondata):       #Function to obtain statistical features of the 
                                 buttonstats[key] = value
                                 if key != 'button' and key != 'frequency':
                                         #Calculate maximums
-                                        buttonstats[key + '_max'] = []
+                                        buttonstats[key + '_max'] = {}
                                         #print(key, value)
                                         if (key == 'acceleration' or key == 'accelerationnog' or key == 'rotation' or key == 'acceleration_d' or key == 'accelerationnog_d' or key == 'rotation_d'):
                                                 #print(value)                                                        
@@ -151,9 +152,9 @@ def calc_stats(jsondata):       #Function to obtain statistical features of the 
                                         if (key == 'dac'):
                                                 max_dac = max(value)
                                                 maxdict = {'dac':max_dac}    #Dict to store max values of a single sequence
-                                        buttonstats[key + '_max'].append(maxdict)
+                                        buttonstats[key + '_max'] = maxdict
                                         #Calculate minimums
-                                        buttonstats[key + '_min'] = []
+                                        buttonstats[key + '_min'] = {}
                                         if (key == 'acceleration' or key == 'accelerationnog' or key == 'rotation' or key == 'acceleration_d' or key == 'accelerationnog_d' or key == 'rotation_d'):                                                      
                                                 min_x = value[0]['x']
                                                 min_y = value[0]['y']
@@ -182,9 +183,9 @@ def calc_stats(jsondata):       #Function to obtain statistical features of the 
                                         if (key == 'dac'):
                                                 min_dac = min(value)
                                                 mindict = {'dac':min_dac}    #Dict to store min values of a single sequence
-                                        buttonstats[key + '_min'].append(mindict)
+                                        buttonstats[key + '_min'] = mindict
                                         #Calculate averages
-                                        buttonstats[key + '_avg'] = []
+                                        buttonstats[key + '_avg'] = {}
                                         if (key == 'acceleration' or key == 'accelerationnog' or key == 'rotation' or key == 'acceleration_d' or key == 'accelerationnog_d' or key == 'rotation_d'):                                                      
                                                 sum_x = 0
                                                 sum_y = 0
@@ -207,7 +208,7 @@ def calc_stats(jsondata):       #Function to obtain statistical features of the 
                                         if (key == 'dac'):
                                                 sum_dac = sum(value)/len(value)
                                                 avgdict = {'dac':sum_dac}    #Dict to store avg values of a single sequence
-                                        buttonstats[key + '_avg'].append(avgdict)
+                                        buttonstats[key + '_avg'] = avgdict
                         statsdict.append(buttonstats)
         return statsdict
 
@@ -221,7 +222,7 @@ def calc_total_energy(jsondata):     #Function to calculate the total energy of 
                                 if key == 'button' or key == 'frequency' or key.endswith('_avg') or key.endswith('_max') or key.endswith('_min'):
                                         continue
                                 if (key.startswith('acceleration') or key.startswith('rotation') or key.startswith('orientation') or key == 'dac'):
-                                        energydict[key + '_e'] = []   #Total energy
+                                        energydict[key + '_e'] = {}   #Total energy
                                         #print("KEY: \n", key, value)
                                         if (key.startswith('acceleration') or key.startswith('rotation')):
                                                 #Should do with list comprehension later
@@ -247,7 +248,7 @@ def calc_total_energy(jsondata):     #Function to calculate the total energy of 
                                         if (key == 'dac'):
                                                 e_dac = sum( i*i for i in value)
                                                 e_dict = {'dac':e_dac}
-                                        energydict[key + '_e'].append(e_dict)
+                                        energydict[key + '_e'] = e_dict
                                         #print(energydict)                              
                 jsondata_withenergy.append(energydict)
         return jsondata_withenergy
@@ -306,15 +307,15 @@ def calc_stats_fft(jsondata):   #Function to calculate maximum, minimum, mean an
         jsondata_withstats = []
         for buttonpress in jsondata:
                 if(buttonpress['button'] !=  None):     #skip bad values
-                        buttonstats = {}        #Dict of all statistics related to one button press
+                        buttonstats = {}       #Dict of all statistics related to one button press
                         for key, value in buttonpress.items():
                                 buttonstats[key] = value
                                 if key.endswith('_fft'):
                                         #Calculate maximums, minimums, averages and energy
-                                        buttonstats[key + '_min'] = []
-                                        buttonstats[key + '_max'] = []
-                                        buttonstats[key + '_avg'] = []
-                                        buttonstats[key + '_e'] = []
+                                        buttonstats[key + '_min'] = {}
+                                        buttonstats[key + '_max'] = {}
+                                        buttonstats[key + '_avg'] = {}
+                                        buttonstats[key + '_e'] = {}
                                         #print(key, value)
                                         if (key.startswith('acceleration') or key.startswith('rotation')):
                                                 #print(key, value)
@@ -331,9 +332,9 @@ def calc_stats_fft(jsondata):   #Function to calculate maximum, minimum, mean an
                                                 avg_y = numpy.average(fft_y)  
                                                 avg_z = numpy.average(fft_z)
                                                 #With complex numbers, energy = F.*conj(F)
-                                                e_x = numpy.sum(fft_x * numpy.conj(fft_x))
-                                                e_y = numpy.sum(fft_y * numpy.conj(fft_y))
-                                                e_z = numpy.sum(fft_z * numpy.conj(fft_z))
+                                                e_x = (1/len(fft_x)) * numpy.sum(fft_x * numpy.conj(fft_x))
+                                                e_y = (1/len(fft_y)) *numpy.sum(fft_y * numpy.conj(fft_y))
+                                                e_z = (1/len(fft_z)) *numpy.sum(fft_z * numpy.conj(fft_z))
                                                 #print(fft_x)
                                                 #print(e_x)
                                                 #print("Max:", max_x)
@@ -356,17 +357,17 @@ def calc_stats_fft(jsondata):   #Function to calculate maximum, minimum, mean an
                                                 avg_alpha = numpy.average(fft_alpha)    
                                                 avg_beta = numpy.average(fft_beta)  
                                                 avg_gamma = numpy.average(fft_gamma)
-                                                e_alpha = numpy.sum(fft_alpha * numpy.conj(fft_alpha))
-                                                e_beta = numpy.sum(fft_beta * numpy.conj(fft_beta))
-                                                e_gamma = numpy.sum(fft_gamma * numpy.conj(fft_gamma))
+                                                e_alpha = (1/len(fft_alpha)) * numpy.sum(fft_alpha * numpy.conj(fft_alpha))
+                                                e_beta = (1/len(fft_beta)) * numpy.sum(fft_beta * numpy.conj(fft_beta))
+                                                e_gamma = (1/len(fft_gamma)) * numpy.sum(fft_gamma * numpy.conj(fft_gamma))
                                                 maxdict = {'alpha':max_alpha, 'beta': max_beta, 'gamma': max_gamma}    #Dict to store max values of a single sequence
                                                 mindict = {'alpha':min_alpha, 'beta': min_beta, 'gamma': min_gamma}    #Dict to store max values of a single sequence
                                                 avgdict = {'alpha':avg_alpha, 'beta': avg_beta, 'gamma': avg_gamma}    #Dict to store avg values of a single sequence
                                                 edict = {'alpha':e_alpha, 'beta': e_beta, 'gamma': e_gamma}    #Dict to store energy of a single sequence
-                                        buttonstats[key + '_max'].append(maxdict) 
-                                        buttonstats[key + '_min'].append(mindict)
-                                        buttonstats[key + '_avg'].append(avgdict)
-                                        buttonstats[key + '_e'].append(edict)
+                                        buttonstats[key + '_max'] = maxdict 
+                                        buttonstats[key + '_min'] = mindict
+                                        buttonstats[key + '_avg'] = avgdict
+                                        buttonstats[key + '_e'] = edict
                                         #print(edict)
                 #print(buttonstats) 
                 jsondata_withstats.append(buttonstats)
@@ -374,7 +375,7 @@ def calc_stats_fft(jsondata):   #Function to calculate maximum, minimum, mean an
 
 def calc_coe(jsondata): #Calculates the centre of energy of the acceleration sequences and adds that to the data
         jsondata_with_coe = []
-        for buttonpress in jsondata[:1]:
+        for buttonpress in jsondata:
                 if(buttonpress['button'] !=  None):     #skip bad values
                         coedict = {}        #Dict of CoE data related to a single button press
                         for key, value in buttonpress.items():
@@ -383,20 +384,53 @@ def calc_coe(jsondata): #Calculates the centre of energy of the acceleration seq
                                 if (key == 'button' or key == 'frequency' or key.endswith('_avg') or key.endswith('_max') or key.endswith('_min') or key.endswith('_e') or key.endswith('_d') or key == 'dac' or key.startswith('orientation') or key.startswith('rotation')):
                                         continue
                                 else:
-                                        #print(key, value)
-                                        print(value)                                        
+                                        coedict[key + '_coe'] = {}
+                                        #print(key)
+                                        #print(value)                                        
                                         if('_fft' in key):
                                                 totalEnergy = buttonpress[key + '_e']
                                         else:
-                                                totalEnergy = buttonpress[key + '_fft_e']
-                                        print(totalEnergy)
+                                                totalEnergy = buttonpress[key + '_fft_e']       #FFT preserves energy
+                                        #print("Total energy:", totalEnergy)
+                                        index = 1       #Does the sum begin at i=0 or i=1?
                                         CoE_x = 0
                                         CoE_y = 0
                                         CoE_z = 0
-                                        #for i in value: #i is a dict
-                                                #print(i['x'])
-                                                #CoE_x = CoE_x + i['x']
-                                        #CoE_x = CoE_x / totalEnergy['x']
+                                        #print(value)
+                                        if(type(value) is dict):
+                                                #print("Dict ", value)
+                                                for i, k in value.items(): #For numpy arrays, i is a dict of numpy arrays
+                                                        #print("i:", i, "k: ", k)
+                                                        if (i == 'x'):
+                                                                index = 0
+                                                                for num in k:
+                                                                        CoE_x = CoE_x + (1 / len(k)) * (index * math.pow(num, 2))
+                                                                        index = index + 1
+                                                        if (i == 'y'):
+                                                                index = 0
+                                                                for num in k:
+                                                                        CoE_y = CoE_y + (1 / len(k)) * (index * math.pow(num, 2))
+                                                                        index = index + 1
+                                                        if (i == 'z'):
+                                                                index = 0
+                                                                for num in k:
+                                                                        CoE_z = CoE_z + (1 / len(k)) * (index * math.pow(num, 2))
+                                                                        index = index + 1
+                                        elif (type(value) is list):
+                                                for i in value:
+                                                        CoE_x = CoE_x + ((value.index(i))* math.pow(i['x'], 2))     #Does the sum begin at i=0 or i=1?
+                                                        CoE_y = CoE_y + ((value.index(i))* math.pow(i['y'], 2))
+                                                        CoE_z = CoE_z + ((value.index(i))* math.pow(i['z'], 2))
+                                        else:
+                                                print("ERROR")
+                                                return -1
+                                        CoE_x = float(CoE_x / totalEnergy['x'])
+                                        CoE_y = float(CoE_y / totalEnergy['y'])
+                                        CoE_z = float(CoE_z / totalEnergy['z'])
+                                        #print("CoE:", CoE_x, CoE_y, CoE_z)
+                                        ceoedict = {'x': CoE_x, 'y': CoE_y, 'z': CoE_z}
+                                        coedict[key + '_coe'] = ceoedict
+                #print(coedict)
                 jsondata_with_coe.append(coedict)
         return jsondata_with_coe
 
@@ -429,8 +463,9 @@ coedict = calc_coe(fftwithstatsdict)
 #Now format the data to be a little bit clearer and save it to a file
 savefilename = filename + '_processed'
 with open(savefilename, 'w') as outfile:
-        for buttonpress in fftwithstatsdict:    ##Loop through all the button presses
+        for buttonpress in coedict:    ##Loop through all the button presses
                 outfile.write("New button:" + str(buttonpress['button']) + "\n")
+                outfile.write("@\n")    #Use @ as splitting character
                 for key in sorted(buttonpress):
                         outfile.write("'" + str(key) + "'" + ':')               
                         outfile.write(str(buttonpress[key]) + ';'  +'\n')
@@ -441,40 +476,6 @@ with open(savefilename, 'w') as outfile:
 #    outfile.write(str(fftwithstatsdict))
 
 #ordered = OrderedDict(fftwithstatsdict[0])
-def prettyprint(jsondata): #Clearly print the JSON array
-        for buttonpress in jsondata:    ##Loop through all the button presses
-                features = 0
-                ekeys = 0
-                dkeys = 0
-                statkeys = 0
-                seqkeys = 0
-                print("\nNew button: ", buttonpress['button'], "\n")
-                for key in sorted(buttonpress):
-                        print(key)                
-                        print(buttonpress[key])
-                        """
-                        if(key.endswith('_e')):
-                                print(len(buttonpress[key][0].keys()))
-                                features = features + len(buttonpress[key][0].keys())
-                                ekeys = ekeys+1
-                        elif(key.endswith('_d')):
-                                print(len(buttonpress[key][0].keys()))
-                                features = features + len(buttonpress[key][0].keys())
-                                dkeys = dkeys+1
-                        elif(key.endswith('_avg') or key.endswith('_max') or key.endswith('_min')):
-                                print(len(buttonpress[key][0].keys()))
-                                features = features + len(buttonpress[key][0].keys())
-                                statkeys = statkeys+1
-                        elif(key == 'button' or key == 'frequency'):
-                                continue
-                        elif(key == 'dac'):
-                                print(1)
-                                features = features + 1
-                        else:
-                                seqkeys = seqkeys + 1
-                                print(len(buttonpress[key][0].keys()))
-                                features = features + len(buttonpress[key][0].keys())
-                        """
 #prettyprint(coedict)
 
 """
