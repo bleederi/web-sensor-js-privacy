@@ -53,16 +53,39 @@ for buttonpress in data_split:
 
 
 #From sensor readings (one for each reading), need to make sequences (one for each coordinate) 
+dictkeys = []
+listkeys = []
+xyzkeys = []    #Keys that have x, y, z data
+abgkeys = []    #Keys that have alpha, beta, gamma data
+numpyarrkeys = []    #Keys that have numpy array data
+#Still need to find a rule to separate xyz and abg keys
+for key, value in buttondata[0].items():
+        if(key != 'button' and key != 'frequency'):
+                #Keys that have dict data
+                if(type(value) is dict):
+                        dictkeys.append(key)
+                #Keys that have list data
+                if(type(value) is list):
+                        listkeys.append(key)
+                #Keys that have alpha, beta, gamma data
+                if('orientation' in key):
+                        abgkeys.append(key)
+                #Keys that have x,y,z data (all the others except orientation, dac)
+                elif('dac' not in key and key != 'button' and key != 'frequency'):
+                        xyzkeys.append(key)
+                if('_fft' in key):
+                        numpyarrkeys.append(key)
 buttondata_array = []   #Holds the data for all the buttons
 for buttonpress in buttondata:
         data = {}       #Dict holding the sequences for a single button press
         data['button'] = buttonpress['button']
         for key, value in buttonpress.items():
                 seq = {}
-                if(key == 'button'):    #Don't need to make sequences for these
+                if(key == 'button' or key == 'frequency'):    #Don't need to make sequences for these
                         continue
                 #Make sequences for each key
-                if(key == 'acceleration' or key == 'rotation'):
+                #First handle list keys
+                if key in listkeys and key in xyzkeys and key not in numpyarrkeys:
                         seq_x = []
                         seq_y = []
                         seq_z = []
@@ -71,7 +94,8 @@ for buttonpress in buttondata:
                                 seq_y.append(i['y'])
                                 seq_z.append(i['z'])
                         seq = {'x':seq_x, 'y':seq_y, 'z':seq_z}
-                elif (key == 'orientation'):
+                elif key in listkeys and key in abgkeys and key not in numpyarrkeys:
+                        #print(value)
                         seq_alpha = []
                         seq_beta = []
                         seq_gamma = []
@@ -80,6 +104,16 @@ for buttonpress in buttondata:
                                 seq_beta.append(i['beta'])
                                 seq_gamma.append(i['gamma'])
                         seq = {'alpha':seq_alpha, 'beta':seq_beta, 'gamma':seq_gamma}
+                elif key in listkeys and key in numpyarrkeys:
+                        print("Numpyarr", key, value)
+                #Then handle dict keys
+                elif key in dictkeys and key in xyzkeys:
+                        seq = {'x':value['x'], 'y':value['y'], 'z':value['z']}
+                elif key in dictkeys and key in abgkeys:
+                        seq = {'alpha':value['alpha'], 'beta':value['beta'], 'gamma':value['gamma']}
+                else:
+                        print(key, value)
+                
                 data[key] = seq
         buttondata_array.append(data)
 
@@ -88,6 +122,8 @@ def buttonselection():      #Condition for selecting the buttons to be plotted
         if x['button'] == 2:    #Select all buttons that fulfil this condition
             yield x
 index = 1
+
+#prettyprint(buttonselection())
 for button in buttonselection():
         #Plot sequences
         fig = plt.figure(index)
@@ -114,4 +150,4 @@ for button in buttonselection():
         plt.ylabel('Orientation')   
         index = index+1
 
-plt.show() 
+#plt.show() 
