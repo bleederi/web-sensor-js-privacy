@@ -15,10 +15,9 @@ import ast
 import numpy
 from helperfuncs import prettyprint
 
-# Load dataset
-#url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
-#names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
-#dataset = pandas.read_csv(url, names=names)
+#TODO: Name variables better, same variable names used in different places (for example 'data')
+
+#Load dataset
 datafilename = 'data_1_processed'
 with open(datafilename, 'r') as datafile:
         dataset = datafile.read()
@@ -27,7 +26,6 @@ with open(datafilename, 'r') as datafile:
 buttondata = [] #List of button presses, here 
 data_split = dataset.split('@')    #Split dataset into distinct button presses
 for buttonpress in data_split:
-        #print(buttonpress)
         datadict = {}   #Here all the data read from the dataset will be saved, one per button
         data = buttonpress.split(';')
         for seq in data:
@@ -36,45 +34,82 @@ for buttonpress in data_split:
                     continue
                 else:
                         #Read the data into a format that we can easily manipulate (string -> new format)
-                        #print("Seq: ", seq)
                         key = seq.split(':', 1)[0].translate({ord(c): None for c in "'"})       #Translate for removing the "'"
                         data = seq.split(':', 1)[1]
-                        #print(key, "\ndata:", data)
-                        #Now analyze the data, make the feature vectors, plot etc.
                         if not(key.endswith("fft")):
                                 data_read = ast.literal_eval(data)      #Cannot read numpy arrays
-                                #print("New data:", data_read)
                         else:   #Handle numpy arrays separately
-                                #print("numpy array")
                                 #First find the dict keys
                                 datasplit = data.split('), ')
-                                #print(datasplit)
                                 for i in datasplit:
                                         spliti = i.split(':')
                                         key2 = spliti[0].translate({ord(c): None for c in "{'"})
-                                        #print(key2)
                                         data_read = ast.literal_eval(spliti[1].translate({ord(c): None for c in "()}'array\n "}))
-                                        #print(spliti[1].translate({ord(c): None for c in "()}'array\n "}))
-                                        #i.translate({ord(c): None for c in "{'array"})
-                                        #print("I:", spliti)
-                                        #print(data_read[1])
-                                        #print(key2, data_read)
                         datadict[key] = data_read
-        #print("")   #Newline
-        #print(datadict[0])
         if datadict:
                 buttondata.append(datadict)
-print(buttondata[0]['button'])
-prettyprint(buttondata)
+
+#prettyprint(buttondata)
 
 
-#plt.plot([1,2,3,4])
-#plt.ylabel('some numbers')
-#plt.show()        
+#From sensor readings (one for each reading), need to make sequences (one for each coordinate) 
+buttondata_array = []   #Holds the data for all the buttons
+for buttonpress in buttondata:
+        data = {}       #Dict holding the sequences for a single button press
+        data['button'] = buttonpress['button']
+        for key, value in buttonpress.items():
+                seq = {}
+                if(key == 'button'):    #Don't need to make sequences for these
+                        continue
+                #Make sequences for each key
+                if(key == 'acceleration' or key == 'rotation'):
+                        seq_x = []
+                        seq_y = []
+                        seq_z = []
+                        for i in value:
+                                seq_x.append(i['x'])
+                                seq_y.append(i['y'])
+                                seq_z.append(i['z'])
+                        seq = {'x':seq_x, 'y':seq_y, 'z':seq_z}
+                elif (key == 'orientation'):
+                        seq_alpha = []
+                        seq_beta = []
+                        seq_gamma = []
+                        for i in value:
+                                seq_alpha.append(i['alpha'])
+                                seq_beta.append(i['beta'])
+                                seq_gamma.append(i['gamma'])
+                        seq = {'alpha':seq_alpha, 'beta':seq_beta, 'gamma':seq_gamma}
+                data[key] = seq
+        buttondata_array.append(data)
 
-#Now need to construct DataArray
-# shape
-#print(dataset.head)
+buttons = buttondata_array[0:3] #Buttons to be plotted
 
-# shape
-#print(dataset.head(20))
+index = 1
+for button in buttons:
+        #Plot sequences
+        fig = plt.figure(index)
+        fig.suptitle('Data for button ' + str(button['button']))
+        plt.subplot(221)
+        plt.plot(button['acceleration']['x'], color='r', label='accelx')
+        plt.plot(button['acceleration']['y'], color='b', label='accely')
+        plt.plot(button['acceleration']['z'], color='g', label='accelz')
+        legend = plt.legend(loc='upper left', shadow=True)
+        plt.ylabel('Acceleration')
+
+        plt.subplot(222)
+        plt.plot(button['rotation']['x'], color='r', label='rotx')
+        plt.plot(button['rotation']['y'], color='b', label='roty')
+        plt.plot(button['rotation']['z'], color='g', label='rotz')
+        legend = plt.legend(loc='upper left', shadow=True)
+        plt.ylabel('Rotation')
+
+        plt.subplot(223)
+        plt.plot(button['orientation']['alpha'], color='r', label='orix')
+        plt.plot(button['orientation']['beta'], color='b', label='oriy')
+        plt.plot(button['orientation']['gamma'], color='g', label='oriz')
+        legend = plt.legend(loc='upper left', shadow=True)
+        plt.ylabel('Orientation')   
+        index = index+1
+
+plt.show() 
