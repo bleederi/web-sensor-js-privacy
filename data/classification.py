@@ -28,7 +28,20 @@ with open(datafilename_vector, 'r') as datafile_vector:
 buttondata = read_from_file(dataset)
 buttondata_vector = read_from_file(dataset_vector)
 #prettyprint(buttondata_vector)
-
+featurevectors = []     #Array to hold all the feature vectors
+i = 0
+for buttonpress in buttondata_vector:
+        featurevector = [] #A single feature vector
+        for key, value in sorted(buttonpress.items()):  #Feature vector has to be sorted
+                if(type(value) is dict):
+                        print(key)
+                        for k, v in value.items():
+                                print('\t', k)
+                                featurevector.append(v)
+        featurevectors.append(featurevector)
+        i = i+1
+print(featurevectors[0])
+print(len(featurevectors[0]))   #Too short!     150 instead of 164
 
 #From sensor readings (one for each reading), need to make sequences (one for each coordinate) - for feature vector, don't need to do this
 dictkeys = []
@@ -135,4 +148,4 @@ def plot(buttons, sameplot=False):
                 index = index+1 #Plot each button press in different plot window
     plt.show() 
 
-plot(buttonselection(), True)
+#plot(buttonselection(), True)
