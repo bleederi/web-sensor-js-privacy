@@ -12,7 +12,6 @@ var rotationData = [];
 
 var sensors = {};
 var currentButton = null;
-var test = null;                //testing variable
 var accel = {x:null, y:null, z:null};
 var accelNoG;
 var velGyro;
@@ -32,28 +31,7 @@ class LowPassFilterData {       //https://w3c.github.io/motion-sensors/#pass-fil
                 this.x = this.x * this.bias + reading.x * (1 - this.bias);
                 this.y = this.y * this.bias + reading.y * (1 - this.bias);
                 this.z = this.z * this.bias + reading.z * (1 - this.bias);
-
         }
-/*
-        update(reading) {       //also normalizes
-                let x = this.x * this.bias + reading.x * (1 - this.bias);
-                let y = this.y * this.bias + reading.y * (1 - this.bias);
-                let z = this.z * this.bias + reading.z * (1 - this.bias);
-                let norm = Math.sqrt(x * x + y * y + z * z);
-                this.x = 9.81 * x / norm;
-                this.y = 9.81 * y / norm;
-                this.z = 9.81 * z / norm;
-
-        }
-        normalize()
-        {
-                //normalize to "known value" 9.81 m/s^2
-                let norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);        
-                this.x = 9.81 * this.x / norm;
-                this.y = 9.81 * this.y / norm;
-                this.z = 9.81 * this.z / norm;
-        }
-        */
 };
 
 function exportData() //https://stackoverflow.com/a/13405322
@@ -94,12 +72,12 @@ function update_text()
 {
 if (accel && accelNoG && gravity && orientationMat && velGyro)  //only update if all data available
         {
-                        document.getElementById("accl").textContent = `Acceleration (${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: (${magnitude(accel).toFixed(3)}))`;
-                        document.getElementById("accl_nog").textContent = `Acceleration without gravity (${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: (${magnitude(accelNoG).toFixed(3)}))`;
-                        document.getElementById("g_accl").textContent = `Isolated gravity (${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
-                        document.getElementById("ori").textContent = `Orientation matrix (${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]}) ...`;
-                        document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: (${magnitude(velGyro).toFixed(3)}))`;
-                        document.getElementById("sensorfreq").textContent = `Sensor frequency (${sensorfreq})`;
+                        document.getElementById("accl").textContent = `Acceleration ${accel.x.toFixed(3)}, ${accel.y.toFixed(3)}, ${accel.z.toFixed(3)} Magnitude: ${magnitude(accel).toFixed(3)}`;
+                        document.getElementById("accl_nog").textContent = `Acceleration without gravity ${accelNoG.x.toFixed(3)}, ${accelNoG.y.toFixed(3)}, ${accelNoG.z.toFixed(3)} Magnitude: ${magnitude(accelNoG).toFixed(3)}`;
+                        document.getElementById("g_accl").textContent = `Isolated gravity ${gravity.x.toFixed(3)}, ${gravity.y.toFixed(3)}, ${gravity.z.toFixed(3)} Magnitude: (${magnitude(gravity).toFixed(3)}))`;
+                        document.getElementById("ori").textContent = `Orientation matrix ${orientationMat[0]} ${orientationMat[1]} ${orientationMat[2]} ${orientationMat[3]} \n ${orientationMat[4]} ${orientationMat[5]} ${orientationMat[6]} ...`;
+                        document.getElementById("rrate").textContent = `Rotation rate (${velGyro.x.toFixed(3)}, ${velGyro.y.toFixed(3)}, ${velGyro.z.toFixed(3)} Magnitude: ${magnitude(velGyro).toFixed(3)}`;
+                        document.getElementById("sensorfreq").textContent = `Sensor frequency ${sensorfreq}`;
         }
 }
 
@@ -121,7 +99,7 @@ function reset_data()   //to be run every button press and release
 function get_click(buttonID)    //ID not necessarily numerical
 {
         currentButton = buttonID;
-        document.getElementById("bstate").textContent = `Button state (${currentButton})`;
+        document.getElementById("bstate").textContent = `Button state ${currentButton}`;
         console.log(currentButton + ' pressed down');
         recording = true;
         reset_data();
@@ -144,12 +122,8 @@ function release()
         dataArray.push(b);
         console.log(currentButton + ' released');        
         currentButton = null;
-        document.getElementById("bstate").textContent = `Button state (${currentButton})`;
+        document.getElementById("bstate").textContent = `Button state ${currentButton}`;
         recording = false;
-      try {
-        //stop_sensors();
-      } catch(err) { }
-
 }
 
 function store (key, data)   //currently uses LocalStorage, maybe should use something else?
@@ -180,11 +154,8 @@ function startSensors() {
                 sensors.Accelerometer = accelerometer;
                 gravity =  new LowPassFilterData(accelerometer, 0.8);
                 accelerometer.onchange = event => {
-                        //accel = {x:1.1, y:2.2, z: 7.7}  //TESTI
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
                         gravity.update(accel);
-                        //console.log(gravity);
-                        //console.log(accel);
                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
                 }
                 accelerometer.onerror = err => {
@@ -215,9 +186,6 @@ function startSensors() {
                 };
                 gyroscope.start();
                 } catch(err) { console.log(err); }
-
-                console.log("Started sensors: ");
-                console.log(sensors);
                 sensors_started = true;
                 return sensors;
         }
@@ -234,15 +202,11 @@ function read_sensors() //ran when a button is pressed, saves data gathered from
                 console.log("Saving data from sensors");
                 accelerationData.push(accel);
                 accelerationnogData.push(accelNoG);
-                //console.log("xAccel: " + accel.x + " yAccel: " + accel.y + " zAccel: " + accel.z);
-                //console.log("xG: " + gravity.x + " yG: " + gravity.y + " zG: " + gravity.z);
-                //console.log("xAccelNoG: " + accelNoG.x + " yAccelNoG: " + accelNoG.y + " zAccelNoG: " + accelNoG.z);
                 rotationData.push(velGyro);
                 orientationMatTemp = new Object;     //need to push orientation matrix by value
                 Object.assign(orientationMatTemp, orientationMat);
                 orientationData.push(orientationMatTemp);
                 orientationMatTemp = null;
-                //console.log("Orientation matrix: " + orientationMat);
         }
 }
 
@@ -258,10 +222,10 @@ xhr.setRequestHeader("Content-type", "application/json");
 xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
         var json = JSON.parse(xhr.responseText);
-        console.log(json.email + ", " + json.password);
+        console.log(json.str1 + ", " + json.str2);
     }
 };
-var data = JSON.stringify({"email": "hey@mail.com", "password": "101010"});
+var data = JSON.stringify({"str1": "foo", "str2": "bar"});
 //var data = JSON.stringify(localStorage.getItem(key));
 xhr.send(data);
 }
