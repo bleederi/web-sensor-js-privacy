@@ -1,11 +1,18 @@
 import math
+import ast
 
-def prettyprint(jsondata): #Clearly print the data - input is all the button data
+def prettyprint(jsondata, *args): #Clearly print the data - input is all the button data and optional argument specifies keys to be printed
         for buttonpress in jsondata:    ##Loop through all the button presses
                 print("\nNew button: ", buttonpress['button'], "\n")
-                for key in sorted(buttonpress):
-                        print(key)                
-                        print(buttonpress[key])
+                if(args):
+                        for key in sorted(buttonpress):
+                                if args[0] in key:
+                                        print(key)                
+                                        print(buttonpress[key])
+                else:
+                        for key in sorted(buttonpress):
+                                print(key)                
+                                print(buttonpress[key])
 
 
 def find_interval(seq, coe, totalEnergy, coord):     #Find the interval of 70% energy for a sequence, centered on coe. For single coord only
@@ -29,3 +36,47 @@ def find_interval(seq, coe, totalEnergy, coord):     #Find the interval of 70% e
                 if(e > 0.7 * totalEnergy):
                         interval = [bound_lower, bound_upper]     
                         return interval
+
+def count_features(seq):        #Counts the number of features in the list of sequences or "feature vectors"
+        nfeatures = 0        
+        #prettyprint(seq)
+        for key, value in seq[0].items():
+                #print(key)
+                if(type(value) is dict):
+                        #print("Key with", len(value.keys()), "keys in value", value.keys())
+                        nfeatures = nfeatures + len(value.keys())
+                else:
+                        #print(value)
+                        #print("Key with", 1, "value")
+                        nfeatures = nfeatures + 1
+        return nfeatures
+
+def read_from_file(dataset):   #Read string data from file and convert it to Python types
+        buttondata = [] #List of button presses, here 
+        data_split = dataset.split('@')    #Split dataset into distinct button presses
+        for buttonpress in data_split:
+                datadict = {}   #Here all the data read from the dataset will be saved, one per button
+                data = buttonpress.split(';')
+                for seq in data:
+                        seq = seq.strip()
+                        if ("New button" in seq or not seq) :
+                            continue
+                        else:
+                                #Read the data into a format that we can easily manipulate (string -> new format)
+                                key = seq.split(':', 1)[0].translate({ord(c): None for c in "'"})       #Translate for removing the "'"
+                                data = seq.split(':', 1)[1]
+                                if not(key.endswith("fft")):
+                                        data_read = ast.literal_eval(data)      #Cannot read numpy arrays
+                                else:   #Handle numpy arrays separately
+                                        #First find the dict keys
+                                        datasplit = data.split('), ')
+                                        for i in datasplit:
+                                                spliti = i.split(':')
+                                                key2 = spliti[0].translate({ord(c): None for c in "{'"})
+                                                data_read = ast.literal_eval(spliti[1].translate({ord(c): None for c in "()}'array\n "}))
+                                datadict[key] = data_read
+                if datadict:
+                        buttondata.append(datadict)
+        return buttondata
+
+        #prettyprint(buttondata)

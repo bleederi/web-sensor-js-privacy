@@ -144,7 +144,7 @@ def calc_stats(jsondata):       #Function to obtain statistical features of the 
                                                 maxdict = {'alpha':max_alpha, 'beta': max_beta, 'gamma': max_gamma}    #Dict to store max values of a single sequence
                                         if (key == 'dac'):
                                                 max_dac = max(value)
-                                                maxdict = {'dac':max_dac}    #Dict to store max values of a single sequence
+                                                maxdict = max_dac    #Dict to store max values of a single sequence
                                         buttonstats[key + '_max'] = maxdict
                                         #Calculate minimums
                                         buttonstats[key + '_min'] = {}
@@ -175,7 +175,7 @@ def calc_stats(jsondata):       #Function to obtain statistical features of the 
                                                 mindict = {'alpha':min_alpha, 'beta': min_beta, 'gamma': min_gamma}    #Dict to store min values of a single sequence
                                         if (key == 'dac'):
                                                 min_dac = min(value)
-                                                mindict = {'dac':min_dac}    #Dict to store min values of a single sequence
+                                                mindict = min_dac    #Dict to store min values of a single sequence
                                         buttonstats[key + '_min'] = mindict
                                         #Calculate averages
                                         buttonstats[key + '_avg'] = {}
@@ -200,7 +200,7 @@ def calc_stats(jsondata):       #Function to obtain statistical features of the 
                                                 avgdict = {'alpha':sum_alpha/len(value), 'beta': sum_beta/len(value), 'gamma': sum_gamma/len(value)}    #Dict to store min values of a single sequence
                                         if (key == 'dac'):
                                                 sum_dac = sum(value)/len(value)
-                                                avgdict = {'dac':sum_dac}    #Dict to store avg values of a single sequence
+                                                avgdict = sum_dac    #Dict to store avg values of a single sequence
                                         buttonstats[key + '_avg'] = avgdict
                         statsdict.append(buttonstats)
         return statsdict
@@ -238,7 +238,7 @@ def calc_total_energy(jsondata):     #Function to calculate the total energy of 
                                                 e_dict = {'alpha':e_alpha, 'beta': e_beta, 'gamma': e_gamma} 
                                         if (key == 'dac'):
                                                 e_dac = sum( i*i for i in value)
-                                                e_dict = {'dac':e_dac}
+                                                e_dict = e_dac
                                         energydict[key + '_e'] = e_dict                            
                 jsondata_withenergy.append(energydict)
         return jsondata_withenergy
@@ -253,7 +253,7 @@ def calc_fft(jsondata): #Function to calculate FFT of each sequence and add that
                                 if (key == 'button' or key == 'frequency' or key.endswith('_avg') or key.endswith('_max') or key.endswith('_min') or key.endswith('_e') or key.endswith('_d') or key == 'dac'):
                                         continue
                                 else:
-                                        fftdict[key + '_fft'] = []
+                                        fftdict[key + '_fft'] = {}
                                         if (key.startswith('acceleration') or key.startswith('rotation')):
                                                 #Below make the sequences to be FFTed
                                                 fft_array_x = []
@@ -266,7 +266,7 @@ def calc_fft(jsondata): #Function to calculate FFT of each sequence and add that
                                                 fft_x = numpy.fft.fft(fft_array_x)
                                                 fft_y = numpy.fft.fft(fft_array_y)
                                                 fft_z = numpy.fft.fft(fft_array_z)
-                                                f_dict = {'x':fft_x, 'y': fft_y, 'z': fft_z} 
+                                                f_dict = {'x':fft_x, 'y': fft_y, 'z': fft_z}
                                 #Need to handle orientation separately (different structure)
                                         if (key.startswith('orientation')):
                                                 #Below make the sequences to be FFTed
@@ -340,6 +340,7 @@ def calc_stats_fft(jsondata):   #Function to calculate maximum, minimum, mean an
                                                 mindict = {'alpha':min_alpha, 'beta': min_beta, 'gamma': min_gamma}    #Dict to store max values of a single sequence
                                                 avgdict = {'alpha':avg_alpha, 'beta': avg_beta, 'gamma': avg_gamma}    #Dict to store avg values of a single sequence
                                                 edict = {'alpha':e_alpha, 'beta': e_beta, 'gamma': e_gamma}    #Dict to store energy of a single sequence
+                                        #Append the sequences - Note, we don't need the original FFTs anymore
                                         buttonstats[key + '_max'] = maxdict 
                                         buttonstats[key + '_min'] = mindict
                                         buttonstats[key + '_avg'] = avgdict
@@ -355,7 +356,7 @@ def calc_interval(jsondata): #Calculates the interval of 70% energy of the accel
                         for key, value in buttonpress.items():
                                 buttondictwithinterval[key] = value
                                 #Now select keys to calculate CoE for
-                                if (key == 'button' or key == 'frequency' or key.endswith('_avg') or key.endswith('_max') or key.endswith('_min') or key.endswith('_e') or key.endswith('_d') or key == 'dac' or key.startswith('orientation') or key.startswith('rotation') or '_fft' in key):
+                                if (key == 'button' or key == 'frequency' or key.endswith('_avg') or key.endswith('_max') or key.endswith('_min') or key.endswith('_e') or key.endswith('_d') or key == 'dac' or key.startswith('orientation') or key.startswith('rotation') or key.endswith('_fft')):
                                         continue
                                 else:
                                         buttondictwithinterval[key + '_interval'] = {}                                     
@@ -365,6 +366,7 @@ def calc_interval(jsondata): #Calculates the interval of 70% energy of the accel
                                         CoE_y = 0
                                         CoE_z = 0
                                         if(type(value) is dict):
+                                                #print(key)
                                                 for i, k in value.items(): #For numpy arrays, i is a dict of numpy arrays
                                                         if (i == 'x'):
                                                                 index = 0
@@ -402,6 +404,18 @@ def calc_interval(jsondata): #Calculates the interval of 70% energy of the accel
                 jsondata_with_interval.append(buttondictwithinterval)
         return jsondata_with_interval
 
+def remove_unnecessary(jsondata):       #Remove the original time and frequency domain sequences from the data, outputting a feature vector
+        featurevector = []
+        unnecessary_keys = ['acceleration', 'accelerationnog', 'orientation', 'rotation',]
+        for buttonpress in jsondata:
+                if(buttonpress['button'] !=  None):     #skip bad values
+                        buttondict = {}        #Dict of the original data without the unnecessary data
+                        for key, value in buttonpress.items():
+                                if(key not in unnecessary_keys and key not in [x+'_fft' for x in unnecessary_keys] and key not in [x+'_d' for x in unnecessary_keys]):
+                                        buttondict[key] = value
+                featurevector.append(buttondict)
+        return featurevector
+
 filename = 'data_1'
 datafile = open(filename,'r')
 jsondata = json.load(datafile)
@@ -427,10 +441,24 @@ fftwithstatsdict = calc_stats_fft(fftdict)
 #print(fftwithstatsdict)
 intervaldict = calc_interval(fftwithstatsdict)
 #print(intervaldict)
+featurevector = remove_unnecessary(intervaldict)
+#print(featurevector) 
 
 #Now format the data to be a little bit clearer and save it to a file
-savefilename = filename + '_processed'
-with open(savefilename, 'w') as outfile:
+#First for the feature vector data
+savefilename_vector = filename + '_vector_processed'
+with open(savefilename_vector, 'w') as outfile:
+        for buttonpress in featurevector:    ##Loop through all the button presses
+                outfile.write("New button:" + str(buttonpress['button']) + "\n")
+                outfile.write("@\n")    #Use @ as splitting character
+                for key in sorted(buttonpress):
+                        outfile.write("'" + str(key) + "'" + ':')               
+                        outfile.write(str(buttonpress[key]) + ';'  +'\n')
+                outfile.write("@\n")    #Use @ as splitting character
+
+savefilename_all = filename + '_processed'
+#And then with the data that still has the original time and frequency domain data (for plotting that data)
+with open(savefilename_all, 'w') as outfile:
         for buttonpress in intervaldict:    ##Loop through all the button presses
                 outfile.write("New button:" + str(buttonpress['button']) + "\n")
                 outfile.write("@\n")    #Use @ as splitting character
@@ -438,5 +466,6 @@ with open(savefilename, 'w') as outfile:
                         outfile.write("'" + str(key) + "'" + ':')               
                         outfile.write(str(buttonpress[key]) + ';'  +'\n')
                 outfile.write("@\n")    #Use @ as splitting character
+
 
 
