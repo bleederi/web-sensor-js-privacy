@@ -34,7 +34,7 @@ def find_interval(seq, coe, totalEnergy, coord):     #Find the interval of 70% e
                 for v in seq[bound_lower:bound_upper]:
                         e = e + math.pow(seq[seq.index(v)][coord], 2)
                 if(e > 0.7 * totalEnergy):
-                        interval = [bound_lower, bound_upper]     
+                        interval = bound_upper - bound_lower     
                         return interval
 
 def count_features(seq):        #Counts the number of features in the list of sequences or "feature vectors"
@@ -50,6 +50,19 @@ def count_features(seq):        #Counts the number of features in the list of se
                         #print("Key with", 1, "value")
                         nfeatures = nfeatures + 1
         return nfeatures
+
+def list_keys(seq):        #Creates the list of keys for use in making the CSV file - biutt
+        keys = []
+        for key, value in seq[0].items():
+                #print(key)
+                if(type(value) is dict):
+                        #print("Key with", len(value.keys()), "keys in value", value.keys())
+                        for key2 in value.keys():                        
+                                keys.append(key + '_' + key2)
+        #Have to separately add these two
+        keys.append('button')
+        keys.append('frequency')
+        return keys
 
 def read_from_file(dataset):   #Read string data from file and convert it to Python types
         buttondata = [] #List of button presses, here 

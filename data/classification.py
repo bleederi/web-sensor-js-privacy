@@ -12,7 +12,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 import numpy
-from helperfuncs import prettyprint, count_features, read_from_file
+from helperfuncs import prettyprint, count_features, read_from_file, list_keys
 
 #TODO: Name variables better, same variable names used in different places (for example 'data')
 
@@ -34,14 +34,29 @@ for buttonpress in buttondata_vector:
         featurevector = [] #A single feature vector
         for key, value in sorted(buttonpress.items()):  #Feature vector has to be sorted
                 if(type(value) is dict):
-                        print(key)
                         for k, v in value.items():
-                                print('\t', k)
                                 featurevector.append(v)
         featurevectors.append(featurevector)
         i = i+1
-print(featurevectors[0])
-print(len(featurevectors[0]))   #Too short!     150 instead of 164
+#print(featurevectors[0])
+#print(len(featurevectors[0]))   #Too short?
+
+dataset_file = 'dataset/dataset1'
+#Now write the feature vectors into a dataset file (CSV format)
+with open(dataset_file, 'w+') as datasetfile:
+        keys = list_keys(buttondata)
+        print(keys)
+        datasetfile.write(str(keys).strip("[]"))
+        datasetfile.write('\n')
+        for vector in featurevectors:
+                #Add button data (what button was pressed)
+                vector.append(buttondata[featurevectors.index(vector)]['button'])
+                #Add frequency data (what sensor frequency was used)
+                vector.append(buttondata[featurevectors.index(vector)]['frequency'])
+                datasetfile.write(str(vector).strip("[]"))
+                datasetfile.write('\n')
+datasetfile.close()
+                
 
 #From sensor readings (one for each reading), need to make sequences (one for each coordinate) - for feature vector, don't need to do this
 dictkeys = []
@@ -112,40 +127,45 @@ for buttonpress in buttondata:
 
 def buttonselection():      #Condition for selecting the buttons to be plotted
     for x in buttondata_array:
-        if x['button'] == 2:    #Select all buttons that fulfil this condition
+        if x['button']  == 2:    #Select all buttons that fulfil this condition
             yield x
 
 #prettyprint(buttonselection())
-#print(count_features(buttondata_array))
 
 def plot(buttons, sameplot=False):
-    index = 1
-    for button in buttons:
-            #Plot sequences
-            fig = plt.figure(index)
-            fig.suptitle('Data for button ' + str(button['button']))
-            plt.subplot(221)
-            plt.plot(button['acceleration']['x'], color='r', label='accelx')
-            plt.plot(button['acceleration']['y'], color='b', label='accely')
-            plt.plot(button['acceleration']['z'], color='g', label='accelz')
-            legend = plt.legend(loc='upper left', shadow=True)
-            plt.ylabel('Acceleration')
+        index = 1
+        for button in buttons:
+                #Plot sequences
+                fig = plt.figure(index)
+                fig.suptitle('Data for button ' + str(button['button']))
+                ax1 = plt.subplot(221)
+                plt.plot(button['acceleration']['x'], color='r', label='accelx')
+                plt.plot(button['acceleration']['y'], color='b', label='accely')
+                plt.plot(button['acceleration']['z'], color='g', label='accelz')
+                ax1.legend(["accx", "accy", "accz"], loc='upper center', bbox_to_anchor=(0.5, 1.10),
+                        ncol=3, fancybox=True, shadow=True)
+                plt.ylabel('Acceleration')
 
-            plt.subplot(222)
-            plt.plot(button['rotation']['x'], color='r', label='rotx')
-            plt.plot(button['rotation']['y'], color='b', label='roty')
-            plt.plot(button['rotation']['z'], color='g', label='rotz')
-            legend = plt.legend(loc='upper left', shadow=True)
-            plt.ylabel('Rotation')
+                ax2 = plt.subplot(222)
+                plt.plot(button['rotation']['x'], color='r', label='rotx')
+                plt.plot(button['rotation']['y'], color='b', label='roty')
+                plt.plot(button['rotation']['z'], color='g', label='rotz')
+                ax2.legend(["rotx", "roty", "rotz"], loc='upper center', bbox_to_anchor=(0.5, 1.10),
+                        ncol=3, fancybox=True, shadow=True)
+                plt.ylabel('Rotation')
 
-            plt.subplot(223)
-            plt.plot(button['orientation']['alpha'], color='r', label='orix')
-            plt.plot(button['orientation']['beta'], color='b', label='oriy')
-            plt.plot(button['orientation']['gamma'], color='g', label='oriz')
-            legend = plt.legend(loc='upper left', shadow=True)
-            plt.ylabel('Orientation')
-            if not sameplot:   
-                index = index+1 #Plot each button press in different plot window
-    plt.show() 
+                ax3 = plt.subplot(223)
+                plt.plot(button['orientation']['alpha'], color='r', label='orix')
+                plt.plot(button['orientation']['beta'], color='b', label='oriy')
+                plt.plot(button['orientation']['gamma'], color='g', label='oriz')
+                ax3.legend(["orix", "oriy", "oriz"],loc='upper center', bbox_to_anchor=(0.5, 1.10),
+                        ncol=3, fancybox=True, shadow=True)
+                plt.ylabel('Orientation')
+                if not sameplot:   
+                        index = index+1 #Plot each button press in different plot window
+                manager = plt.get_current_fig_manager()
+                manager.resize(*manager.window.maxsize())
+                plt.savefig('button_' + str(button['button']) + '_' +str(index)  + '.svg', format='svg')
+        plt.show() 
 
-#plot(buttonselection(), True)
+#plot(buttondata_array, True)
