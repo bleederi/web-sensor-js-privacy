@@ -18,34 +18,10 @@ import numpy
 import math
 from collections import OrderedDict
 import pickle
-from helperfuncs import prettyprint, find_interval 
+from helperfuncs import prettyprint, find_interval, convert_orientation
 
-def convert_orientation(jsondata):      #Convert orientation matrix to Euler angles
-        orientationjsondata = []        #New JSON data with orientation converted to Euler angles
-        for buttonpress in jsondata:
-                if(buttonpress['button'] !=  None):     #skip bad values
-                        orientationdict = {}      #Dict (JSON data) for a button press with orientation converted
-                        for key, value in buttonpress.items():
-                                if(key != 'orientation'):
-                                        orientationdict[key] = value
-                                else:   #Here convert orientation
-                                        orientationdict[key] = []
-                                        for orimatrix in value:  #Each orientation matrix
-                                                tempdict = {}   #Temp dict to store Euler angle values
-                                                r11 = orimatrix['0']
-                                                r21 = orimatrix['4']
-                                                r31 = orimatrix['8']
-                                                r32 = orimatrix['9']
-                                                r33 = orimatrix['10']
-                                                betadivisor = math.sqrt(math.pow(r32,2) + math.pow(r33,2))
-                                                if(r11 != 0 and r33 != 0 and betadivisor != 0): #Can't divide by zero
-                                                        alpha = math.atan2(r21, r11)
-                                                        beta = math.atan2(-r31, (math.sqrt(math.pow(r32,2) + math.pow(r33,2))))
-                                                        gamma = math.atan2(r32, r33)
-                                                tempdict = {'alpha': alpha, 'beta': beta, 'gamma': gamma}
-                                                orientationdict['orientation'].append(tempdict)
-                orientationjsondata.append(orientationdict)
-        return orientationjsondata
+__author__ = "Jesse Nieminen"
+__status__ = "Development"
 
 def remove_initial(jsondata):   #Do operations on JSON formatted data
         cancelledjsondata = [] #New JSON data with the effect of initial position and orientation cancelled
