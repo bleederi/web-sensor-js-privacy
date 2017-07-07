@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-
+ *
 */
 
 var output = document.querySelector('.output');
@@ -173,7 +173,7 @@ function startSensors() {
                 accelerometer = new Accelerometer({ frequency: sensorfreq, includeGravity: true });
                 sensors.Accelerometer = accelerometer;
                 gravity =  new LowPassFilterData(accelerometer, 0.8);
-                accelerometer.onchange = event => {
+                accelerometer.onreading = event => {
                         accel = {x:accelerometer.x, y:accelerometer.y, z:accelerometer.z};
                         gravity.update(accel);
                         accelNoG = {x:accel.x - gravity.x, y:accel.y - gravity.y, z:accel.z - gravity.z};
@@ -186,7 +186,7 @@ function startSensors() {
                 //AbsoluteOrientationSensor
                 absoluteorientationsensor = new AbsoluteOrientationSensor({ frequency: sensorfreq});
                 sensors.AbsoluteOrientationSensor = absoluteorientationsensor;
-                absoluteorientationsensor.onchange = event => {
+                absoluteorientationsensor.onreading = event => {
                         absoluteorientationsensor.populateMatrix(orientationMat);
                 }
                 absoluteorientationsensor.onerror = err => {
@@ -197,7 +197,7 @@ function startSensors() {
                 //Gyroscope
                 gyroscope = new Gyroscope({ frequency: sensorfreq});
                 sensors.Gyroscope = gyroscope;
-                gyroscope.onchange = event => {
+                gyroscope.onreading = event => {
                         velGyro = {x:gyroscope.x, y:gyroscope.y, z:gyroscope.z};
                 }
                 gyroscope.onerror = err => {
